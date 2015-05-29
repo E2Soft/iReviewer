@@ -31,6 +31,15 @@ public class ReviewsGroupList extends ListFragment{
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		//postaviti da fragment ima meni
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -41,15 +50,6 @@ public class ReviewsGroupList extends ListFragment{
 		setListAdapter(myAdapter);
 		
 		return view; 
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
 	}
 	
 	@Override
