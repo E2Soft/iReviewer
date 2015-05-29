@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.MyListAdapter;
+import com.example.ireviewr.fragments.groups.GroupDetailFragment;
 import com.example.ireviewr.model.NavItem;
 
 public class ReviewsFragmentList extends ListFragment {
@@ -97,7 +98,7 @@ public class ReviewsFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		/*NavItem item = items.get(position);
+		NavItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
 		bundle.putString("TITLE", item.getmTitle());
@@ -107,8 +108,9 @@ public class ReviewsFragmentList extends ListFragment {
 		Fragment fragment = new GroupDetailFragment();
 		fragment.setArguments(bundle);
 		
-		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
-		Toast.makeText(getActivity(), "Test", Toast.LENGTH_LONG).show();
+		getActivity().getSupportFragmentManager().beginTransaction().
+		replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+		//Toast.makeText(getActivity(), "Test", Toast.LENGTH_LONG).show();
 	}
 	
 	@Override
