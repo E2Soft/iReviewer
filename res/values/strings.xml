@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">iReviewer</string>
+    
+    <string name="frg_groups">Groups</string>
+    
+    <string name="search">Search</string>
+    
+    <string name="home">Home</string>
+    <string name="groups">Groups</string>
+    <string name="reviews">Reviews</string>
+    <string name="preferences">Preferences</string>
+    <string name="about">About</string>
+    <string name="users">Users</string>
+    <string name="detail">Detail</string>
+    <string name="comments">Comments</string>
+    
+    <string name="create_review">Create review</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="hello_first">Open navigation drawer</string>
+    
+    <string name="group_detail">Group detail</string>
+    <string name="add_item">Add</string>
+    <string name="edit_item">Edit</string>
+    <string name="remove_item">Remove</string>
+    
+    <string name="review_name">Name</string>
+    <string name="review_name_edit">Enter name</string>
+    <string name="review_picture_take">Take</string>
+    <string name="review_picture_choose">Choose</string>
+    <string name="review_picture">Picture</string>
+    <string name="review_rating">Rating</string>
+    <string name="review_tags">Tags</string>
+    <string name="review_tags_list">Enter tags</string>
+    <string name="review_description">Description</string>
+    <string name="review_desc">Enter description</string>
+    <string name="review_image">Image</string>
+    
+    <string name="save_item">Save</string>
+    <string name="cancel_item">Cancel</string>
+    
+    <string name="comment_name">Comment thih review</string>
+    <string name="comment_content">Enter comment here..</string>
+    <string name="comment">Comment</string>
+    <string name="cancel">Cancel</string>
+    
+    
+</resources>
