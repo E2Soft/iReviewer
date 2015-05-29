@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.fragments.groups.GroupDetailFragment;
 import com.example.ireviewr.model.NavItem;
 
 public class ReviewsFragmentList extends ListFragment {
@@ -105,7 +104,7 @@ public class ReviewsFragmentList extends ListFragment {
 		bundle.putString("TEXT", item.getmSubtitle());
 		bundle.putInt("ICON", item.getmIcon());
 		
-		Fragment fragment = new GroupDetailFragment();
+		Fragment fragment = new ReviewTabFragment();
 		fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager().beginTransaction().
