@@ -12,6 +12,7 @@
     <item name="darkorange" type="color">#FFFF8800</item>
     <item name="darkred" type="color">#FFCC0000</item>
     <item name="material_blue_grey_800" type="color">#ff37474f</item>
+    <item name="material_blue_white" type="color">#E8EAF6</item>
  
     <integer-array name="androidcolors">
         <item>@color/blue</item>

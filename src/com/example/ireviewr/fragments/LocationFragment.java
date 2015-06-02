@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.model.Comment;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
