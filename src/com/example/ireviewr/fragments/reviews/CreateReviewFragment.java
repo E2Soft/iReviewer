@@ -229,11 +229,21 @@ public class CreateReviewFragment extends Fragment {
 		
 	}
 	
+	private void takePhoto(Bundle extras){
+		// recyle unused bitmaps
+        if (bitmap != null) {
+        	bitmap.recycle();
+        }
+		
+        bitmap = (Bitmap) extras.get("data");
+        mImageView.setImageBitmap(bitmap);
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
 			if(requestCode == REQUEST_CAMERA){
-				setUpImage(data);
+				takePhoto(data.getExtras());
 			}else if(requestCode == SELECT_PHOTO){
 				setUpImage(data);
 			}

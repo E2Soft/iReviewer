@@ -23,10 +23,41 @@ import com.example.ireviewr.model.NavItem;
 public class GroupsListFragment extends ListFragment {
 	private ArrayList<NavItem> items;
 	private ArrayAdapter<NavItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	public GroupsListFragment(ArrayList<NavItem> items) {
-		this.items = items;
+	public static GroupsListFragment newInstance(ArrayList<NavItem> items) {
+		GroupsListFragment fragment = new GroupsListFragment();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		/*if(savedInstanceState == null || !savedInstanceState.containsKey(DATA)) {
+			items = getArguments().getParcelableArrayList(DATA);
+		}else{
+			items = savedInstanceState.getParcelableArrayList(DATA);
+		}*/
+		
+		items = getArguments().getParcelableArrayList(DATA);
+		
+		//postaviti da fragment ima meni
+		setHasOptionsMenu(true);
 	}
+	
+	/*@Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(DATA, items);
+        super.onSaveInstanceState(outState);
+    }*/
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,15 +70,6 @@ public class GroupsListFragment extends ListFragment {
 		setListAdapter(myAdapter);
 		
 		return view; 
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -103,8 +125,7 @@ public class GroupsListFragment extends ListFragment {
 		bundle.putString("TEXT", item.getmSubtitle());
 		bundle.putInt("ICON", item.getmIcon());
 		
-		Fragment fragment = new GroupTabsFragment(getActivity(), items, items);
-		fragment.setArguments(bundle);
+		Fragment fragment = GroupTabsFragment.newInstance(bundle, items, items);
 		
 		//
 		getActivity().getSupportFragmentManager().beginTransaction().

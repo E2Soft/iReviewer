@@ -24,17 +24,18 @@ public class UserFragmentList extends ListFragment {
 
 	private ArrayList<NavItem> items;
 	private ArrayAdapter<NavItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	/*
-	 * TODO:Ovo ce sigurno biti izmenjeno, 
-	 * sada samo sluzi da vidim da li se prikazuje ok
-	 * Bolja varijanta proslediti neki ID kroz bundle
-	 * pa traziti detalje kursorom
-	 * 
-	 */
-	public UserFragmentList(ArrayList<NavItem> items) {
-		this.items = items;
-	}
+	public static UserFragmentList newInstance(ArrayList<NavItem> items) {
+		UserFragmentList fragment = new UserFragmentList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,8 @@ public class UserFragmentList extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);

@@ -24,10 +24,18 @@ public class ReviewsFragmentList extends ListFragment {
 	
 	private ArrayList<NavItem> items;
 	private ArrayAdapter<NavItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	public ReviewsFragmentList(ArrayList<NavItem> items) {
-		this.items = items;
-	}
+	public static ReviewsFragmentList newInstance(ArrayList<NavItem> items) {
+		ReviewsFragmentList fragment = new ReviewsFragmentList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +54,8 @@ public class ReviewsFragmentList extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);

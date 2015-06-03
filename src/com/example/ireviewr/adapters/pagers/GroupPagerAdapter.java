@@ -38,9 +38,9 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 			fragment = new GroupDetailFragment();
 			fragment.setArguments(bundle);
 		}else if(position == 1){
-			fragment = new ReviewsGroupList(reviews);
+			fragment = ReviewsGroupList.newInstance(reviews);
 		}else if(position == 2){
-			fragment = new UserFragmentList(users);
+			fragment = UserFragmentList.newInstance(users);
 		}
 		
 		return fragment;

@@ -1,8 +1,5 @@
 package com.example.ireviewr.fragments;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,8 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.fragments.reviews.CommentsListFragment;
-import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.fragments.reviewobjects.CreateReviewObjectFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -47,28 +43,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 		inflater.inflate(R.menu.home_menu, menu);
 	}
 	
-	private ArrayList<Comment> commentsList(){
-		ArrayList<Comment> items = new ArrayList<Comment>();
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
-		
-		return items;
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.home_add_item:
 				getActivity().getSupportFragmentManager().beginTransaction()
-				.replace(R.id.mainContent, new CommentsListFragment(commentsList())).
+				.replace(R.id.mainContent, new CreateReviewObjectFragment()).
 					addToBackStack(null).commit();
 				return true;
 		    default:
@@ -77,18 +58,30 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 	}
 	
 	
+	private void setUpMapIfNeeded(View inflatedView) {
+        if (mMapView == null) {
+        	mMapView = ((MapView) inflatedView.findViewById(R.id.mapview));
+        }
+    }
+
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
+		
 	    // inflat and return the layout
 	    View v = inflater.inflate(R.layout.location_fragment, container, false);
 	    
-	    //init map
-	    MapsInitializer.initialize(getActivity());
-	    
-	    mMapView = (MapView) v.findViewById(R.id.mapView);
+	    setUpMapIfNeeded(v);
 	    mMapView.onCreate(savedInstanceState);
-
+	    
+	    //init map
+	    try {
+	        MapsInitializer.initialize(getActivity().getApplicationContext());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
 	    mMapView.getMapAsync(this);
 	    
 	    return v;
@@ -113,8 +106,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
 	@Override
 	public void onDestroy() {
+		mMapView.onDestroy();
 	    super.onDestroy();
-	    mMapView.onDestroy();
 	}
 
 	@Override

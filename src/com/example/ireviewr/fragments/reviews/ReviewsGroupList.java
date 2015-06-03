@@ -25,15 +25,25 @@ public class ReviewsGroupList extends ListFragment{
 	
 	private ArrayList<NavItem> items;
 	private ArrayAdapter<NavItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	public ReviewsGroupList(ArrayList<NavItem> items) {
-		this.items = items;
-	}
+	public static ReviewsGroupList newInstance(ArrayList<NavItem> items) {
+		ReviewsGroupList fragment = new ReviewsGroupList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);

@@ -39,6 +39,7 @@ import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.LocationFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
+import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.NavItem;
 
@@ -187,15 +188,15 @@ public class MainActivity extends FragmentActivity{
     private void selectItemFromDrawer(int position) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	if(position == 0){
-    		fragmentManager.beginTransaction().replace(R.id.mainContent, new LocationFragment()).commit();
+    		fragmentManager.beginTransaction().replace(R.id.mainContent, new  CreateReviewFragment()).commit();
     	}else if(position == 1){
         	/*fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new TabbedFragment(MainActivity.this)).addToBackStack(null).commit();*/
     		fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new GroupsListFragment(getList())).addToBackStack(null).commit();
+        	replace(R.id.mainContent, GroupsListFragment.newInstance(getList())).addToBackStack(null).commit();
         }else if(position == 2){
         	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new ReviewsFragmentList(getList())).addToBackStack(null).commit();
+        	replace(R.id.mainContent, ReviewsFragmentList.newInstance(getList())).addToBackStack(null).commit();
         }else if(position == 3){
         	fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();

@@ -26,15 +26,25 @@ public class CommentsListFragment extends ListFragment {
 
 	private ArrayList<Comment> items;
 	private ArrayAdapter<Comment> myAdapter;
+	public static String DATA = "DATA";
 	
-	public CommentsListFragment(ArrayList<Comment> items) {
-		this.items = items;
-	}
+	public static CommentsListFragment newInstance(ArrayList<Comment> items) {
+		CommentsListFragment fragment = new CommentsListFragment();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);

@@ -31,6 +31,7 @@ public class CreateReviewObjectFragment extends Fragment {
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
+	private String SAVED_PHOTO = "SAVED_IMAGE";
 	private ImageView mImageView;
 	private Bitmap bitmap;
 	
@@ -41,6 +42,17 @@ public class CreateReviewObjectFragment extends Fragment {
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
 	}
+	
+	//to save image taken by user when orientation change
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		/*if(bitmap != null){
+			outState.putParcelable(SAVED_PHOTO, bitmap);
+		}*/
+	}
+	
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -71,6 +83,19 @@ public class CreateReviewObjectFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View view = inflater.inflate(R.layout.frag_4, container, false);
+		
+		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
+		
+		/*if (savedInstanceState != null) {
+			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			if(bitmap != null){
+				mImageView.setImageBitmap(bitmap);
+			}
+		}*/
+		
+		if(mImageView == null){
+			Toast.makeText(getActivity(), "NULL", Toast.LENGTH_LONG).show();
+		}
 		
 		Button chooseImage = (Button)view.findViewById(R.id.reviewobject_image_choose);
 		chooseImage.setOnClickListener(new OnClickListener() {
