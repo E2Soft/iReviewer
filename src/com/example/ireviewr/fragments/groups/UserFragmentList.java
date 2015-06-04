@@ -3,6 +3,7 @@ package com.example.ireviewr.fragments.groups;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +24,10 @@ public class UserFragmentList extends ListFragment {
 
 	private ArrayList<UserItem> items;
 	private ArrayAdapter<UserItem> myAdapter;
+	
 	public static String DATA = "DATA";
+	public static String NAME = "NAME";
+	public static String LAST_MODIFIED = "LAST MODIFIED";
 	
 	public static UserFragmentList newInstance(ArrayList<UserItem> items) {
 		UserFragmentList fragment = new UserFragmentList();
@@ -108,18 +112,17 @@ public class UserFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		/*UserItem item = items.get(position);
+		UserItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
+		bundle.putString(NAME, item.getUsername());
+		bundle.putString(LAST_MODIFIED, item.getLastModified().toString());
 		
 		Fragment fragment = new UserDetailFragment();
 		fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager().beginTransaction().
-					replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
+					replace(R.id.mainContent, fragment).addToBackStack(null).commit();
 	}
 	
 	@Override
