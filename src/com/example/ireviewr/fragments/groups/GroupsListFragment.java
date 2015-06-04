@@ -5,24 +5,26 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
+import com.example.ireviewr.loaders.SimpleCursorLoader;
+import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
 
 public class GroupsListFragment extends ListFragment {
 	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private CursorAdapter myAdapter;
 	
 	public GroupsListFragment(ArrayList<NavItem> items) {
 		this.items = items;
@@ -34,11 +36,21 @@ public class GroupsListFragment extends ListFragment {
 
 		View view = inflater.inflate(R.layout.groups_list, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
-		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
+		myAdapter = new SimpleCursorAdapter(getActivity(),
+		        android.R.layout.simple_expandable_list_item_1,
+		        null,
+		        new String[] { "name" },
+		        new int[] { android.R.id.text1 },
+		        0);
+		
+		getActivity().getSupportLoaderManager().initLoader(0, null, new SimpleCursorLoader(
+				getActivity(), 
+				myAdapter, 
+				Group.class));
+		
 		setListAdapter(myAdapter);
 		
-		return view; 
+		return view;
 	}
 	
 	@Override

@@ -17,6 +17,8 @@
 package com.example.ireviewr;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,12 +37,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.LocationFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
+import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
 
 public class MainActivity extends FragmentActivity{
@@ -99,6 +104,28 @@ public class MainActivity extends FragmentActivity{
         if (savedInstanceState == null) {
             selectItemFromDrawer(0);
         }
+        
+        //////////////////////////////////
+        Log.d("DATABASE", "starting save test");
+        Group group = new Group(1, "mygroup", new Date());
+        group.save();
+        group = new Group(2, "mygroup2", new Date());
+        group.save();
+        group = new Group(3, "mygroup3", new Date());
+        group.save();
+        Log.d("DATABASE", "saved");
+        
+        Log.d("DATABASE", "starting query test");
+        List<Group> existingGroups = (new Select())
+        .from(Group.class)
+        .orderBy("RANDOM()")
+        .execute();
+        for(Group existingGroup : existingGroups)
+        {
+        	Log.d("DATABASE", "got group with name: "+existingGroup.getName());
+        }
+        
+        //////////////////////////////////////
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
