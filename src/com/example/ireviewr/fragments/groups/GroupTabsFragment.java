@@ -29,7 +29,7 @@ public class GroupTabsFragment extends Fragment {
 		fragment.setArguments(bundle);
 		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class GroupTabsFragment extends Fragment {
 		return bundle;
 	}
 	
-	//Mokap ali kasnije bi trebali citati iz baze
+	//TODO:Mokap ali kasnije bi trebali citati iz baze
 	private Group getGroupByID(int id){
 		return Mokap.getGroupList().get(id);
 	}
@@ -77,9 +77,7 @@ public class GroupTabsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View v = inflater.inflate(R.layout.group_fragment_tabbed, container, false);
-		mGroupPagerAdapter = new GroupPagerAdapter(getDetailBundleByID(),
-													getChildFragmentManager(),
-													getActivity());
+		mGroupPagerAdapter = new GroupPagerAdapter(getDetailBundleByID(),getChildFragmentManager(),getActivity());
         
         mViewPager = (ViewPager) v.findViewById(R.id.group_pager);
         mViewPager.setAdapter(mGroupPagerAdapter);

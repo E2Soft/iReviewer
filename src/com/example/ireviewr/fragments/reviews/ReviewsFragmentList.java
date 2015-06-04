@@ -35,7 +35,7 @@ public class ReviewsFragmentList extends ListFragment {
 		fragment.setArguments(bundle);
 		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,12 +114,13 @@ public class ReviewsFragmentList extends ListFragment {
 		bundle.putString("TEXT", item.getmSubtitle());
 		bundle.putInt("ICON", item.getmIcon());
 		
-		Fragment fragment = new ReviewTabFragment();
+		Fragment fragment = ReviewTabFragment.newInstance(position);
 		fragment.setArguments(bundle);
 		
-		getActivity().getSupportFragmentManager().beginTransaction().
-		replace(R.id.mainContent, fragment).addToBackStack(null).commit();
-		//Toast.makeText(getActivity(), "Test", Toast.LENGTH_LONG).show();
+		getActivity().getSupportFragmentManager()
+									.beginTransaction()
+									.replace(R.id.mainContent, fragment).
+									addToBackStack(null).commit();
 	}
 	
 	@Override

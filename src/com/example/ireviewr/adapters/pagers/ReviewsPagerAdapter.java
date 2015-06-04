@@ -7,9 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.ireviewr.fragments.GaleryGridFragment;
+import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
-import com.example.ireviewr.tools.Mokap;
+import com.example.ireviewr.model.ReviewItem;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 
@@ -38,12 +39,14 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		Fragment fragment = null;
 		
+		ReviewItem review = bundle.getParcelable(GroupTabsFragment.DATA);
+		
 		if(position == 0){
 			fragment = new ReviewDetailFragment();
 		}else if(position == 1){
-			fragment = CommentsListFragment.newInstance(Mokap.getCommentsList());
+			fragment = CommentsListFragment.newInstance(review.getComments());
 		}else if(position == 2){
-			fragment = new GaleryGridFragment(Mokap.gatGaleryList());
+			fragment = GaleryGridFragment.newInstance(review.getImages());
 		}
 		
 		return fragment;

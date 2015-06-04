@@ -3,6 +3,7 @@ package com.example.ireviewr.fragments.reviews;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -106,18 +107,16 @@ public class ReviewsGroupList extends ListFragment{
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		/*NavItem item = items.get(position);
+		ReviewItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
+		bundle.putParcelable(DATA, item);
 		
-		Fragment fragment = new GroupDetailFragment();
+		Fragment fragment = new ReviewTabFragment();
 		fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
+		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();
 	}
 	
 	@Override

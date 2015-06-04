@@ -31,13 +31,23 @@ public class GaleryGridFragment extends Fragment {
 	private ArrayList<GaleryItem> items;
 	private ArrayAdapter<GaleryItem> myAdapter;
 	
-	public GaleryGridFragment(ArrayList<GaleryItem> items) {
-		this.items = items;
-	}
+	public static String DATA = "DATA";
+	
+	public static GaleryGridFragment newInstance(ArrayList<GaleryItem> items) {
+		GaleryGridFragment fragment = new GaleryGridFragment();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		setHasOptionsMenu(true);
 	}
