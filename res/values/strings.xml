@@ -28,6 +28,8 @@
     <string name="edit_item">Edit</string>
     <string name="remove_item">Remove</string>
     
+    <string name="last_date_modified">Last modified</string>
+    
     <string name="review_name">Name</string>
     <string name="review_name_edit">Enter name</string>
     <string name="review_picture_take">Take</string>

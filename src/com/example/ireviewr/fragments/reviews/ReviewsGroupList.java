@@ -3,7 +3,6 @@ package com.example.ireviewr.fragments.reviews;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,17 +16,16 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.fragments.groups.GroupDetailFragment;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.adapters.ReviewsAdapter;
+import com.example.ireviewr.model.ReviewItem;
 
 public class ReviewsGroupList extends ListFragment{
 	
-	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private ArrayList<ReviewItem> items;
+	private ArrayAdapter<ReviewItem> myAdapter;
 	public static String DATA = "DATA";
 	
-	public static ReviewsGroupList newInstance(ArrayList<NavItem> items) {
+	public static ReviewsGroupList newInstance(ArrayList<ReviewItem> items) {
 		ReviewsGroupList fragment = new ReviewsGroupList();
 	    
 		Bundle bundle = new Bundle();
@@ -55,7 +53,7 @@ public class ReviewsGroupList extends ListFragment{
 
 		View view = inflater.inflate(R.layout.list_view_fragment, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
+		myAdapter = new ReviewsAdapter(getActivity(), R.layout.review_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -108,7 +106,7 @@ public class ReviewsGroupList extends ListFragment{
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		NavItem item = items.get(position);
+		/*NavItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
 		bundle.putString("TITLE", item.getmTitle());
@@ -119,7 +117,7 @@ public class ReviewsGroupList extends ListFragment{
 		fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
 	}
 	
 	@Override

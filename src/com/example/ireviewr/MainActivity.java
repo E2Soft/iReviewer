@@ -36,12 +36,12 @@ import android.widget.Toast;
 
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
-import com.example.ireviewr.fragments.LocationFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.tools.Mokap;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -108,6 +108,7 @@ public class MainActivity extends FragmentActivity{
         mNavItems.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
         mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
         mNavItems.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
+        mNavItems.add(new NavItem("Sync data", "Sync data from repo", R.drawable.ic_action_refresh));
     }
     
     @Override
@@ -160,30 +161,6 @@ public class MainActivity extends FragmentActivity{
         }
     }
     
-    /*MOKAP*/
-    private ArrayList<NavItem> getList(){
-    	ArrayList<NavItem> items = new ArrayList<NavItem>();
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	return items;
-    }
     
     private void selectItemFromDrawer(int position) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
@@ -193,16 +170,18 @@ public class MainActivity extends FragmentActivity{
         	/*fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new TabbedFragment(MainActivity.this)).addToBackStack(null).commit();*/
     		fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, GroupsListFragment.newInstance(getList())).addToBackStack(null).commit();
+        	replace(R.id.mainContent, GroupsListFragment.newInstance(Mokap.getGroupList())).addToBackStack(null).commit();
         }else if(position == 2){
         	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, ReviewsFragmentList.newInstance(getList())).addToBackStack(null).commit();
+        	replace(R.id.mainContent, ReviewsFragmentList.newInstance(Mokap.getList())).addToBackStack(null).commit();
         }else if(position == 3){
         	fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();
         }else if(position == 4){	
         	fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new AboutFragment()).addToBackStack(null).commit();
+        }else if(position == 5){
+        	Toast.makeText(MainActivity.this, "Call sync", Toast.LENGTH_LONG).show();
         }else{
         	Toast.makeText(MainActivity.this, "Nesto van opsega!", Toast.LENGTH_LONG).show();
         }

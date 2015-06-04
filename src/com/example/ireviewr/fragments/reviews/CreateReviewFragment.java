@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,7 +31,7 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.TagsAdapter;
-import com.example.ireviewr.model.Tag;
+import com.example.ireviewr.tools.Mokap;
 
 public class CreateReviewFragment extends Fragment {
 	
@@ -108,24 +107,9 @@ public class CreateReviewFragment extends Fragment {
 	
 	//set up tags dialog
 	private void setUpTags(){
-		
-		ArrayList<Tag> tags = new ArrayList<Tag>();
-		tags.add(new Tag("Name1", new Date()));
-		tags.add(new Tag("Name2", new Date()));
-		tags.add(new Tag("Name3", new Date()));
-		tags.add(new Tag("Name4", new Date()));
-		tags.add(new Tag("Name5", new Date()));
-		tags.add(new Tag("Name6", new Date()));
-		tags.add(new Tag("Name1", new Date()));
-		tags.add(new Tag("Name2", new Date()));
-		tags.add(new Tag("Name3", new Date()));
-		tags.add(new Tag("Name4", new Date()));
-		tags.add(new Tag("Name5", new Date()));
-		tags.add(new Tag("Name6", new Date()));
-		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 		.setTitle("Select tags")
-		.setAdapter(new TagsAdapter(getActivity(), R.layout.tags_item, tags),null)
+		.setAdapter(new TagsAdapter(getActivity(), R.layout.tags_item, Mokap.getTags()),null)
 		.setCancelable(false)
 	           .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int id) {

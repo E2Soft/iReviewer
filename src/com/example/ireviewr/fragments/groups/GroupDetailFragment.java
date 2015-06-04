@@ -8,11 +8,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.adapters.pagers.GroupPagerAdapter;
 
 public class GroupDetailFragment extends Fragment {
 	
@@ -57,13 +57,10 @@ public class GroupDetailFragment extends Fragment {
 		Bundle bundle = getArguments();
 		
 		TextView gTitle = (TextView)view.findViewById(R.id.group_title);
-		gTitle.setText(bundle.getString("TITLE"));
+		gTitle.setText(bundle.getString(GroupPagerAdapter.NAME));
 		
-		TextView gText = (TextView)view.findViewById(R.id.group_subTitle);
-		gText.setText(bundle.getString("TEXT"));
-		
-		ImageView gImage = (ImageView)view.findViewById(R.id.group_icon);
-		gImage.setImageResource(bundle.getInt("ICON"));
+		TextView gText = (TextView)view.findViewById(R.id.group_lastModified);
+		gText.setText(bundle.getString(GroupPagerAdapter.LAST_MODIFIED));
 		
 		return view;
 	}

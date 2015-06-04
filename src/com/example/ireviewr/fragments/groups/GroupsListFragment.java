@@ -17,15 +17,15 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.adapters.GroupAdapter;
+import com.example.ireviewr.model.Group;
 
 public class GroupsListFragment extends ListFragment {
-	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private ArrayList<Group> items;
+	private ArrayAdapter<Group> myAdapter;
 	public static String DATA = "DATA";
 	
-	public static GroupsListFragment newInstance(ArrayList<NavItem> items) {
+	public static GroupsListFragment newInstance(ArrayList<Group> items) {
 		GroupsListFragment fragment = new GroupsListFragment();
 	    
 		Bundle bundle = new Bundle();
@@ -65,7 +65,7 @@ public class GroupsListFragment extends ListFragment {
 
 		View view = inflater.inflate(R.layout.groups_list, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
+		myAdapter = new GroupAdapter(getActivity(), R.layout.group_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -118,18 +118,12 @@ public class GroupsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		NavItem item = items.get(position);
+		Fragment fragment = GroupTabsFragment.newInstance(position);
 		
-		Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
-		
-		Fragment fragment = GroupTabsFragment.newInstance(bundle, items, items);
-		
-		//
-		getActivity().getSupportFragmentManager().beginTransaction().
-							replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+		getActivity().getSupportFragmentManager()
+												.beginTransaction()
+												.replace(R.id.mainContent, fragment)
+												.addToBackStack(null).commit();
 	}
 	
 	@Override

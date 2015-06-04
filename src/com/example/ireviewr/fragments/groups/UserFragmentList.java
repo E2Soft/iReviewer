@@ -3,7 +3,6 @@ package com.example.ireviewr.fragments.groups;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,16 +16,16 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.adapters.UserAdapter;
+import com.example.ireviewr.model.UserItem;
 
 public class UserFragmentList extends ListFragment {
 
-	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private ArrayList<UserItem> items;
+	private ArrayAdapter<UserItem> myAdapter;
 	public static String DATA = "DATA";
 	
-	public static UserFragmentList newInstance(ArrayList<NavItem> items) {
+	public static UserFragmentList newInstance(ArrayList<UserItem> items) {
 		UserFragmentList fragment = new UserFragmentList();
 	    
 		Bundle bundle = new Bundle();
@@ -43,7 +42,7 @@ public class UserFragmentList extends ListFragment {
 
 		View view = inflater.inflate(R.layout.users_fragment, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
+		myAdapter = new UserAdapter(getActivity(), R.layout.user_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -109,7 +108,7 @@ public class UserFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		NavItem item = items.get(position);
+		/*UserItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
 		bundle.putString("TITLE", item.getmTitle());
@@ -120,7 +119,7 @@ public class UserFragmentList extends ListFragment {
 		fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager().beginTransaction().
-					replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+					replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
 	}
 	
 	@Override
