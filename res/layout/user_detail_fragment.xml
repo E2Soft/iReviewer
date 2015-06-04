@@ -24,8 +24,9 @@
         android:gravity="center_vertical"
         android:textColor="#000"
         android:text="Line 2"
-        android:layout_toRightOf="@+id/user_name_label"
-        android:layout_toEndOf="@+id/user_name_label" 
+        android:layout_toRightOf="@id/user_name_label"
+        android:layout_toEndOf="@id/user_name_label"
+        android:layout_alignBaseline="@id/user_name_label" 
         android:layout_margin="5dp"/>
  
     <TextView android:id="@+id/user_subTitle"
@@ -49,9 +50,10 @@
         android:gravity="center_vertical"
         android:textColor="#000"
         android:text="Line 2"
-        android:layout_toRightOf="@+id/user_subTitle"
-        android:layout_toEndOf="@+id/user_subTitle"
-        android:layout_below="@id/user_title" 
+        android:layout_toRightOf="@id/user_subTitle"
+        android:layout_toEndOf="@id/user_subTitle"
+        android:layout_below="@id/user_title"
+        android:layout_alignBaseline="@id/user_subTitle" 
         android:layout_margin="5dp"/>
 
 </RelativeLayout>

@@ -126,7 +126,7 @@ public class GaleryGridFragment extends Fragment {
 		
 		 View view = inflater.inflate(R.layout.galery_layout, container, false);
 		
-		 myAdapter = new GaleryAdapter(getActivity(), R.layout.comment_item, items);
+		 myAdapter = new GaleryAdapter(getActivity(), R.layout.galery_item, items);
 			//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		 GridView gridview = (GridView)view.findViewById(R.id.gridview);
 		 gridview.setAdapter(myAdapter);

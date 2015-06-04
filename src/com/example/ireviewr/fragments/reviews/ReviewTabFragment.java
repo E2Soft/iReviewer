@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.ReviewsPagerAdapter;
-import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.ReviewItem;
 import com.example.ireviewr.tools.Mokap;
 

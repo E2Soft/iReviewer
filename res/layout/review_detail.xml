@@ -3,5 +3,147 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
+    <ImageView 
+   	    android:id="@+id/review_image_content"
+   	    android:contentDescription="@null"
+        android:src="@drawable/ic_action_picture"
+        android:layout_height="128dp"
+        android:layout_width="128dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="center"
+        android:layout_margin="5dp"/>
+    
+    <TextView
+        android:id="@+id/review_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/review_name"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_image_content"
+        android:layout_margin="5dp" />
+    
+    <TextView
+        android:id="@+id/review_name_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="Line 2"
+        android:layout_toRightOf="@id/review_name_label"
+        android:layout_toEndOf="@id/review_name_label"
+        android:layout_alignBaseline="@id/review_name_label" 
+        android:layout_below="@id/review_image_content"
+        android:layout_margin="5dp"/>
+    
+    <TextView android:id="@+id/review_desc_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/created"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_name_label"
+        android:layout_margin="5dp" />
+    
+    <TextView
+        android:id="@+id/review_desc_contnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="Line 2"
+        android:layout_toRightOf="@id/review_desc_label"
+        android:layout_toEndOf="@id/review_desc_label"
+        android:layout_alignBaseline="@id/review_desc_label"
+        android:layout_below="@id/review_name_content" 
+        android:layout_margin="5dp"/>
+    
+    <TextView android:id="@+id/review_rating_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/review_rating"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_desc_label"
+        android:layout_margin="5dp" />
+    
+    <RatingBar
+        android:id="@+id/review_rating_content"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/review_rating_label"
+        android:layout_toRightOf="@id/review_rating_label"
+        android:layout_below="@id/review_desc_contnt"
+        android:isIndicator="true" 
+        android:numStars="5"
+        android:layout_margin="5dp"/>
+    
+    <TextView android:id="@+id/review_modified_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/last_date_modified"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_rating_label"
+        android:layout_margin="5dp" />
+    
+    <TextView
+        android:id="@+id/review_modified_contnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="Line 2"
+        android:layout_toRightOf="@id/review_modified_label"
+        android:layout_toEndOf="@id/review_modified_label"
+        android:layout_alignBaseline="@id/review_modified_label"
+        android:layout_below="@id/review_rating_content" 
+        android:layout_margin="5dp"/>
+    
+    <TextView android:id="@+id/review_description_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/review_description"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_modified_label"
+        android:layout_margin="5dp" />
+    
+    <TextView
+        android:id="@+id/review_description_contnt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="Line 2"
+        android:layout_below="@id/review_description_label" 
+        android:layout_margin="5dp"/>
+    
 
 </RelativeLayout>

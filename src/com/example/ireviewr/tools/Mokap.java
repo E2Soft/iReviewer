@@ -105,13 +105,13 @@ public class Mokap {
 		items.add(new ReviewItem("Name1", "Bla1", 2, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
 				gatGaleryList(), getTags()));
-		items.add(new ReviewItem("Name2", "Bla2", 2, getUserList().get(0), 
+		items.add(new ReviewItem("Name2", "Bla2", 3, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
 				gatGaleryList(), getTags()));
-		items.add(new ReviewItem("Name3", "Bla3", 2, getUserList().get(0), 
+		items.add(new ReviewItem("Name3", "Bla3", 1, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
 				gatGaleryList(), getTags()));
-		items.add(new ReviewItem("Name4", "Bla4", 2, getUserList().get(0), 
+		items.add(new ReviewItem("Name4", "Bla4", 4, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
 				gatGaleryList(), getTags()));
 		

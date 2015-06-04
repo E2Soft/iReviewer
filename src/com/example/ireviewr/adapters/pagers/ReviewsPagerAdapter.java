@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.GaleryGridFragment;
 import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
@@ -42,7 +43,16 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 		ReviewItem review = bundle.getParcelable(GroupTabsFragment.DATA);
 		
 		if(position == 0){
+			Bundle bundle = new Bundle();
+			bundle.putString("NAME", review.getName());
+			bundle.putString("DESCRIPTION", review.getDescription());
+			bundle.putString("CREATED", review.getCreated().toString());
+			bundle.putString("LAST MODIFIED", review.getLast_modified().toString());
+			bundle.putInt("IMAGE", R.drawable.ic_action_camera);
+			bundle.putDouble("RATING", review.getRating());
+			
 			fragment = new ReviewDetailFragment();
+			fragment.setArguments(bundle);
 		}else if(position == 1){
 			fragment = CommentsListFragment.newInstance(review.getComments());
 		}else if(position == 2){

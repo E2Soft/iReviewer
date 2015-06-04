@@ -68,7 +68,8 @@
         android:id="@+id/review_rating_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/review_rating"/>
+        android:layout_below="@id/review_rating"
+        android:numStars="5"/>
    	
    	<TextView
         android:id="@+id/review_tags"
