@@ -50,7 +50,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 	
 	private ArrayList<Comment> commentsList(){
 		ArrayList<Comment> items = new ArrayList<Comment>();
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
+		/*items.add(new Comment("bla bla truc", new Date(), "Ja"));
 		items.add(new Comment("bla bla truc", new Date(), "On"));
 		items.add(new Comment("bla bla truc", new Date(), "Ona"));
 		items.add(new Comment("bla bla truc", new Date(), "Ja"));
@@ -58,7 +58,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 		items.add(new Comment("bla bla truc", new Date(), "Ona"));
 		items.add(new Comment("bla bla truc", new Date(), "Ja"));
 		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
+		items.add(new Comment("bla bla truc", new Date(), "Ona"));*/
 		
 		return items;
 	}

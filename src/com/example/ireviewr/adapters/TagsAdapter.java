@@ -39,7 +39,7 @@ public class TagsAdapter extends ArrayAdapter<Tag> {
 		textViewTitle.setText(tag.getName());
 		
 		TextView textViewDesc = (TextView)itemView.findViewById(R.id.tag_date_created);
-		textViewDesc.setText(tag.getDateCreated().toString());
+		textViewDesc.setText(tag.getDateModified().toString());
 		
 		return itemView;
 	}

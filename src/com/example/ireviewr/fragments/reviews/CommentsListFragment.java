@@ -21,6 +21,7 @@ import android.widget.SearchView;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.CommentsAdapter;
 import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.model.User;
 
 public class CommentsListFragment extends ListFragment {
 
@@ -111,7 +112,7 @@ public class CommentsListFragment extends ListFragment {
 					//get data
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
 					//create object
-					Comment newComment = new Comment(editText.getText().toString(), new Date(), "Test user");
+					Comment newComment = new Comment(editText.getText().toString(), new User(), null);
 					//add to list
 					items.add(newComment);
 					

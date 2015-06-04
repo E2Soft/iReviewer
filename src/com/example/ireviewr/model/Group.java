@@ -2,42 +2,31 @@ package com.example.ireviewr.model;
 
 import java.util.Date;
 
-import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.annotation.Column.ForeignKeyAction;
 
 @Table(name = "UserGroup", id="_id")
-public class Group extends Model 
+public class Group extends AbstractModel 
 {
-	@Column(name = "group_id", 
-			index=true, 
-			notNull=true, 
-			unique=true, 
-			onUniqueConflict=ConflictAction.REPLACE)
-	private int groupId;
-	
-	@Column(name = "name")
+	@Column(name = "name", notNull=true)
 	private String name;
 	
-	@Column(name = "last_modified")
-	private Date lastModified;
+	@Column(name = "user_created", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private User userCreated;
 	
 	public Group() {} // required by activeandroid
 	
-	public Group(int groupId, String name, Date lastModified) 
+	public Group(String modelId, Date dateModified, String name, User userCreated) {
+		super(modelId, dateModified);
+		this.name = name;
+		this.userCreated = userCreated;
+	}
+
+	public Group(String name, User userCreated)
 	{
 		this.name = name;
-		this.lastModified = lastModified;
-		this.groupId = groupId;
-	}
-
-	public int getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(int groupId) {
-		this.groupId = groupId;
+		this.userCreated = userCreated;
 	}
 
 	public String getName() {
@@ -48,11 +37,11 @@ public class Group extends Model
 		this.name = name;
 	}
 
-	public Date getLastModified() {
-		return lastModified;
+	public User getUserCreated() {
+		return userCreated;
 	}
 
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
+	public void setUserCreated(User userCreated) {
+		this.userCreated = userCreated;
 	}
 }

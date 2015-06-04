@@ -46,6 +46,7 @@ import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.model.User;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -106,12 +107,15 @@ public class MainActivity extends FragmentActivity{
         }
         
         //////////////////////////////////
+        User testUser = new User("test_user", "test@user.com");
+        testUser.save();
+        
         Log.d("DATABASE", "starting save test");
-        Group group = new Group(1, "mygroup", new Date());
+        Group group = new Group("mygroup", testUser);
         group.save();
-        group = new Group(2, "mygroup2", new Date());
+        group = new Group("mygroup2", testUser);
         group.save();
-        group = new Group(3, "mygroup3", new Date());
+        group = new Group("mygroup3", testUser);
         group.save();
         Log.d("DATABASE", "saved");
         

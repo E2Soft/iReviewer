@@ -51,10 +51,10 @@ public class CommentsAdapter extends ArrayAdapter<Comment>{
 		content.setText(comment.getContent());
 		
 		TextView userCreated = (TextView)itemView.findViewById(R.id.user_created);
-		userCreated.setText(comment.getUserCreated());
+		userCreated.setText(comment.getUserCreated().getName());
 		
 		TextView dateCreated = (TextView)itemView.findViewById(R.id.date_created);
-		dateCreated.setText(comment.getDateCreated().toString());
+		dateCreated.setText(comment.getDateModified().toString());
 		
 		return itemView;
 	}
@@ -73,7 +73,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment>{
 					// search content in friend list
 		            for (Comment item : items) {
 		                if (item.getContent().toLowerCase().contains(constraint.toString().toLowerCase()) ||
-		                		item.getUserCreated().toLowerCase().contains(constraint.toString().toLowerCase())) {
+		                		item.getUserCreated().getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
 		                    tempList.add(item);
 		                }
 		            }

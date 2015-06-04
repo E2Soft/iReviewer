@@ -110,7 +110,7 @@ public class CreateReviewFragment extends Fragment {
 	private void setUpTags(){
 		
 		ArrayList<Tag> tags = new ArrayList<Tag>();
-		tags.add(new Tag("Name1", new Date()));
+		/*tags.add(new Tag("Name1", new Date()));
 		tags.add(new Tag("Name2", new Date()));
 		tags.add(new Tag("Name3", new Date()));
 		tags.add(new Tag("Name4", new Date()));
@@ -121,7 +121,7 @@ public class CreateReviewFragment extends Fragment {
 		tags.add(new Tag("Name3", new Date()));
 		tags.add(new Tag("Name4", new Date()));
 		tags.add(new Tag("Name5", new Date()));
-		tags.add(new Tag("Name6", new Date()));
+		tags.add(new Tag("Name6", new Date()));*/
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 		.setTitle("Select tags")
