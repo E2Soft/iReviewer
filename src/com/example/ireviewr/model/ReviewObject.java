@@ -1,10 +1,14 @@
 package com.example.ireviewr.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.query.From;
+import com.activeandroid.query.Select;
 
 @Table(name = "ReviewObject", id="_id")
 public class ReviewObject extends AbstractModel 
@@ -15,13 +19,13 @@ public class ReviewObject extends AbstractModel
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "location_long")
+	@Column(name = "locationLong")
 	private double locationLong;
 	
-	@Column(name = "location_lat")
+	@Column(name = "locationLat")
 	private double locationLat;
 	
-	@Column(name = "user_created", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
 	private User userCreated;
 
 	public ReviewObject() {} // required by activeandroid
@@ -82,5 +86,62 @@ public class ReviewObject extends AbstractModel
 
 	public void setUserCreated(User userCreated) {
 		this.userCreated = userCreated;
+	}
+	
+	public List<Review> getReviews()
+	{
+        return getMany(Review.class, "reviewObject");
+    }
+	
+	public void addReview(Image toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		toAdd.setReviewObject(this);
+		toAdd.save();
+	}
+	
+	public List<Tag> getTags()
+	{
+		List<TagToReviewObject> manyToMany = getMany(TagToReviewObject.class, "reviewObject");
+		List<Tag> ret = new ArrayList<Tag>();
+		for(TagToReviewObject m2m : manyToMany)
+		{
+			ret.add(m2m.getTag());
+		}
+        return ret;
+    }
+	
+	public void addTag(Tag toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new TagToReviewObject(this, toAdd).save();
+	}
+	
+	public List<Image> getImages()
+	{
+        return getMany(Image.class, "reviewObject");
+    }
+	
+	public void addImage(Image toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		toAdd.setReviewObject(this);
+		toAdd.save();
+	}
+	
+	public static List<ReviewObject> filterByTags(List<Tag> tags)
+	{
+		From query = new Select()
+		.from(ReviewObject.class).as("r");
+		
+		int i=0;
+		for(Tag tag : tags)
+		{
+			query = query.join(TagToReviewObject.class).as("t"+i)
+					.on("r._id = t"+i+".reviewObject and t"+i+".tag = ?", tag.getId());
+			i++;
+		}
+		
+		return query.execute();
 	}
 }

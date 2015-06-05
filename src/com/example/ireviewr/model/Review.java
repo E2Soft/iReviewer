@@ -1,10 +1,14 @@
 package com.example.ireviewr.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.From;
+import com.activeandroid.query.Select;
 
 @Table(name = "Review", id="_id")
 public class Review extends AbstractModel
@@ -18,13 +22,13 @@ public class Review extends AbstractModel
 	@Column(name = "rating")
 	private int rating;
 	
-	@Column(name = "date_created", notNull=true)
+	@Column(name = "dateCreated", notNull=true)
 	private Date dateCreated;
 	
-	@Column(name = "user_created", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
 	private User userCreated;
 	
-	@Column(name = "review_object", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	@Column(name = "reviewObject", notNull=true, onDelete=ForeignKeyAction.CASCADE)
 	private ReviewObject reviewObject;
 
 	public Review() {} // required by activeandroid
@@ -99,5 +103,73 @@ public class Review extends AbstractModel
 
 	public void setReviewObject(ReviewObject reviewObject) {
 		this.reviewObject = reviewObject;
+	}
+	
+	public List<Group> getGroups()
+	{
+		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "review");
+		List<Group> ret = new ArrayList<Group>();
+		for(GroupToReview m2m : manyToMany)
+		{
+			ret.add(m2m.getGroup());
+		}
+        return ret;
+    }
+	
+	public List<Comment> getComments()
+	{
+        return getMany(Comment.class, "review");
+    }
+	
+	public void addComment(Comment toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		toAdd.setReview(this);
+		toAdd.save();
+	}
+	
+	public List<Tag> getTags()
+	{
+		List<TagToReview> manyToMany = getMany(TagToReview.class, "review");
+		List<Tag> ret = new ArrayList<Tag>();
+		for(TagToReview m2m : manyToMany)
+		{
+			ret.add(m2m.getTag());
+		}
+        return ret;
+    }
+	
+	public void addTag(Tag toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new TagToReview(this, toAdd).save();
+	}
+	
+	public List<Image> getImages()
+	{
+        return getMany(Image.class, "review");
+    }
+	
+	public void addImage(Image toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		toAdd.setReview(this);
+		toAdd.save();
+	}
+	
+	public static List<Review> filterByTags(List<Tag> tags)
+	{
+		From query = new Select()
+		.from(Review.class).as("r");
+		
+		int i=0;
+		for(Tag tag : tags)
+		{
+			query = query.join(TagToReview.class).as("t"+i)
+					.on("r._id = t"+i+".review and t"+i+".tag = ?", tag.getId());
+			i++;
+		}
+		
+		return query.execute();
 	}
 }

@@ -15,7 +15,7 @@ public class Image extends AbstractModel
 	@Column(name = "path", notNull=true)
 	private String path;
 	
-	@Column(name = "review_object", onDelete=ForeignKeyAction.CASCADE)
+	@Column(name = "reviewObject", onDelete=ForeignKeyAction.CASCADE)
 	private ReviewObject reviewObject;
 	
 	@Column(name = "review", onDelete=ForeignKeyAction.CASCADE)
@@ -68,7 +68,7 @@ public class Image extends AbstractModel
 	public void setReviewObject(ReviewObject reviewObject) {
 		if(review != null)
 		{
-			throw new RuntimeException("An Image can have either ReviewObject or Review, not both.");
+			throw new RuntimeException("Image moze da ima ili ReviewObject ili Review, ne oba.");
 		}
 		this.reviewObject = reviewObject;
 	}
@@ -80,7 +80,7 @@ public class Image extends AbstractModel
 	public void setReview(Review review) {
 		if(reviewObject != null)
 		{
-			throw new RuntimeException("An Image can have either ReviewObject or Review, not both.");
+			throw new RuntimeException("Image moze da ima ili ReviewObject ili Review, ne oba.");
 		}
 		this.review = review;
 	}

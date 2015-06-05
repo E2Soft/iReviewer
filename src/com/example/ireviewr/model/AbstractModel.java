@@ -9,14 +9,14 @@ import com.activeandroid.annotation.Column.ConflictAction;
 
 public abstract class AbstractModel extends Model 
 {
-	@Column(name = "model_id", 
+	@Column(name = "modelId", 
 			index=true, 
 			notNull=true, 
 			unique=true, 
 			onUniqueConflict=ConflictAction.REPLACE)
 	private String modelId = null;
 	
-	@Column(name = "date_modified", notNull=true)
+	@Column(name = "dateModified", notNull=true)
 	private Date dateModified;
 
 	public AbstractModel() 

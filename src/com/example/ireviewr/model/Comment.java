@@ -12,7 +12,7 @@ public class Comment extends AbstractModel
 	@Column(name = "content", notNull=true)
 	private String content;
 	
-	@Column(name = "user_created", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
 	private User userCreated;
 	
 	@Column(name = "review", notNull=true, onDelete=ForeignKeyAction.CASCADE)
