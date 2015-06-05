@@ -46,6 +46,8 @@ import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
 
 public class MainActivity extends FragmentActivity{
@@ -122,11 +124,65 @@ public class MainActivity extends FragmentActivity{
         Log.d("DATABASE", "starting query test");
         List<Group> existingGroups = (new Select())
         .from(Group.class)
-        .orderBy("RANDOM()")
         .execute();
         for(Group existingGroup : existingGroups)
         {
         	Log.d("DATABASE", "got group with name: "+existingGroup.getName());
+        }
+        
+        /////////////////////////////////////
+        
+        ReviewObject ro = new ReviewObject("ro1", "dro1", 1, 1, testUser);
+        ro.save();
+        
+        Tag tag1 = new Tag("tag1");
+        tag1.save();
+        Tag tag2 = new Tag("tag2");
+        tag2.save();
+        
+        ro.addTag(tag1);
+        ro.addTag(tag2);
+        
+        List<ReviewObject> existingRevObjects = (new Select())
+                .from(ReviewObject.class)
+                .execute();
+        for(ReviewObject existingReviewObject : existingRevObjects)
+        {
+        	Log.d("DATABASE", "got ReviewObject with name: "+existingReviewObject.getName());
+        	for(Tag existingTag : existingReviewObject.getTags())
+        	{
+        		Log.d("DATABASE", "got tag with name: "+existingTag.getName());
+        	}
+        }
+        
+        ReviewObject ro2 = new ReviewObject("ro2", "dro2", 2, 2, testUser);
+        ro2.save();
+        ro2.addTag(tag1);
+        
+        ReviewObject ro3 = new ReviewObject("ro3", "dro3", 2, 2, testUser);
+        ro3.save();
+        
+        Log.d("DATABASE", "filter by tag1");
+        List<Tag> tagsFilter = new ArrayList<Tag>();
+        tagsFilter.add(tag1);
+        for(ReviewObject existingReviewObject : ReviewObject.filterByTags(tagsFilter))
+        {
+        	Log.d("DATABASE", "got ReviewObject with name: "+existingReviewObject.getName());
+        	for(Tag existingTag : existingReviewObject.getTags())
+        	{
+        		Log.d("DATABASE", "got tag with name: "+existingTag.getName());
+        	}
+        }
+        
+        Log.d("DATABASE", "filter by tag1 and tag2");
+        tagsFilter.add(tag2);
+        for(ReviewObject existingReviewObject : ReviewObject.filterByTags(tagsFilter))
+        {
+        	Log.d("DATABASE", "got ReviewObject with name: "+existingReviewObject.getName());
+        	for(Tag existingTag : existingReviewObject.getTags())
+        	{
+        		Log.d("DATABASE", "got tag with name: "+existingTag.getName());
+        	}
         }
         
         //////////////////////////////////////
