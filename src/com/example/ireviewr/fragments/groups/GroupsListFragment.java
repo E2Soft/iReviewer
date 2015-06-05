@@ -18,7 +18,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.loaders.SimpleCursorLoader;
+import com.example.ireviewr.loaders.SimpleCursorLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
 
@@ -43,7 +43,7 @@ public class GroupsListFragment extends ListFragment {
 		        new int[] { android.R.id.text1 },
 		        0);
 		
-		getActivity().getSupportLoaderManager().initLoader(0, null, new SimpleCursorLoader(
+		getActivity().getSupportLoaderManager().initLoader(0, null, new SimpleCursorLoaderCallbacks(
 				getActivity(), 
 				myAdapter, 
 				Group.class));

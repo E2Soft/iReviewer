@@ -11,7 +11,7 @@ import android.support.v4.widget.CursorAdapter;
 import com.activeandroid.Model;
 import com.activeandroid.content.ContentProvider;
 
-public class SimpleCursorLoader implements LoaderCallbacks<Cursor>
+public class SimpleCursorLoaderCallbacks implements LoaderCallbacks<Cursor>
 {
 	private Context currentContext;
 	private CursorAdapter cursorAdapter;
@@ -21,27 +21,27 @@ public class SimpleCursorLoader implements LoaderCallbacks<Cursor>
 	private String[] selectionArgs = null;
 	private String sortOrder = null;
 	
-	public SimpleCursorLoader(Context currentContext, CursorAdapter cursorAdapter, Class<? extends Model> entityClass)
+	public SimpleCursorLoaderCallbacks(Context currentContext, CursorAdapter cursorAdapter, Class<? extends Model> entityClass)
 	{
 		this.currentContext = currentContext;
 		this.cursorAdapter = cursorAdapter;
 		this.entityClass = entityClass;
 	}
 
-	public SimpleCursorLoader projection(String... projection)
+	public SimpleCursorLoaderCallbacks projection(String... projection)
 	{
 		this.projection = projection;
 		return this;
 	}
 	
-	public SimpleCursorLoader selection(String selection, String... selectionArgs)
+	public SimpleCursorLoaderCallbacks selection(String selection, String... selectionArgs)
 	{
 		this.selection = selection;
 		this.selectionArgs = selectionArgs;
 		return this;
 	}
 	
-	public SimpleCursorLoader sortOrder(String sortOrder)
+	public SimpleCursorLoaderCallbacks sortOrder(String sortOrder)
 	{
 		this.sortOrder = sortOrder;
 		return this;
