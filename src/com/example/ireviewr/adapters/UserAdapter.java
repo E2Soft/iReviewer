@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.UserItem;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class UserAdapter extends ArrayAdapter<UserItem>{
 
@@ -38,7 +39,7 @@ public class UserAdapter extends ArrayAdapter<UserItem>{
 		name.setText(tag.getUsername());
 		
 		TextView date = (TextView)itemView.findViewById(R.id.user_date_created);
-		date.setText(tag.getLastModified().toString());
+		date.setText(ReviewerTools.preapreDate(tag.getLastModified()));
 		
 		
 		return itemView;

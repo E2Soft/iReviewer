@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.ReviewItem;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewsAdapter extends ArrayAdapter<ReviewItem>{
 
@@ -38,8 +41,13 @@ public class ReviewsAdapter extends ArrayAdapter<ReviewItem>{
 		name.setText(tag.getName());
 		
 		TextView date = (TextView)itemView.findViewById(R.id.review_date_created);
-		date.setText(tag.getCreated().toString());
+		date.setText(ReviewerTools.preapreDate(tag.getCreated()));
 		
+		RatingBar rating = (RatingBar)itemView.findViewById(R.id.review_rating_list);
+		rating.setRating((float)tag.getRating());
+		
+		ImageView image = (ImageView)itemView.findViewById(R.id.review_item_icon);
+		image.setImageResource(R.drawable.ic_action_select_all);
 		
 		return itemView;
 	}

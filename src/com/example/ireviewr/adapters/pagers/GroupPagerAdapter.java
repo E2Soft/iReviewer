@@ -11,6 +11,7 @@ import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.groups.UserFragmentList;
 import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
 
@@ -36,7 +37,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 		if(position == 0){
 			Bundle bundle = new Bundle();
 			bundle.putString(NAME, group.getName());
-			bundle.putString(LAST_MODIFIED, group.getLastModified().toString());
+			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getLastModified()));
 			
 			fragment = new GroupDetailFragment();
 			fragment.setArguments(bundle);

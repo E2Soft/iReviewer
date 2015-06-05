@@ -107,16 +107,12 @@ public class ReviewsGroupList extends ListFragment{
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		ReviewItem item = items.get(position);
+		Fragment fragment = ReviewTabFragment.newInstance(position);
 		
-		Bundle bundle = new Bundle();
-		bundle.putParcelable(DATA, item);
-		
-		Fragment fragment = new ReviewTabFragment();
-		fragment.setArguments(bundle);
-		
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+		getActivity().getSupportFragmentManager()
+												.beginTransaction()
+												.replace(R.id.mainContent, fragment).
+												addToBackStack(null).commit();
 	}
 	
 	@Override

@@ -28,6 +28,7 @@ public class ReviewTabFragment extends Fragment {
 	    
 		Bundle bundle = new Bundle();
 		bundle.putInt(ID, id);
+		fragment.setArguments(bundle);
 		
 	    return fragment;
 	}

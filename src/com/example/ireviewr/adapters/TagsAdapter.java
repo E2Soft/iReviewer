@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Tag;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class TagsAdapter extends ArrayAdapter<Tag> {
 
@@ -39,7 +40,7 @@ public class TagsAdapter extends ArrayAdapter<Tag> {
 		textViewTitle.setText(tag.getName());
 		
 		TextView textViewDesc = (TextView)itemView.findViewById(R.id.tag_date_created);
-		textViewDesc.setText(tag.getDateCreated().toString());
+		textViewDesc.setText(ReviewerTools.preapreDate(tag.getDateCreated()));
 		
 		return itemView;
 	}

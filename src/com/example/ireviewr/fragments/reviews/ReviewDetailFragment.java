@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.adapters.pagers.ReviewsPagerAdapter;
 
 public class ReviewDetailFragment extends Fragment {
 
@@ -59,22 +60,22 @@ public class ReviewDetailFragment extends Fragment {
 		Bundle bundle = getArguments();
 		
 		TextView name = (TextView)view.findViewById(R.id.review_name_content);
-		name.setText(bundle.getString("NAME"));
+		name.setText(bundle.getString(ReviewsPagerAdapter.NAME));
 		
 		TextView created = (TextView)view.findViewById(R.id.review_desc_contnt);
-		created.setText(bundle.getString("CREATED"));
+		created.setText(bundle.getString(ReviewsPagerAdapter.CREATED));
 		
 		RatingBar rating = (RatingBar)view.findViewById(R.id.review_rating_content);
-		rating.setRating((float)bundle.getDouble("RATING"));
+		rating.setRating((float)bundle.getDouble(ReviewsPagerAdapter.RATING));
 		
 		TextView modified = (TextView)view.findViewById(R.id.review_modified_contnt);
-		modified.setText(bundle.getString("LAST MODIFIED"));
+		modified.setText(bundle.getString(ReviewsPagerAdapter.LAST_MODIFIED));
 		
 		TextView description = (TextView)view.findViewById(R.id.review_description_contnt);
-		description.setText(bundle.getString("DESCRIPTION"));
+		description.setText(bundle.getString(ReviewsPagerAdapter.DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.review_image_content);
-		image.setImageResource(bundle.getInt("IMAGE"));
+		image.setImageResource(bundle.getInt(ReviewsPagerAdapter.IMAGE));
 		
 		return view;
 	}

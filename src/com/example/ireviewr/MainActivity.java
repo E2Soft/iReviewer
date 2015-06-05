@@ -104,8 +104,8 @@ public class MainActivity extends FragmentActivity{
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
     	mNavItems.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-        mNavItems.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-        mNavItems.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
+        mNavItems.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_group));
+        mNavItems.add(new NavItem("Places", "Meetup destination", R.drawable.ic_action_place));
         mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
         mNavItems.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
         mNavItems.add(new NavItem("Sync data", "Sync data from repo", R.drawable.ic_action_refresh));

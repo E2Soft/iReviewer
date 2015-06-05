@@ -12,12 +12,20 @@ import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
 import com.example.ireviewr.model.ReviewItem;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 
 	private String[] names ={"Detail","Comments", "Galery"};
 	private Context context;
 	private Bundle bundle;
+	
+	public static String NAME ="NAME";
+	public static String DESCRIPTION ="DESCRIPTION";
+	public static String CREATED = "CREATED";
+	public static String LAST_MODIFIED = "LAST MODIFIED";
+	public static String IMAGE = "IMAGE";
+	public static String RATING = "RATING";
 	
 	public ReviewsPagerAdapter(Bundle bundle, FragmentManager fm, Context context) {
 		super(fm);
@@ -44,12 +52,12 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 		
 		if(position == 0){
 			Bundle bundle = new Bundle();
-			bundle.putString("NAME", review.getName());
-			bundle.putString("DESCRIPTION", review.getDescription());
-			bundle.putString("CREATED", review.getCreated().toString());
-			bundle.putString("LAST MODIFIED", review.getLast_modified().toString());
-			bundle.putInt("IMAGE", R.drawable.ic_action_camera);
-			bundle.putDouble("RATING", review.getRating());
+			bundle.putString(NAME, review.getName());
+			bundle.putString(DESCRIPTION, review.getDescription());
+			bundle.putString(CREATED,ReviewerTools.preapreDate(review.getCreated()));
+			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getLast_modified()));
+			bundle.putInt(IMAGE, R.drawable.ic_action_camera);
+			bundle.putDouble(RATING, review.getRating());
 			
 			fragment = new ReviewDetailFragment();
 			fragment.setArguments(bundle);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class CommentsAdapter extends ArrayAdapter<Comment>{
 
@@ -54,7 +55,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment>{
 		userCreated.setText(comment.getUserCreated());
 		
 		TextView dateCreated = (TextView)itemView.findViewById(R.id.date_created);
-		dateCreated.setText(comment.getDateCreated().toString());
+		dateCreated.setText(ReviewerTools.preapreDate(comment.getDateCreated()));
 		
 		return itemView;
 	}
