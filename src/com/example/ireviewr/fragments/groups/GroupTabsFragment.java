@@ -97,6 +97,7 @@ public class GroupTabsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
 	}
 	

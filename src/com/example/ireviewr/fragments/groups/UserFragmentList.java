@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.UserAdapter;
 import com.example.ireviewr.model.UserItem;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class UserFragmentList extends ListFragment {
 
@@ -116,7 +117,7 @@ public class UserFragmentList extends ListFragment {
 		
 		Bundle bundle = new Bundle();
 		bundle.putString(NAME, item.getUsername());
-		bundle.putString(LAST_MODIFIED, item.getLastModified().toString());
+		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(item.getLastModified()));
 		
 		Fragment fragment = new UserDetailFragment();
 		fragment.setArguments(bundle);
