@@ -1,9 +1,12 @@
-package com.example.ireviewr.fragments.reviews;
+package com.example.ireviewr.fragments;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,22 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.ReviewsAdapter;
-import com.example.ireviewr.model.ReviewItem;
+import com.example.ireviewr.adapters.TagsAdapter;
+import com.example.ireviewr.model.Tag;
 
-public class ReviewsGroupList extends ListFragment{
-	
-	private ArrayList<ReviewItem> items;
-	private ArrayAdapter<ReviewItem> myAdapter;
+public class TagsFragmentList extends ListFragment {
+
+	private ArrayList<Tag> items;
+	private ArrayAdapter<Tag> myAdapter;
 	public static String DATA = "DATA";
 	
-	public static ReviewsGroupList newInstance(ArrayList<ReviewItem> items) {
-		ReviewsGroupList fragment = new ReviewsGroupList();
+	public static TagsFragmentList newInstance(ArrayList<Tag> items) {
+		TagsFragmentList fragment = new TagsFragmentList();
 	    
 		Bundle bundle = new Bundle();
 		bundle.putParcelableArrayList(DATA, items);
@@ -52,31 +54,13 @@ public class ReviewsGroupList extends ListFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.list_view_fragment, container, false);
+		View view = inflater.inflate(R.layout.tags_list, container, false);
 		
-		myAdapter = new ReviewsAdapter(getActivity(), R.layout.review_item, items);
+		myAdapter = new TagsAdapter(getActivity(), R.layout.tags_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
 		return view; 
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		// handle item selection
-		switch (item.getItemId()) {
-			case R.id.add_item:
-				
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.replace(R.id.mainContent, new CreateReviewFragment())
-				.addToBackStack(null)
-				.commit();
-				
-				return true;
-		    default:
-		    	return super.onOptionsItemSelected(item);
-		}
 	}
 	
 	@Override
@@ -110,20 +94,61 @@ public class ReviewsGroupList extends ListFragment{
 	}
 	
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		Fragment fragment = ReviewTabFragment.newInstance(position);
+		// handle item selection
+		switch (item.getItemId()) {
+			case R.id.add_item:
+				tagsDialog();
+				
+				return true;
+		    default:
+		    	return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	private void tagsDialog(){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+		final View promptView = layoutInflater.inflate(R.layout.comment_dialog, null);
+		alertDialogBuilder.setView(promptView);
 		
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment).
-												addToBackStack(null).commit();
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton(R.string.comment, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//get data
+					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+					//create object
+					Tag tag = new Tag(editText.getText().toString(), new Date());
+					//add to list
+					items.add(tag);
+					
+					//update original list
+					((TagsAdapter) myAdapter).getItemsOriginal().add(tag);
+					
+					//notify adapter
+					myAdapter.notifyDataSetChanged();
+				}
+			})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+			});
+		
+		
+		// create an alert dialog
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.groups);
+		getActivity().getActionBar().setTitle(R.string.review_tags);
 		setHasOptionsMenu(true);
 	}
 	

@@ -14,13 +14,12 @@
         android:layout_alignParentStart="true"
         android:layout_margin="5dp" />
     
-    <CheckedTextView
+    <TextView
         android:id="@+id/tag_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/tag_item_icon"
         android:layout_toEndOf="@+id/tag_item_icon"

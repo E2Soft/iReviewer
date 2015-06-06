@@ -36,11 +36,9 @@ import android.widget.Toast;
 
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
-import com.example.ireviewr.fragments.LocationFragment;
 import com.example.ireviewr.fragments.MyMapFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
-import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.tools.Mokap;

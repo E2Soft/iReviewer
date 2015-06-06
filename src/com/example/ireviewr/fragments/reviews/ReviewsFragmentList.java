@@ -67,7 +67,12 @@ public class ReviewsFragmentList extends ListFragment {
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add Reviews item pressed", Toast.LENGTH_LONG).show();
+				
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.replace(R.id.mainContent, new CreateReviewFragment())
+				.addToBackStack(null)
+				.commit();
+				
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);

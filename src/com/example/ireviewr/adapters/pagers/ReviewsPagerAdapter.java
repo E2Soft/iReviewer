@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.GaleryGridFragment;
+import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
@@ -16,7 +16,7 @@ import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] names ={"Detail","Comments", "Galery"};
+	private String[] names ={"Detail", "Comments", "Galery", "Tags"};
 	private Context context;
 	private Bundle bundle;
 	
@@ -65,6 +65,8 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 			fragment = CommentsListFragment.newInstance(review.getComments());
 		}else if(position == 2){
 			fragment = GaleryGridFragment.newInstance(review.getImages());
+		}else if(position == 3){
+			fragment = TagsFragmentList.newInstance(review.getTags());
 		}
 		
 		return fragment;

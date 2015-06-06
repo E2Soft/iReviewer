@@ -1,9 +1,12 @@
 package com.example.ireviewr.fragments.reviews;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -12,7 +15,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,8 +30,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
@@ -92,17 +99,51 @@ public class CreateReviewFragment extends Fragment {
 			}
 		});
 		
+		final TextView tagContent = (TextView)view.findViewById(R.id.review_tags_list);
+		
 		Button choose_tags = (Button)view.findViewById(R.id.choose_tags);
 		choose_tags.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				//Toast.makeText(getActivity(), "Tags clicked", Toast.LENGTH_LONG).show();
-				setUpTags();
+				addTagDialog(tagContent);
 			}
 		});
 		
 		return view;
+	}
+	
+	private void addTagDialog(final TextView tagContent){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+		final View promptView = layoutInflater.inflate(R.layout.add_tag_layout, null);
+		alertDialogBuilder.setView(promptView);
+		
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					EditText content = (EditText)promptView.findViewById(R.id.tag_content);
+					
+					String oldValue = tagContent.getText().toString();
+					String newValue = oldValue+" #"+content.getText().toString();
+					
+					tagContent.setText(newValue);
+				}
+			})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+			});
+		
+		
+		// create an alert dialog
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
 	}
 	
 	//set up tags dialog
@@ -227,6 +268,31 @@ public class CreateReviewFragment extends Fragment {
 			}
 		}
 		
+	}
+	
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir = Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    String mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+	    return image;
+	}
+	
+	private void galleryAddPic() throws IOException {
+	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    File f = new File(createImageFile().getAbsolutePath());
+	    Uri contentUri = Uri.fromFile(f);
+	    mediaScanIntent.setData(contentUri);
+	    getActivity().sendBroadcast(mediaScanIntent);
 	}
 	
 	private void takePhoto(Bundle extras){

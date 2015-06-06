@@ -46,9 +46,12 @@
     <string name="save_item">Save</string>
     <string name="cancel_item">Cancel</string>
     
-    <string name="comment_name">Comment thih review</string>
+    <string name="comment_name">Comment this review</string>
     <string name="comment_content">Enter comment here..</string>
     <string name="comment">Comment</string>
     <string name="cancel">Cancel</string>
+    
+    <string name="tag_name">Add tag</string>
+    <string name="tag_content">Enter tag name</string>
     
 </resources>

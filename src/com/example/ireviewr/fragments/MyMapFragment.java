@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.fragments.reviewobjects.CreateReviewObjectFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +39,29 @@ public class MyMapFragment extends Fragment{
 		
 		getActivity().getActionBar().setTitle(R.string.home);
 	    setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		//dodati meni
+		inflater.inflate(R.menu.home_menu, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// handle item selection
+		switch (item.getItemId()) {
+			case R.id.home_add_item:
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.replace(R.id.mainContent, new CreateReviewObjectFragment())
+				.addToBackStack(null).commit();
+				
+				return true;
+		    default:
+		    	return super.onOptionsItemSelected(item);
+		}
 	}
 	
     @Override

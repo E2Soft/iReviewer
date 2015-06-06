@@ -24,7 +24,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment>{
 		super(context, resource);
 		this.items = items;
 		this.mContext = context;
-		itemsOriginal = new ArrayList<Comment>(this.items);
+		this.itemsOriginal = new ArrayList<Comment>(this.items);
 	}
 	
 	@Override
