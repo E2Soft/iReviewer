@@ -1,8 +1,5 @@
 package com.example.ireviewr.fragments.groups;
 
-import java.util.ArrayList;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,28 +9,67 @@ import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.GroupPagerAdapter;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.model.Group;
+import com.example.ireviewr.tools.Mokap;
 
 public class GroupTabsFragment extends Fragment {
 
 	private GroupPagerAdapter mGroupPagerAdapter;
 	private ViewPager mViewPager;
-	private Context context;
-	private ArrayList<NavItem> groups;
-	private ArrayList<NavItem> users;
+	private int id;//key of a chosen group
 	
-	public GroupTabsFragment(Context context,
-			ArrayList<NavItem> groups, ArrayList<NavItem> users) {
-		this.context = context;
-		this.groups = groups;
-		this.users = users;
+	public static String ID = "ID";
+	public static String DATA = "DATA";
+	
+	public static GroupTabsFragment newInstance(int id) {
+		GroupTabsFragment fragment = new GroupTabsFragment();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putInt(ID, id);
+		fragment.setArguments(bundle);
+		
+	    return fragment;
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		/*if(savedInstanceState == null || !savedInstanceState.containsKey(GROUPS)
+				|| !savedInstanceState.containsKey(USERS)) {
+			groups = getArguments().getParcelableArrayList(GROUPS);
+			users = getArguments().getParcelableArrayList(USERS);
+		}else{
+			groups = savedInstanceState.getParcelableArrayList(GROUPS);
+			users = savedInstanceState.getParcelableArrayList(USERS);
+		}*/
+		
+		/*groups = getArguments().getParcelableArrayList(GROUPS);
+		users = getArguments().getParcelableArrayList(USERS);
+		bundleArgs = getArguments().getBundle(ARGS);*/
+		id = getArguments().getInt(ID);
+		
 		setHasOptionsMenu(true);
+	}
+	
+	/*@Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(GROUPS, users);
+        outState.putParcelableArrayList(USERS, groups);
+        super.onSaveInstanceState(outState);
+    }*/
+	
+	private Bundle getDetailBundleByID(){
+		Bundle bundle = new Bundle();
+		Group group = getGroupByID(id);
+		bundle.putParcelable(DATA, group);
+		
+		return bundle;
+	}
+	
+	//TODO:Mokap ali kasnije bi trebali citati iz baze
+	private Group getGroupByID(int id){
+		return Mokap.getGroupList().get(id);
 	}
 	
 	@Override
@@ -41,7 +77,7 @@ public class GroupTabsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View v = inflater.inflate(R.layout.group_fragment_tabbed, container, false);
-		mGroupPagerAdapter = new GroupPagerAdapter(getArguments(),getChildFragmentManager(),context,groups,users);
+		mGroupPagerAdapter = new GroupPagerAdapter(getDetailBundleByID(),getChildFragmentManager(),getActivity());
         
         mViewPager = (ViewPager) v.findViewById(R.id.group_pager);
         mViewPager.setAdapter(mGroupPagerAdapter);
@@ -61,6 +97,7 @@ public class GroupTabsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
 	}
 	

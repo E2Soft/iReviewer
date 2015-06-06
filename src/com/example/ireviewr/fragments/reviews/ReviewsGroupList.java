@@ -17,17 +17,35 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.fragments.groups.GroupDetailFragment;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.adapters.ReviewsAdapter;
+import com.example.ireviewr.model.ReviewItem;
 
 public class ReviewsGroupList extends ListFragment{
 	
-	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private ArrayList<ReviewItem> items;
+	private ArrayAdapter<ReviewItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	public ReviewsGroupList(ArrayList<NavItem> items) {
-		this.items = items;
+	public static ReviewsGroupList newInstance(ArrayList<ReviewItem> items) {
+		ReviewsGroupList fragment = new ReviewsGroupList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
+		
+		//postaviti da fragment ima meni
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -36,20 +54,11 @@ public class ReviewsGroupList extends ListFragment{
 
 		View view = inflater.inflate(R.layout.list_view_fragment, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
+		myAdapter = new ReviewsAdapter(getActivity(), R.layout.review_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
 		return view; 
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -58,7 +67,12 @@ public class ReviewsGroupList extends ListFragment{
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add Group item pressed", Toast.LENGTH_LONG).show();
+				
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.replace(R.id.mainContent, new CreateReviewFragment())
+				.addToBackStack(null)
+				.commit();
+				
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -98,18 +112,12 @@ public class ReviewsGroupList extends ListFragment{
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		NavItem item = items.get(position);
+		Fragment fragment = ReviewTabFragment.newInstance(position);
 		
-		Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
-		
-		Fragment fragment = new GroupDetailFragment();
-		fragment.setArguments(bundle);
-		
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+		getActivity().getSupportFragmentManager()
+												.beginTransaction()
+												.replace(R.id.mainContent, fragment).
+												addToBackStack(null).commit();
 	}
 	
 	@Override

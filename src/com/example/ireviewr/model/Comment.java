@@ -2,7 +2,10 @@ package com.example.ireviewr.model;
 
 import java.util.Date;
 
-public class Comment {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Comment implements Parcelable{
 	
 	private String content;
 	private Date dateCreated;
@@ -37,6 +40,18 @@ public class Comment {
 	
 	public void setUserCreated(String userCreated) {
 		this.userCreated = userCreated;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(content);
+		dest.writeString(userCreated);
+		dest.writeSerializable(dateCreated);
 	}
 	
 }

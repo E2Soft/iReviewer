@@ -13,8 +13,10 @@
     <string name="users">Users</string>
     <string name="detail">Detail</string>
     <string name="comments">Comments</string>
+    <string name="galery">Galery</string>
     
     <string name="create_review">Create review</string>
+    <string name="created">Created</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -26,6 +28,8 @@
     <string name="add_item">Add</string>
     <string name="edit_item">Edit</string>
     <string name="remove_item">Remove</string>
+    
+    <string name="last_date_modified">Last modified</string>
     
     <string name="review_name">Name</string>
     <string name="review_name_edit">Enter name</string>
@@ -42,10 +46,12 @@
     <string name="save_item">Save</string>
     <string name="cancel_item">Cancel</string>
     
-    <string name="comment_name">Comment thih review</string>
+    <string name="comment_name">Comment this review</string>
     <string name="comment_content">Enter comment here..</string>
     <string name="comment">Comment</string>
     <string name="cancel">Cancel</string>
     
+    <string name="tag_name">Add tag</string>
+    <string name="tag_content">Enter tag name</string>
     
 </resources>

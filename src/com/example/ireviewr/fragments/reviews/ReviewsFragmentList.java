@@ -24,9 +24,17 @@ public class ReviewsFragmentList extends ListFragment {
 	
 	private ArrayList<NavItem> items;
 	private ArrayAdapter<NavItem> myAdapter;
+	public static String DATA = "DATA";
 	
-	public ReviewsFragmentList(ArrayList<NavItem> items) {
-		this.items = items;
+	public static ReviewsFragmentList newInstance(ArrayList<NavItem> items) {
+		ReviewsFragmentList fragment = new ReviewsFragmentList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
 	}
 	
 	@Override
@@ -47,6 +55,8 @@ public class ReviewsFragmentList extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
+		items = getArguments().getParcelableArrayList(DATA);
+		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
 	}
@@ -57,7 +67,12 @@ public class ReviewsFragmentList extends ListFragment {
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add Reviews item pressed", Toast.LENGTH_LONG).show();
+				
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.replace(R.id.mainContent, new CreateReviewFragment())
+				.addToBackStack(null)
+				.commit();
+				
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -97,18 +112,20 @@ public class ReviewsFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		/*NavItem item = items.get(position);
+		NavItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
 		bundle.putString("TITLE", item.getmTitle());
 		bundle.putString("TEXT", item.getmSubtitle());
 		bundle.putInt("ICON", item.getmIcon());
 		
-		Fragment fragment = new GroupDetailFragment();
+		Fragment fragment = ReviewTabFragment.newInstance(position);
 		fragment.setArguments(bundle);
 		
-		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainContent, fragment).addToBackStack(null).commit();*/
-		Toast.makeText(getActivity(), "Test", Toast.LENGTH_LONG).show();
+		getActivity().getSupportFragmentManager()
+									.beginTransaction()
+									.replace(R.id.mainContent, fragment).
+									addToBackStack(null).commit();
 	}
 	
 	@Override

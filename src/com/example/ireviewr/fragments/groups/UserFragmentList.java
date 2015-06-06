@@ -17,24 +17,29 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.MyListAdapter;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.adapters.UserAdapter;
+import com.example.ireviewr.model.UserItem;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class UserFragmentList extends ListFragment {
 
-	private ArrayList<NavItem> items;
-	private ArrayAdapter<NavItem> myAdapter;
+	private ArrayList<UserItem> items;
+	private ArrayAdapter<UserItem> myAdapter;
 	
-	/*
-	 * TODO:Ovo ce sigurno biti izmenjeno, 
-	 * sada samo sluzi da vidim da li se prikazuje ok
-	 * Bolja varijanta proslediti neki ID kroz bundle
-	 * pa traziti detalje kursorom
-	 * 
-	 */
-	public UserFragmentList(ArrayList<NavItem> items) {
-		this.items = items;
-	}
+	public static String DATA = "DATA";
+	public static String NAME = "NAME";
+	public static String LAST_MODIFIED = "LAST MODIFIED";
+	
+	public static UserFragmentList newInstance(ArrayList<UserItem> items) {
+		UserFragmentList fragment = new UserFragmentList();
+	    
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(DATA, items);
+		
+		fragment.setArguments(bundle);
+		
+	    return fragment;
+	  }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +47,7 @@ public class UserFragmentList extends ListFragment {
 
 		View view = inflater.inflate(R.layout.users_fragment, container, false);
 		
-		myAdapter = new MyListAdapter(getActivity(), R.layout.drawer_list_item, items);
+		myAdapter = new UserAdapter(getActivity(), R.layout.user_item, items);
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -55,6 +60,8 @@ public class UserFragmentList extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
@@ -106,12 +113,11 @@ public class UserFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		NavItem item = items.get(position);
+		UserItem item = items.get(position);
 		
 		Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
+		bundle.putString(NAME, item.getUsername());
+		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(item.getLastModified()));
 		
 		Fragment fragment = new UserDetailFragment();
 		fragment.setArguments(bundle);

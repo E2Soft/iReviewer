@@ -2,7 +2,6 @@ package com.example.ireviewr.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ireviewr.R;
@@ -26,9 +25,6 @@ public class SplashScreenActivity extends Activity {
 		
 		TextView gText = (TextView)findViewById(R.id.group_subTitle);
 		gText.setText(test);
-		
-		ImageView gImage = (ImageView)findViewById(R.id.group_icon);
-		gImage.setImageResource(icon);
 		
 	}
 	

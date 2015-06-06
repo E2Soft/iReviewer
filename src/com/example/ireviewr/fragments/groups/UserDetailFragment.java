@@ -1,7 +1,5 @@
 package com.example.ireviewr.fragments.groups;
 
-import com.example.ireviewr.R;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +8,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ireviewr.R;
 
 public class UserDetailFragment extends Fragment {
 
@@ -57,13 +56,10 @@ public class UserDetailFragment extends Fragment {
 		Bundle bundle = getArguments();
 		
 		TextView gTitle = (TextView)view.findViewById(R.id.user_title);
-		gTitle.setText(bundle.getString("TITLE"));
+		gTitle.setText(bundle.getString(UserFragmentList.NAME));
 		
-		TextView gText = (TextView)view.findViewById(R.id.user_subTitle);
-		gText.setText(bundle.getString("TEXT"));
-		
-		ImageView gImage = (ImageView)view.findViewById(R.id.user_icon);
-		gImage.setImageResource(bundle.getInt("ICON"));
+		TextView gText = (TextView)view.findViewById(R.id.user_lastModified);
+		gText.setText(bundle.getString(UserFragmentList.LAST_MODIFIED));
 		
 		return view;
 	}
@@ -71,6 +67,7 @@ public class UserDetailFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
 	}
 	
