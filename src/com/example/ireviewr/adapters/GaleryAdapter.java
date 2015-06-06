@@ -1,8 +1,11 @@
 package com.example.ireviewr.adapters;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,17 @@ public class GaleryAdapter extends ArrayAdapter<GaleryItem>{
 		itemsOriginal = new ArrayList<GaleryItem>(this.items);
 	}
 	
+	private void setImageFromPath(ImageView imageView, String path){
+		File imgFile = new  File(path);
+
+		if(imgFile.exists()){
+		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		    imageView.setImageBitmap(myBitmap);
+		}else{
+			imageView.setImageResource(R.drawable.ic_action_picture);
+		}
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
@@ -42,7 +56,7 @@ public class GaleryAdapter extends ArrayAdapter<GaleryItem>{
 		
 		//populate view
 		ImageView imageView = (ImageView)itemView.findViewById(R.id.imageView1);
-		imageView.setImageResource(navItem.getId());
+		setImageFromPath(imageView, navItem.getPath());
 		
 		TextView textViewTitle = (TextView)itemView.findViewById(R.id.text1);
 		textViewTitle.setText(navItem.getName());

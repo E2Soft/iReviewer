@@ -1,8 +1,11 @@
 package com.example.ireviewr.adapters;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,17 @@ public class ReviewsAdapter extends ArrayAdapter<ReviewItem>{
 		this.mContext = context;
 	}
 	
+	private void setImageFromPath(ImageView imageView, String path){
+		File imgFile = new  File(path);
+
+		if(imgFile.exists()){
+		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+		    imageView.setImageBitmap(myBitmap);
+		}else{
+			imageView.setImageResource(R.drawable.ic_action_picture);
+		}
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View itemView = convertView;
@@ -47,7 +61,7 @@ public class ReviewsAdapter extends ArrayAdapter<ReviewItem>{
 		rating.setRating((float)tag.getRating());
 		
 		ImageView image = (ImageView)itemView.findViewById(R.id.review_item_icon);
-		image.setImageResource(R.drawable.ic_action_select_all);
+		setImageFromPath(image, tag.getPicture().getPath());
 		
 		return itemView;
 	}

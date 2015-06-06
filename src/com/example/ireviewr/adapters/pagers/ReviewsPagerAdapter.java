@@ -56,7 +56,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 			bundle.putString(DESCRIPTION, review.getDescription());
 			bundle.putString(CREATED,ReviewerTools.preapreDate(review.getCreated()));
 			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getLast_modified()));
-			bundle.putInt(IMAGE, R.drawable.ic_action_camera);
+			bundle.putString(IMAGE, review.getPicture().getPath());
 			bundle.putDouble(RATING, review.getRating());
 			
 			fragment = new ReviewDetailFragment();

@@ -4,7 +4,7 @@ package com.example.ireviewr.fragments.reviews;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -40,7 +40,7 @@ public class CreateReviewFragment extends Fragment {
 	private int SELECT_PHOTO = 2;
 	private ImageView mImageView;
 	private Bitmap bitmap;
-	private ArrayList<Integer> mSelectedItems = new ArrayList<Integer>();  // Where we track the selected items
+	private HashMap<Integer, Boolean> mSelectedItems = new HashMap<Integer, Boolean>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +124,19 @@ public class CreateReviewFragment extends Fragment {
 		
 		
 		AlertDialog dialog = builder.create();
+		
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			
+			@Override
+			public void onShow(DialogInterface dialog) {
+				ListView listView = (((AlertDialog) dialog).getListView());
+				
+				for(Integer key : mSelectedItems.keySet()){
+					listView.setItemChecked(key, mSelectedItems.get(key));
+				}
+			}
+		});
+		
 		dialog.getListView().setItemsCanFocus(false);
 		dialog.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		dialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -133,6 +146,9 @@ public class CreateReviewFragment extends Fragment {
 					int position, long id) {
 				
 				CheckedTextView textView = (CheckedTextView)view.findViewById(R.id.tag_name);
+				
+				//put value
+				mSelectedItems.put(position, textView.isChecked());
 				
 		        if(textView.isChecked()) {
 		        	textView.setChecked(false);

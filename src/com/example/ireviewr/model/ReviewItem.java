@@ -17,6 +17,7 @@ public class ReviewItem implements Parcelable{
 	private Date last_modified;
 	private ArrayList<GaleryItem> images;
 	private ArrayList<Tag> tags;
+	private GaleryItem picture;
 	
 	public ReviewItem() {
 		// TODO Auto-generated constructor stub
@@ -25,7 +26,7 @@ public class ReviewItem implements Parcelable{
 	public ReviewItem(String name, String description, double rating,
 			UserItem creator, ArrayList<Comment> comments, Date created,
 			Date last_modified, ArrayList<GaleryItem> images,
-			ArrayList<Tag> tags) {
+			ArrayList<Tag> tags, GaleryItem picture) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -36,6 +37,7 @@ public class ReviewItem implements Parcelable{
 		this.last_modified = last_modified;
 		this.images = images;
 		this.tags = tags;
+		this.picture = picture;
 	}
 	
 	public String getName() {
@@ -116,6 +118,14 @@ public class ReviewItem implements Parcelable{
 		return 0;
 	}
 	
+	public GaleryItem getPicture() {
+		return picture;
+	}
+	
+	public void setPicture(GaleryItem picture) {
+		this.picture = picture;
+	}
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
@@ -127,7 +137,7 @@ public class ReviewItem implements Parcelable{
 		dest.writeList(tags);
 		dest.writeSerializable(last_modified);
 		dest.writeSerializable(created);
-		
+		dest.writeParcelable(picture, flags);
 	}
 	
 }

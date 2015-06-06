@@ -76,11 +76,6 @@ public class Mokap {
     
 	public static ArrayList<GaleryItem> gatGaleryList(){
 		ArrayList<GaleryItem> items = new ArrayList<GaleryItem>();
-		items.add(new GaleryItem("Test1", R.drawable.ic_action_edit));
-		items.add(new GaleryItem("Test2", R.drawable.ic_action_labels));
-		items.add(new GaleryItem("Test3", R.drawable.ic_action_map));
-		items.add(new GaleryItem("Test4", R.drawable.ic_action_picture));
-		items.add(new GaleryItem("Test5", R.drawable.ic_action_camera));
 		
 		return items;
 	}
@@ -104,16 +99,19 @@ public class Mokap {
 		
 		items.add(new ReviewItem("Name1", "Bla1", 2, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
-				gatGaleryList(), getTags()));
+				gatGaleryList(), getTags(),new GaleryItem("", "")));
 		items.add(new ReviewItem("Name2", "Bla2", 3, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
-				gatGaleryList(), getTags()));
-		items.add(new ReviewItem("Name3", "Bla3", 1, getUserList().get(0), 
+				gatGaleryList(), getTags(),new GaleryItem("", "")));
+		items.add(new ReviewItem("Name3", "Bla3", 4, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
-				gatGaleryList(), getTags()));
-		items.add(new ReviewItem("Name4", "Bla4", 4, getUserList().get(0), 
+				gatGaleryList(), getTags(),new GaleryItem("", "")));
+		items.add(new ReviewItem("Name4", "Bla4", 5, getUserList().get(0), 
 				getCommentsList(), new Date(), new Date(), 
-				gatGaleryList(), getTags()));
+				gatGaleryList(), getTags(),new GaleryItem("", "")));
+		items.add(new ReviewItem("Name5", "Bla5", 1, getUserList().get(0), 
+				getCommentsList(), new Date(), new Date(), 
+				gatGaleryList(), getTags(),new GaleryItem("", "")));
 		
 		return items;
 	}
