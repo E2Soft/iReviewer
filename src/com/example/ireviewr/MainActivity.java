@@ -36,6 +36,8 @@ import android.widget.Toast;
 
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
+import com.example.ireviewr.fragments.LocationFragment;
+import com.example.ireviewr.fragments.MyMapFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
@@ -165,10 +167,8 @@ public class MainActivity extends FragmentActivity{
     private void selectItemFromDrawer(int position) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	if(position == 0){
-    		fragmentManager.beginTransaction().replace(R.id.mainContent, new  CreateReviewFragment()).commit();
+    		fragmentManager.beginTransaction().replace(R.id.mainContent, MyMapFragment.newInstance()).commit();
     	}else if(position == 1){
-        	/*fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new TabbedFragment(MainActivity.this)).addToBackStack(null).commit();*/
     		fragmentManager.beginTransaction().
         	replace(R.id.mainContent, GroupsListFragment.newInstance(Mokap.getGroupList())).addToBackStack(null).commit();
         }else if(position == 2){
