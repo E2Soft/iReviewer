@@ -107,6 +107,30 @@ public class MainActivity extends FragmentActivity{
         if (savedInstanceState == null) {
             selectItemFromDrawer(0);
         }
+        
+		//////////////////////////////////
+		User testUser = new User("test_user", "test@user.com");
+		testUser.save();
+		
+		Log.d("DATABASE", "starting save test");
+		Group group = new Group("mygroup", testUser);
+		group.save();
+		group = new Group("mygroup2", testUser);
+		group.save();
+		group = new Group("mygroup3", testUser);
+		group.save();
+		Log.d("DATABASE", "saved");
+		
+		Log.d("DATABASE", "starting query test");
+		List<Group> existingGroups = (new Select())
+		.from(Group.class)
+		.execute();
+		for(Group existingGroup : existingGroups)
+		{
+			Log.d("DATABASE", "got group with name: "+existingGroup.getName());
+		}
+		
+		/////////////////////////////////////
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){

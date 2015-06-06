@@ -1,12 +1,12 @@
 package com.example.ireviewr.fragments.groups;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,14 +17,23 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.example.ireviewr.R;
-import com.example.ireviewr.loaders.SimpleCursorLoaderCallbacks;
+import com.example.ireviewr.adapters.AbstractArrayAdapter;
+import com.example.ireviewr.adapters.SimpleArrayAdapter;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.model.User;
 
 public class GroupsListFragment extends ListFragment {
 	private ArrayList<NavItem> items;
-	private CursorAdapter myAdapter;
+	private AbstractArrayAdapter<Group> myAdapter;
+	
+	public GroupsListFragment()
+	{
+		this.items = new ArrayList<NavItem>();
+	}
 	
 	public GroupsListFragment(ArrayList<NavItem> items) {
 		this.items = items;
@@ -36,17 +45,18 @@ public class GroupsListFragment extends ListFragment {
 
 		View view = inflater.inflate(R.layout.groups_list, container, false);
 		
-		myAdapter = new SimpleCursorAdapter(getActivity(),
-		        android.R.layout.simple_expandable_list_item_1,
-		        null,
-		        new String[] { "name" },
-		        new int[] { android.R.id.text1 },
-		        0);
+		myAdapter = new SimpleArrayAdapter<Group>(getActivity(), android.R.layout.simple_expandable_list_item_1)
+		{
+			@Override
+			protected String[] getDataToDisplay(Group item)
+			{
+				return new String[] {item.getName()};
+			}
+		};
 		
-		getActivity().getSupportLoaderManager().initLoader(0, null, new SimpleCursorLoaderCallbacks(
-				getActivity(), 
-				myAdapter, 
-				Group.class));
+		getActivity().getSupportLoaderManager().initLoader(0, null, new ModelLoaderCallbacks<Group>(getActivity(), 
+				Group.class, 
+				myAdapter));
 		
 		setListAdapter(myAdapter);
 		
@@ -69,6 +79,14 @@ public class GroupsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.add_item:
 				Toast.makeText(getActivity(), "Add Group item pressed", Toast.LENGTH_LONG).show();
+				
+				///////test////////
+				String newid = ""+UUID.randomUUID().getLeastSignificantBits()%10000;
+				User testUser = new Select().from(User.class).executeSingle();
+				Group group = new Group("mygroup"+newid, testUser);
+				group.save();
+				///////////////
+				
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);

@@ -11,7 +11,14 @@ import android.support.v4.widget.CursorAdapter;
 import com.activeandroid.Model;
 import com.activeandroid.content.ContentProvider;
 
-public class SimpleCursorLoaderCallbacks implements LoaderCallbacks<Cursor>
+/**
+ * LoaderCallbacks koji koristi CursorLoader za rad sa active-android orm.
+ * Deprecated, koristiti {@link #ModelLoaderCallbacks} (pogodniji za orm).
+ * @author LaptopX
+ *
+ */
+@Deprecated
+public class CursorLoaderCallbacks implements LoaderCallbacks<Cursor>
 {
 	private Context currentContext;
 	private CursorAdapter cursorAdapter;
@@ -21,27 +28,27 @@ public class SimpleCursorLoaderCallbacks implements LoaderCallbacks<Cursor>
 	private String[] selectionArgs = null;
 	private String sortOrder = null;
 	
-	public SimpleCursorLoaderCallbacks(Context currentContext, CursorAdapter cursorAdapter, Class<? extends Model> entityClass)
+	public CursorLoaderCallbacks(Context currentContext, CursorAdapter cursorAdapter, Class<? extends Model> entityClass)
 	{
 		this.currentContext = currentContext;
 		this.cursorAdapter = cursorAdapter;
 		this.entityClass = entityClass;
 	}
 
-	public SimpleCursorLoaderCallbacks projection(String... projection)
+	public CursorLoaderCallbacks projection(String... projection)
 	{
 		this.projection = projection;
 		return this;
 	}
 	
-	public SimpleCursorLoaderCallbacks selection(String selection, String... selectionArgs)
+	public CursorLoaderCallbacks selection(String selection, String... selectionArgs)
 	{
 		this.selection = selection;
 		this.selectionArgs = selectionArgs;
 		return this;
 	}
 	
-	public SimpleCursorLoaderCallbacks sortOrder(String sortOrder)
+	public CursorLoaderCallbacks sortOrder(String sortOrder)
 	{
 		this.sortOrder = sortOrder;
 		return this;
