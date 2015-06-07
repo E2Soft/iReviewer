@@ -1,7 +1,5 @@
 package com.example.ireviewr.fragments.reviews;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -11,38 +9,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.ReviewsAdapter;
-import com.example.ireviewr.model.ReviewItem;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
+import com.example.ireviewr.model.Review;
 
-public class ReviewsGroupList extends ListFragment{
+public class ReviewsGroupList extends ListFragment
+{
+	private ReviewsAdapter myAdapter;
 	
-	private ArrayList<ReviewItem> items;
-	private ArrayAdapter<ReviewItem> myAdapter;
-	public static String DATA = "DATA";
-	
-	public static ReviewsGroupList newInstance(ArrayList<ReviewItem> items) {
+	// TODO uraditi da prima id rev objekta i trazi reviewove za njega
+	public static ReviewsGroupList newInstance() {
 		ReviewsGroupList fragment = new ReviewsGroupList();
-	    
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(DATA, items);
-		
-		fragment.setArguments(bundle);
-		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
@@ -50,12 +38,17 @@ public class ReviewsGroupList extends ListFragment{
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
+			Bundle savedInstanceState)
+	{
 		View view = inflater.inflate(R.layout.list_view_fragment, container, false);
 		
-		myAdapter = new ReviewsAdapter(getActivity(), R.layout.review_item, items);
-		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
+		myAdapter = new ReviewsAdapter(getActivity());
+		// TODO uraditi da prima id rev objekta i trazi reviewove za njega
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.REVIEW, null, 
+				new ModelLoaderCallbacks<Review>(getActivity(), 
+				Review.class, 
+				myAdapter));
+		
 		setListAdapter(myAdapter);
 		
 		return view; 

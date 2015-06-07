@@ -45,7 +45,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 			fragment = new GroupDetailFragment();
 			fragment.setArguments(bundle);
 		}else if(position == 1){
-			fragment = ReviewsGroupList.newInstance(Mokap.getReviewList());
+			fragment = ReviewsGroupList.newInstance();
 		}else if(position == 2){
 			fragment = UserFragmentList.newInstance(Mokap.getUserList());
 		}
