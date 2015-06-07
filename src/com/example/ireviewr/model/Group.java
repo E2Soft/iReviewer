@@ -48,7 +48,7 @@ public class Group extends AbstractModel
 	
 	public List<User> getUsers()
 	{
-		List<GroupToUser> manyToMany = getMany(GroupToUser.class, "group");
+		List<GroupToUser> manyToMany = getMany(GroupToUser.class, "userGroup");
 		List<User> ret = new ArrayList<User>();
 		for(GroupToUser m2m : manyToMany)
 		{
@@ -65,7 +65,7 @@ public class Group extends AbstractModel
 	
 	public List<Review> getReviews()
 	{
-		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "group");
+		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "userGroup");
 		List<Review> ret = new ArrayList<Review>();
 		for(GroupToReview m2m : manyToMany)
 		{

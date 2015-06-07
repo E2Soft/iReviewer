@@ -3,7 +3,6 @@ package com.example.ireviewr.adapters;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -13,28 +12,27 @@ import android.widget.TextView;
  *
  * @param <T> tip modela
  */
-public class SimpleArrayAdapter<T> extends AbstractArrayAdapter<T>
+public class SingleFieldArrayAdapter<T> extends AbstractArrayAdapter<T>
 {
-	public SimpleArrayAdapter(Context context, int resource)
+	public SingleFieldArrayAdapter(Context context)
+	{
+		super(context, android.R.layout.simple_expandable_list_item_1);
+	}
+	
+	public SingleFieldArrayAdapter(Context context, int resource)
 	{
 		super(context, resource);
 	}
 	
-	@Override
-	protected View createViewFromResource(int position, View convertView, ViewGroup parent, int resource)
+	public SingleFieldArrayAdapter(Context context, int resource, int textViewResourceId)
 	{
-		View view;
+		super(context, resource, textViewResourceId);
+	}
+	
+	@Override
+	protected void populateView(View view, T item)
+	{
 		TextView text;
-		
-		if (convertView == null)
-		{
-			view = mInflater.inflate(resource, parent, false);
-		}
-		else
-		{
-			view = convertView;
-		}
-		
 		try
 		{
 			if (mFieldId == 0)
@@ -48,7 +46,8 @@ public class SimpleArrayAdapter<T> extends AbstractArrayAdapter<T>
 				// Otherwise, find the TextView field within the layout
 				text = (TextView) view.findViewById(mFieldId);
 			}
-		} catch (ClassCastException e)
+		}
+		catch (ClassCastException e)
 		{
 			Log.e("ArrayAdapter",
 					"You must supply a resource ID for a TextView");
@@ -56,7 +55,6 @@ public class SimpleArrayAdapter<T> extends AbstractArrayAdapter<T>
 					"ArrayAdapter requires the resource ID to be a TextView", e);
 		}
 		
-		T item = getItem(position);
 		if (item instanceof CharSequence)
 		{
 			text.setText((CharSequence) item);
@@ -65,7 +63,5 @@ public class SimpleArrayAdapter<T> extends AbstractArrayAdapter<T>
 		{
 			text.setText(getDataToDisplay(item)[0]);
 		}
-		
-		return view;
 	}
 }
