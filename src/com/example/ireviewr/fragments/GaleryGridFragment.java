@@ -14,40 +14,32 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GaleryAdapter;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.GaleryItem;
+import com.example.ireviewr.model.Image;
 
 public class GaleryGridFragment extends Fragment {
 
 	private CharSequence[] itemNames = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 100;
 	private int SELECT_PHOTO = 200;
-	private ArrayList<GaleryItem> items;
-	private ArrayAdapter<GaleryItem> myAdapter;
-	
-	public static String DATA = "DATA";
+	private GaleryAdapter myAdapter;
 	
 	public static GaleryGridFragment newInstance(ArrayList<GaleryItem> items) {
 		GaleryGridFragment fragment = new GaleryGridFragment();
-	    
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(DATA, items);
-		fragment.setArguments(bundle);
-		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		items = getArguments().getParcelableArrayList(DATA);
 		
 		setHasOptionsMenu(true);
 	}
@@ -122,16 +114,20 @@ public class GaleryGridFragment extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+			Bundle savedInstanceState)
+	{
+		View view = inflater.inflate(R.layout.galery_layout, container, false);
 		
-		 View view = inflater.inflate(R.layout.galery_layout, container, false);
+		myAdapter = new GaleryAdapter(getActivity());
 		
-		 myAdapter = new GaleryAdapter(getActivity(), R.layout.galery_item, items);
-			//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
-		 GridView gridview = (GridView)view.findViewById(R.id.gridview);
-		 gridview.setAdapter(myAdapter);
-		 //gridview.setOnItemClickListener(this);
-		 
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.IMAGE, null, 
+				new ModelLoaderCallbacks<Image>(getActivity(), 
+				Image.class, 
+				myAdapter));
+		
+		GridView gridview = (GridView)view.findViewById(R.id.gridview);
+		gridview.setAdapter(myAdapter);
+		
 		return view;
 	}
 	

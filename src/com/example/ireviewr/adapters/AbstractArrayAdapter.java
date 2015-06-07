@@ -35,8 +35,8 @@ import android.widget.Filterable;
 
 /**
  * <p>Modified version of an ArrayAdapter to be more extensible.
- * Added methods: {@link #getDataToDisplay(T)} and {@link #getTextToFilter(T)}, {@link #createViewFromResource(T)}
- *  is now abstract and should be implemented in concreete adapter.
+ * Added methods: {@link #getDataToDisplay(T)} and {@link #getTextToFilter(T)} and {@link #populateView(View, T)}.
+ * For more details see the docs for each method.
  * <p>Original docs below:
  * 
  * <p>A concrete BaseAdapter that is backed by an array of arbitrary
@@ -371,8 +371,31 @@ public abstract class AbstractArrayAdapter<T> extends BaseAdapter implements Fil
         return createViewFromResource(position, convertView, parent, mResource);
     }
 
-    protected abstract View createViewFromResource(int position, View convertView, ViewGroup parent,
-            int resource);
+	protected View createViewFromResource(int position, View convertView, ViewGroup parent, int resource)
+	{
+		View view;
+		
+		if (convertView == null)
+		{
+			view = mInflater.inflate(resource, parent, false);
+		}
+		else
+		{
+			view = convertView;
+		}
+		
+		populateView(view, getItem(position));
+		
+		return view;
+	}
+	
+	/**
+	 * Populate the view with the data extracted from given item.
+	 * Redefine to map item data to a custom layout.
+	 * @param view to populate
+	 * @param item to extract data from
+	 */
+	protected abstract void populateView(View view, T item);
 
     /**
      * <p>Sets the layout resource to create the drop down views.</p>
@@ -495,9 +518,10 @@ public abstract class AbstractArrayAdapter<T> extends BaseAdapter implements Fil
     }
     
     /**
-     * Returns data to be displayed on view. Can be overriden in client code.
+     * Returns data to be displayed on a view.
+     * Can be overriden in client code to map custom item data to the view.
      * @param item
-     * @return data extracted from item
+     * @return data extracted from the item
      */
     protected String[] getDataToDisplay(T item)
     {

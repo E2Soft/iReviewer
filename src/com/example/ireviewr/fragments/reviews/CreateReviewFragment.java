@@ -148,7 +148,7 @@ public class CreateReviewFragment extends Fragment {
 	
 	//set up tags dialog
 	private void setUpTags(){
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+		/*AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 		.setTitle("Select tags")
 		.setAdapter(new TagsAdapter(getActivity(), R.layout.tags_item, Mokap.getTags()),null)
 		.setCancelable(false)
@@ -202,7 +202,7 @@ public class CreateReviewFragment extends Fragment {
 		});
 		
 		dialog.show();
-		
+		*/
 	}
 	
 	//Choose image from camera or galery

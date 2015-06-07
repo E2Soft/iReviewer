@@ -1,6 +1,6 @@
 package com.example.ireviewr.fragments.groups;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,35 +11,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.UserAdapter;
-import com.example.ireviewr.model.UserItem;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
+import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.Mokap;
 import com.example.ireviewr.tools.ReviewerTools;
 
-public class UserFragmentList extends ListFragment {
-
-	private ArrayList<UserItem> items;
-	private ArrayAdapter<UserItem> myAdapter;
+public class UserFragmentList extends ListFragment
+{
+	private UserAdapter myAdapter;
 	
 	public static String DATA = "DATA";
 	public static String NAME = "NAME";
 	public static String LAST_MODIFIED = "LAST MODIFIED";
 	
-	public static UserFragmentList newInstance(ArrayList<UserItem> items) {
+	public static UserFragmentList newInstance()
+	{
 		UserFragmentList fragment = new UserFragmentList();
-	    
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(DATA, items);
-		
-		fragment.setArguments(bundle);
-		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,21 +43,29 @@ public class UserFragmentList extends ListFragment {
 
 		View view = inflater.inflate(R.layout.users_fragment, container, false);
 		
-		myAdapter = new UserAdapter(getActivity(), R.layout.user_item, items);
-		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
+		myAdapter = new UserAdapter(getActivity());
+		
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.USER, null, 
+				new ModelLoaderCallbacks<User>(getActivity(), 
+				User.class, 
+				myAdapter)
+				{
+					@Override
+					protected List<User> getData()
+					{
+						return Mokap.getUserModelList();
+					}
+				});
+		
 		setListAdapter(myAdapter);
 		
 		return view;
 	}
 	
-	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
@@ -113,11 +117,11 @@ public class UserFragmentList extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		UserItem item = items.get(position);
+		User item = myAdapter.getItem(position);
 		
 		Bundle bundle = new Bundle();
-		bundle.putString(NAME, item.getUsername());
-		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(item.getLastModified()));
+		bundle.putString(NAME, item.getName());
+		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(item.getDateModified()));
 		
 		Fragment fragment = new UserDetailFragment();
 		fragment.setArguments(bundle);

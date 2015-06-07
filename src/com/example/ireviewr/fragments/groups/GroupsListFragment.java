@@ -16,16 +16,16 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.AbstractArrayAdapter;
-import com.example.ireviewr.adapters.SimpleArrayAdapter;
+import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 
 public class GroupsListFragment extends ListFragment
 {
-	private AbstractArrayAdapter<Group> myAdapter;
+	private GroupAdapter myAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,27 +37,20 @@ public class GroupsListFragment extends ListFragment
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
+			Bundle savedInstanceState)
+	{
 		View view = inflater.inflate(R.layout.groups_list, container, false);
 		
-		// TODO koristiti GroupAdapter i R.layout.group_item, prepraviti da radi sa model loaderom
-		myAdapter = new SimpleArrayAdapter<Group>(getActivity(), android.R.layout.simple_expandable_list_item_1)
-		{
-			@Override
-			protected String[] getDataToDisplay(Group item)
-			{
-				return new String[] {item.getName()};
-			}
-		};
+		myAdapter = new GroupAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(0, null, new ModelLoaderCallbacks<Group>(getActivity(), 
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.GROUP, null, 
+				new ModelLoaderCallbacks<Group>(getActivity(), 
 				Group.class, 
 				myAdapter));
 		
 		setListAdapter(myAdapter);
 		
-		return view; 
+		return view;
 	}
 	
 	@Override
