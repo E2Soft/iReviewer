@@ -1,7 +1,6 @@
 package com.example.ireviewr.fragments;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,30 +20,21 @@ import android.widget.SearchView;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.TagsAdapter;
 import com.example.ireviewr.model.Tag;
+import com.example.ireviewr.tools.Mokap;
 
 public class TagsFragmentList extends ListFragment {
-
-	private ArrayList<Tag> items;
 	private ArrayAdapter<Tag> myAdapter;
-	public static String DATA = "DATA";
 	
+	// TODO da prima id rev objekta ili reviewa za koji trazi sve tagove, ili da trazi sve tagove
 	public static TagsFragmentList newInstance(ArrayList<Tag> items) {
 		TagsFragmentList fragment = new TagsFragmentList();
-	    
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(DATA, items);
-		
-		fragment.setArguments(bundle);
-		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
@@ -56,7 +46,7 @@ public class TagsFragmentList extends ListFragment {
 
 		View view = inflater.inflate(R.layout.tags_list, container, false);
 		
-		myAdapter = new TagsAdapter(getActivity(), R.layout.tags_item, items);
+		myAdapter = new TagsAdapter(getActivity(), R.layout.tags_item, Mokap.getTags());
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -121,12 +111,13 @@ public class TagsFragmentList extends ListFragment {
 					//get data
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
 					//create object
-					Tag tag = new Tag(editText.getText().toString(), new Date());
+					//Tag tag = new Tag(editText.getText().toString(), new Date());
 					//add to list
-					items.add(tag);
+					//items.add(tag);
+					// TODO add to database
 					
 					//update original list
-					((TagsAdapter) myAdapter).getItemsOriginal().add(tag);
+					//((TagsAdapter) myAdapter).getItemsOriginal().add(tag);
 					
 					//notify adapter
 					myAdapter.notifyDataSetChanged();

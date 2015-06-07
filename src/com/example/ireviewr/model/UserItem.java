@@ -5,6 +5,10 @@ import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Koristiti {@link #User}
+ */
+@Deprecated
 public class UserItem implements Parcelable{
 	
 	private String username;

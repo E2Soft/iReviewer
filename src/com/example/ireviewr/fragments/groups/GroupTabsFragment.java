@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.GroupPagerAdapter;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.Mokap;
 
 public class GroupTabsFragment extends Fragment {
@@ -61,15 +62,15 @@ public class GroupTabsFragment extends Fragment {
 	
 	private Bundle getDetailBundleByID(){
 		Bundle bundle = new Bundle();
-		Group group = getGroupByID(id);
-		bundle.putParcelable(DATA, group);
+		//Group group = getGroupByID(id);
+		//bundle.putParcelable(DATA, group);
 		
 		return bundle;
 	}
 	
 	//TODO:Mokap ali kasnije bi trebali citati iz baze
 	private Group getGroupByID(int id){
-		return Mokap.getGroupList().get(id);
+		return new Group("test group", new User("test user", "test@test.com"));
 	}
 	
 	@Override

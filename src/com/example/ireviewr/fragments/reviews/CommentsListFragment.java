@@ -1,7 +1,6 @@
 package com.example.ireviewr.fragments.reviews;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,30 +20,22 @@ import android.widget.SearchView;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.CommentsAdapter;
 import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.Mokap;
 
 public class CommentsListFragment extends ListFragment {
 
-	private ArrayList<Comment> items;
 	private ArrayAdapter<Comment> myAdapter;
-	public static String DATA = "DATA";
 	
 	public static CommentsListFragment newInstance(ArrayList<Comment> items) {
 		CommentsListFragment fragment = new CommentsListFragment();
-	    
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(DATA, items);
-		
-		fragment.setArguments(bundle);
-		
 	    return fragment;
-	  }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		items = getArguments().getParcelableArrayList(DATA);
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
@@ -56,7 +47,7 @@ public class CommentsListFragment extends ListFragment {
 
 		View view = inflater.inflate(R.layout.comments_list, container, false);
 		
-		myAdapter = new CommentsAdapter(getActivity(), R.layout.comment_item, items);
+		myAdapter = new CommentsAdapter(getActivity(), R.layout.comment_item, Mokap.getCommentsList());
 		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
 		setListAdapter(myAdapter);
 		
@@ -121,9 +112,10 @@ public class CommentsListFragment extends ListFragment {
 					//get data
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
 					//create object
-					Comment newComment = new Comment(editText.getText().toString(), new Date(), "Test user");
+					Comment newComment = new Comment(editText.getText().toString(), new User(), null);
 					//add to list
-					items.add(newComment);
+					//items.add(newComment);
+					// TODO save to database
 					
 					//update original list
 					((CommentsAdapter) myAdapter).getItemsOriginal().add(newComment);

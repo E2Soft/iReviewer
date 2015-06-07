@@ -1,18 +1,28 @@
 package com.example.ireviewr.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class Tag implements Parcelable{
+@Table(name = "Tag", id="_id")
+public class Tag extends AbstractModel
+{
+	@Column(name = "name", notNull=true, unique=true)
 	private String name;
-	private Date dateCreated;
+
+	public Tag() {} // required by activeandroid
 	
-	public Tag(String name, Date dateCreated) {
-		super();
+	public Tag(String modelId, Date dateModified, String name)
+	{
+		super(modelId, dateModified);
 		this.name = name;
-		this.dateCreated = dateCreated;
+	}
+
+	public Tag(String name)
+	{
+		this.name = name;
 	}
 
 	public String getName() {
@@ -22,25 +32,26 @@ public class Tag implements Parcelable{
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(name);
-		dest.writeSerializable(dateCreated);
-		
-	}
+	
+	public List<Review> getReviews()
+	{
+		List<TagToReview> manyToMany = getMany(TagToReview.class, "tag");
+		List<Review> ret = new ArrayList<Review>();
+		for(TagToReview m2m : manyToMany)
+		{
+			ret.add(m2m.getReview());
+		}
+        return ret;
+    }
+	
+	public List<ReviewObject> getReviewObjects()
+	{
+		List<TagToReviewObject> manyToMany = getMany(TagToReviewObject.class, "tag");
+		List<ReviewObject> ret = new ArrayList<ReviewObject>();
+		for(TagToReviewObject m2m : manyToMany)
+		{
+			ret.add(m2m.getReviewObject());
+		}
+        return ret;
+    }
 }

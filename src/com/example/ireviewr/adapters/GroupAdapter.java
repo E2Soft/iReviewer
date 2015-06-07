@@ -44,7 +44,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 		title.setText(navItem.getName());
 		
 		TextView dateCreated = (TextView)itemView.findViewById(R.id.group_date_created);
-		dateCreated.setText(ReviewerTools.preapreDate(navItem.getLastModified()));
+		dateCreated.setText(ReviewerTools.preapreDate(navItem.getDateModified()));
 		
 		TextView numberOfUsers = (TextView)itemView.findViewById(R.id.group_users);
 		numberOfUsers.setText("Users:"+navItem.getUsers().size());

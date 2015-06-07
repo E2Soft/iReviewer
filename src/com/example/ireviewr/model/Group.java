@@ -2,24 +2,32 @@ package com.example.ireviewr.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class Group implements Parcelable{
-	
+@Table(name = "UserGroup", id="_id")
+public class Group extends AbstractModel 
+{
+	@Column(name = "name", notNull=true)
 	private String name;
-	private Date lastModified;
-	private ArrayList<ReviewItem> reviews;
-	private ArrayList<UserItem> users;
 	
-	public Group(String name, Date lastModified, ArrayList<ReviewItem> reviews,
-			ArrayList<UserItem> users) {
-		super();
+	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private User userCreated;
+	
+	public Group() {} // required by activeandroid
+	
+	public Group(String modelId, Date dateModified, String name, User userCreated) {
+		super(modelId, dateModified);
 		this.name = name;
-		this.lastModified = lastModified;
-		this.reviews = reviews;
-		this.users = users;
+		this.userCreated = userCreated;
+	}
+
+	public Group(String name, User userCreated)
+	{
+		this.name = name;
+		this.userCreated = userCreated;
 	}
 
 	public String getName() {
@@ -30,41 +38,45 @@ public class Group implements Parcelable{
 		this.name = name;
 	}
 
-	public Date getLastModified() {
-		return lastModified;
+	public User getUserCreated() {
+		return userCreated;
 	}
 
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
-	}
-
-	public ArrayList<ReviewItem> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(ArrayList<ReviewItem> reviews) {
-		this.reviews = reviews;
-	}
-
-	public ArrayList<UserItem> getUsers() {
-		return users;
-	}
-
-	public void setUsers(ArrayList<UserItem> users) {
-		this.users = users;
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeList(reviews);
-		dest.writeList(users);
-		dest.writeString(name);
-		dest.writeSerializable(lastModified);
+	public void setUserCreated(User userCreated) {
+		this.userCreated = userCreated;
 	}
 	
+	public List<User> getUsers()
+	{
+		List<GroupToUser> manyToMany = getMany(GroupToUser.class, "group");
+		List<User> ret = new ArrayList<User>();
+		for(GroupToUser m2m : manyToMany)
+		{
+			ret.add(m2m.getUser());
+		}
+        return ret;
+    }
+	
+	public void addUser(User toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new GroupToUser(toAdd, this).save();
+	}
+	
+	public List<Review> getReviews()
+	{
+		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "group");
+		List<Review> ret = new ArrayList<Review>();
+		for(GroupToReview m2m : manyToMany)
+		{
+			ret.add(m2m.getReview());
+		}
+        return ret;
+    }
+	
+	public void addReview(Review toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new GroupToReview(toAdd, this).save();
+	}
 }

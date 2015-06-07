@@ -1,5 +1,7 @@
 package com.example.ireviewr.adapters.pagers;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.groups.UserFragmentList;
 import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.tools.Mokap;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
@@ -36,15 +39,15 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 		
 		if(position == 0){
 			Bundle bundle = new Bundle();
-			bundle.putString(NAME, group.getName());
-			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getLastModified()));
+			bundle.putString(NAME, "test group");
+			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(new Date()));
 			
 			fragment = new GroupDetailFragment();
 			fragment.setArguments(bundle);
 		}else if(position == 1){
-			fragment = ReviewsGroupList.newInstance(group.getReviews());
+			fragment = ReviewsGroupList.newInstance(Mokap.getReviewList());
 		}else if(position == 2){
-			fragment = UserFragmentList.newInstance(group.getUsers());
+			fragment = UserFragmentList.newInstance(Mokap.getUserList());
 		}
 		
 		return fragment;

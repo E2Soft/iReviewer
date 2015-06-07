@@ -8,8 +8,10 @@ import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.GaleryItem;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewItem;
 import com.example.ireviewr.model.Tag;
+import com.example.ireviewr.model.User;
 import com.example.ireviewr.model.UserItem;
 
 public class Mokap {
@@ -43,33 +45,33 @@ public class Mokap {
     public static ArrayList<Tag> getTags() {
     	
     	ArrayList<Tag> tags = new ArrayList<Tag>();
-		tags.add(new Tag("Name1", new Date()));
-		tags.add(new Tag("Name2", new Date()));
-		tags.add(new Tag("Name3", new Date()));
-		tags.add(new Tag("Name4", new Date()));
-		tags.add(new Tag("Name5", new Date()));
-		tags.add(new Tag("Name6", new Date()));
-		tags.add(new Tag("Name1", new Date()));
-		tags.add(new Tag("Name2", new Date()));
-		tags.add(new Tag("Name3", new Date()));
-		tags.add(new Tag("Name4", new Date()));
-		tags.add(new Tag("Name5", new Date()));
-		tags.add(new Tag("Name6", new Date()));
+		tags.add(new Tag("Name1"));
+		tags.add(new Tag("Name2"));
+		tags.add(new Tag("Name3"));
+		tags.add(new Tag("Name4"));
+		tags.add(new Tag("Name5"));
+		tags.add(new Tag("Name6"));
+		tags.add(new Tag("Name1"));
+		tags.add(new Tag("Name2"));
+		tags.add(new Tag("Name3"));
+		tags.add(new Tag("Name4"));
+		tags.add(new Tag("Name5"));
+		tags.add(new Tag("Name6"));
 		
 		return tags;
 	}
     
     public static ArrayList<Comment> getCommentsList(){
 		ArrayList<Comment> items = new ArrayList<Comment>();
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
-		items.add(new Comment("bla bla truc", new Date(), "Ja"));
-		items.add(new Comment("bla bla truc", new Date(), "On"));
-		items.add(new Comment("bla bla truc", new Date(), "Ona"));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
+		items.add(new Comment("bla bla truc", new User(), new Review()));
 		
 		return items;
 	}
@@ -115,7 +117,7 @@ public class Mokap {
 		
 		return items;
 	}
-	
+	/*
 	public static ArrayList<Group> getGroupList(){
 		ArrayList<Group> items = new ArrayList<Group>();
 		
@@ -131,5 +133,5 @@ public class Mokap {
 	public static Group getSingleGroup(){
 		return getGroupList().get(0);
 	}
-    
+    */
 }
