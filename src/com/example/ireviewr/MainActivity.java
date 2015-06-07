@@ -249,5 +249,6 @@ public class MainActivity extends FragmentActivity{
     	public static final int REVIEW	= 2;
 		public static final int	COMMENT	= 3;
 		public static final int	USER	= 4;
+		public static final int	IMAGE	= 5;
     };
 }
