@@ -1,6 +1,7 @@
 package com.example.ireviewr.fragments.reviews;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,24 +18,30 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SearchView;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.CommentsAdapter;
+import com.example.ireviewr.adapters.GroupAdapter;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.Mokap;
 
-public class CommentsListFragment extends ListFragment {
-
-	private ArrayAdapter<Comment> myAdapter;
+public class CommentsListFragment extends ListFragment
+{
+	private CommentsAdapter myAdapter;
 	
-	public static CommentsListFragment newInstance(ArrayList<Comment> items) {
+	// TODO da prima id reviewa i dobavlja komentare za njega
+	public static CommentsListFragment newInstance()
+	{
 		CommentsListFragment fragment = new CommentsListFragment();
 	    return fragment;
 	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -43,12 +50,25 @@ public class CommentsListFragment extends ListFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
+			Bundle savedInstanceState)
+	{
 		View view = inflater.inflate(R.layout.comments_list, container, false);
 		
-		myAdapter = new CommentsAdapter(getActivity(), R.layout.comment_item, Mokap.getCommentsList());
-		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
+		myAdapter = new CommentsAdapter(getActivity());
+		
+		// TODO da prima id reviewa i dobavlja komentare za njega
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.COMMENT, null, 
+				new ModelLoaderCallbacks<Comment>(getActivity(), 
+				Comment.class, 
+				myAdapter)
+				{
+					@Override
+					protected List<Comment> getData()
+					{
+						return Mokap.getCommentsList();
+					}
+				});
+		
 		setListAdapter(myAdapter);
 		
 		return view; 
@@ -118,7 +138,7 @@ public class CommentsListFragment extends ListFragment {
 					// TODO save to database
 					
 					//update original list
-					((CommentsAdapter) myAdapter).getItemsOriginal().add(newComment);
+					//((CommentsAdapter) myAdapter).getItemsOriginal().add(newComment);
 					
 					//notify adapter
 					myAdapter.notifyDataSetChanged();

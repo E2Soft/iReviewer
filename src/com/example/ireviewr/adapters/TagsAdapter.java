@@ -24,4 +24,10 @@ public class TagsAdapter extends AbstractArrayAdapter<Tag>
 		TextView textViewDesc = (TextView)view.findViewById(R.id.tag_date_created);
 		textViewDesc.setText(ReviewerTools.preapreDate(item.getDateModified()));
 	}
+	
+	@Override
+	protected String getTextToFilter(Tag item)
+	{
+		return item.getName();
+	}
 }

@@ -52,4 +52,10 @@ public class ReviewsAdapter extends AbstractArrayAdapter<Review>
 		/*ImageView image = (ImageView)view.findViewById(R.id.review_item_icon);
 		setImageFromPath(image, item.geti().getPath());*/
 	}
+	
+	@Override
+	protected String getTextToFilter(Review item)
+	{
+		return item.getName();
+	}
 }

@@ -62,7 +62,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 			fragment = new ReviewDetailFragment();
 			fragment.setArguments(bundle);
 		}else if(position == 1){
-			fragment = CommentsListFragment.newInstance(review.getComments());
+			fragment = CommentsListFragment.newInstance();
 		}else if(position == 2){
 			fragment = GaleryGridFragment.newInstance(review.getImages());
 		}else if(position == 3){

@@ -30,7 +30,6 @@ public class GroupAdapter extends AbstractArrayAdapter<Group>
 	@Override
 	protected String getTextToFilter(Group item)
 	{
-		// filtriraj po imenu grupe
 		return item.getName();
 	}
 }
