@@ -1,6 +1,7 @@
 package com.example.ireviewr.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,19 +14,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SearchView;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.TagsAdapter;
+import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.tools.Mokap;
 
 public class TagsFragmentList extends ListFragment {
-	private ArrayAdapter<Tag> myAdapter;
+	private TagsAdapter myAdapter;
 	
-	// TODO da prima id rev objekta ili reviewa za koji trazi sve tagove, ili da trazi sve tagove
+	// TODO da prima id rev objekta ili reviewa za koji trazi sve tagove
 	public static TagsFragmentList newInstance(ArrayList<Tag> items) {
 		TagsFragmentList fragment = new TagsFragmentList();
 	    return fragment;
@@ -33,7 +35,6 @@ public class TagsFragmentList extends ListFragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -46,8 +47,21 @@ public class TagsFragmentList extends ListFragment {
 
 		View view = inflater.inflate(R.layout.tags_list, container, false);
 		
-		myAdapter = new TagsAdapter(getActivity(), R.layout.tags_item, Mokap.getTags());
-		//setListAdapter(new MyListAdapter(getActivity(), R.layout.drawer_list_item, items));
+		myAdapter = new TagsAdapter(getActivity());
+		
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.TAG, null, 
+				new ModelLoaderCallbacks<Tag>(getActivity(), 
+				Tag.class, 
+				myAdapter)
+				{
+					@Override
+					protected List<Tag> getData()
+					{
+						// TODO da prima id rev objekta ili reviewa za koji trazi sve tagove
+						return Mokap.getTags();
+					}
+				});
+		
 		setListAdapter(myAdapter);
 		
 		return view; 

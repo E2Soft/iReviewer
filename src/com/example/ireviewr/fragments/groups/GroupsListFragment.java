@@ -1,6 +1,7 @@
 package com.example.ireviewr.fragments.groups;
 
 import java.util.UUID;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -13,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
 import com.activeandroid.query.Select;
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
@@ -40,7 +43,8 @@ public class GroupsListFragment extends ListFragment
 		
 		myAdapter = new GroupAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(0, null, new ModelLoaderCallbacks<Group>(getActivity(), 
+		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.GROUP, null, 
+				new ModelLoaderCallbacks<Group>(getActivity(), 
 				Group.class, 
 				myAdapter));
 		
