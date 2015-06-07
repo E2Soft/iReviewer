@@ -6,7 +6,6 @@ import java.util.Date;
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.GaleryItem;
-import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewItem;
@@ -92,6 +91,17 @@ public class Mokap {
 		items.add(new UserItem("User5","mail@mail.com",new Date()));
 		items.add(new UserItem("User6","mail@mail.com",new Date()));
 		items.add(new UserItem("User7","mail@mail.com",new Date()));
+		
+		return items;
+	}
+	
+	public static ArrayList<User> getUserModelList()
+	{
+		ArrayList<User> items = new ArrayList<User>();
+		
+		items.add(new User("User1","mail@mail.com"));
+		items.add(new User("User2","mail@mail.com"));
+		items.add(new User("User3","mail@mail.com"));
 		
 		return items;
 	}

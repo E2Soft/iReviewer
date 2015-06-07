@@ -13,7 +13,6 @@ import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.groups.UserFragmentList;
 import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
 import com.example.ireviewr.model.Group;
-import com.example.ireviewr.tools.Mokap;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
@@ -47,7 +46,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 		}else if(position == 1){
 			fragment = ReviewsGroupList.newInstance();
 		}else if(position == 2){
-			fragment = UserFragmentList.newInstance(Mokap.getUserList());
+			fragment = UserFragmentList.newInstance();
 		}
 		
 		return fragment;
