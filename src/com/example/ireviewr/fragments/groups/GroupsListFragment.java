@@ -107,7 +107,8 @@ public class GroupsListFragment extends ListFragment
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		Fragment fragment = GroupTabsFragment.newInstance(position);
+		String modelId = myAdapter.getItem(position).getModelId();
+		Fragment fragment = GroupTabsFragment.newInstance(modelId);
 		
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()

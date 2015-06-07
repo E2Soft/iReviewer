@@ -31,7 +31,7 @@ public class UserFragmentList extends ListFragment
 	public static String NAME = "NAME";
 	public static String LAST_MODIFIED = "LAST MODIFIED";
 	
-	public static UserFragmentList newInstance()
+	public static UserFragmentList newInstance(String itemId)
 	{
 		UserFragmentList fragment = new UserFragmentList();
 	    return fragment;

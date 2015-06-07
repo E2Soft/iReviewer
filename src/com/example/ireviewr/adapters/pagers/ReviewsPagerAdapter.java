@@ -1,24 +1,22 @@
 package com.example.ireviewr.adapters.pagers;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.example.ireviewr.fragments.GaleryGridFragment;
 import com.example.ireviewr.fragments.TagsFragmentList;
-import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
-import com.example.ireviewr.model.ReviewItem;
+import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.ReviewerTools;
 
-public class ReviewsPagerAdapter extends FragmentPagerAdapter {
-
+public class ReviewsPagerAdapter extends FragmentPagerAdapter
+{
 	private String[] names ={"Detail", "Comments", "Galery", "Tags"};
-	private Context context;
-	private Bundle bundle;
+	private String itemId;
 	
 	public static String NAME ="NAME";
 	public static String DESCRIPTION ="DESCRIPTION";
@@ -27,14 +25,15 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 	public static String IMAGE = "IMAGE";
 	public static String RATING = "RATING";
 	
-	public ReviewsPagerAdapter(Bundle bundle, FragmentManager fm, Context context) {
+	public ReviewsPagerAdapter(String itemId, FragmentManager fm)
+	{
 		super(fm);
-		this.context = context;
-		this.bundle = bundle;
+		this.itemId = itemId;
 	}
 	
 	@Override
-	public int getCount() {
+	public int getCount()
+	{
 		return names.length;
 	}
 	
@@ -45,31 +44,43 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 	}
 	
 	@Override
-	public Fragment getItem(int position) {
-		Fragment fragment = null;
-		
-		ReviewItem review = bundle.getParcelable(GroupTabsFragment.DATA);
-		
-		if(position == 0){
-			Bundle bundle = new Bundle();
-			bundle.putString(NAME, review.getName());
-			bundle.putString(DESCRIPTION, review.getDescription());
-			bundle.putString(CREATED,ReviewerTools.preapreDate(review.getCreated()));
-			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getLast_modified()));
-			bundle.putString(IMAGE, review.getPicture().getPath());
-			bundle.putDouble(RATING, review.getRating());
-			
-			fragment = new ReviewDetailFragment();
-			fragment.setArguments(bundle);
-		}else if(position == 1){
-			fragment = CommentsListFragment.newInstance();
-		}else if(position == 2){
-			fragment = GaleryGridFragment.newInstance(review.getImages());
-		}else if(position == 3){
-			fragment = TagsFragmentList.newInstance(review.getTags());
+	public Fragment getItem(int position)
+	{
+		switch(position)
+		{
+			case 0:
+			{
+				Review review = Review.getByModelId(Review.class, itemId);
+				
+				Bundle bundle = new Bundle();
+				bundle.putString(NAME, review.getName());
+				bundle.putString(DESCRIPTION, review.getDescription());
+				bundle.putString(CREATED,ReviewerTools.preapreDate(review.getDateCreated()));
+				bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getDateModified()));
+				//bundle.putString(IMAGE, review.getPicture().getPath()); // TODO
+				bundle.putDouble(RATING, review.getRating());
+				
+				Fragment fragment = new ReviewDetailFragment();
+				fragment.setArguments(bundle);
+				return fragment;
+			}
+			case 1:
+			{
+				return CommentsListFragment.newInstance(itemId);
+			}
+			case 2:
+			{
+				return GaleryGridFragment.newInstance(itemId);
+			}
+			case 3:
+			{
+				return TagsFragmentList.newInstance(itemId);
+			}
+			default:
+			{
+				Log.e("ReviewsPagerAdapter", "Internal error unknown slide position.");
+				return null;
+			}
 		}
-		
-		return fragment;
 	}
-
 }
