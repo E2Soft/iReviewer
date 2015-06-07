@@ -23,7 +23,7 @@ public class ReviewsGroupList extends ListFragment
 	private ReviewsAdapter myAdapter;
 	
 	// TODO uraditi da prima id rev objekta i trazi reviewove za njega
-	public static ReviewsGroupList newInstance() {
+	public static ReviewsGroupList newInstance(String itemId) {
 		ReviewsGroupList fragment = new ReviewsGroupList();
 	    return fragment;
 	}
@@ -105,7 +105,8 @@ public class ReviewsGroupList extends ListFragment
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		Fragment fragment = ReviewTabFragment.newInstance("test_id");
+		String modelId = myAdapter.getItem(position).getModelId();
+		Fragment fragment = ReviewTabFragment.newInstance(modelId);
 		
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()

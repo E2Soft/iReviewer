@@ -1,6 +1,5 @@
 package com.example.ireviewr.adapters.pagers;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +25,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 	public static String IMAGE = "IMAGE";
 	public static String RATING = "RATING";
 	
-	public ReviewsPagerAdapter(String itemId, FragmentManager fm, Context context)
+	public ReviewsPagerAdapter(String itemId, FragmentManager fm)
 	{
 		super(fm);
 		this.itemId = itemId;

@@ -1,15 +1,12 @@
 package com.example.ireviewr.adapters.pagers;
 
-import java.util.Date;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.example.ireviewr.fragments.groups.GroupDetailFragment;
-import com.example.ireviewr.fragments.groups.GroupTabsFragment;
 import com.example.ireviewr.fragments.groups.UserFragmentList;
 import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
 import com.example.ireviewr.model.Group;
@@ -17,50 +14,60 @@ import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
 
-	private Context context;
 	private String[] names ={"Detail","Reviews", "Users"};
-	private Bundle bundle;
+	private String itemId;
 	
 	public static String NAME = "NAME";
 	public static String LAST_MODIFIED = "LAST MODIFIED";
 	
-	public GroupPagerAdapter(Bundle bundle, FragmentManager fm, Context context) {
+	public GroupPagerAdapter(String itemId, FragmentManager fm)
+	{
 		super(fm);
-		this.context = context;
-		this.bundle = bundle;
+		this.itemId = itemId;
 	}
 	
 	@Override
-	public Fragment getItem(int position) {
-		Fragment fragment = null;
-		
-		Group group = bundle.getParcelable(GroupTabsFragment.DATA);
-		
-		if(position == 0){
-			Bundle bundle = new Bundle();
-			bundle.putString(NAME, "test group");
-			bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(new Date()));
-			
-			fragment = new GroupDetailFragment();
-			fragment.setArguments(bundle);
-		}else if(position == 1){
-			fragment = ReviewsGroupList.newInstance();
-		}else if(position == 2){
-			fragment = UserFragmentList.newInstance();
+	public Fragment getItem(int position)
+	{
+		switch(position)
+		{
+			case 0:
+			{
+				Group group = Group.getByModelId(Group.class, itemId);
+				
+				Bundle bundle = new Bundle();
+				bundle.putString(NAME, group.getName());
+				bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getDateModified()));
+				
+				Fragment fragment = new GroupDetailFragment();
+				fragment.setArguments(bundle);
+				return fragment;
+			}
+			case 1:
+			{
+				return ReviewsGroupList.newInstance(itemId);
+			}
+			case 2:
+			{
+				return UserFragmentList.newInstance(itemId);
+			}
+			default:
+			{
+				Log.e("GroupPagerAdapter", "Internal error unknown slide position.");
+				return null;
+			}
 		}
-		
-		return fragment;
 	}
 	
 	@Override
-	public CharSequence getPageTitle(int position) {
-		
+	public CharSequence getPageTitle(int position)
+	{
 		return names[position];
 	}
 	
 	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
+	public int getCount()
+	{
 		return names.length;
 	}
 
