@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ConflictAction;
+import com.activeandroid.query.Select;
 
 public abstract class AbstractModel extends Model 
 {
@@ -41,5 +42,10 @@ public abstract class AbstractModel extends Model
 
 	public String getModelId() {
 		return modelId;
+	}
+	
+	public static <T extends AbstractModel> T getByModelId(Class<T> modelClass,String modelId)
+	{
+		return new Select().from(modelClass).where("modelId = ?", modelId).executeSingle();
 	}
 }

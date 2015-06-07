@@ -1,6 +1,5 @@
 package com.example.ireviewr.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -28,7 +27,7 @@ public class TagsFragmentList extends ListFragment {
 	private TagsAdapter myAdapter;
 	
 	// TODO da prima id rev objekta ili reviewa za koji trazi sve tagove
-	public static TagsFragmentList newInstance(ArrayList<Tag> items) {
+	public static TagsFragmentList newInstance(String itemId) {
 		TagsFragmentList fragment = new TagsFragmentList();
 	    return fragment;
 	}

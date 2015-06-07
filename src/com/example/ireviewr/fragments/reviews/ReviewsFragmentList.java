@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.MyListAdapter;
@@ -114,13 +113,13 @@ public class ReviewsFragmentList extends ListFragment {
 		
 		NavItem item = items.get(position);
 		
-		Bundle bundle = new Bundle();
+		/*Bundle bundle = new Bundle();
 		bundle.putString("TITLE", item.getmTitle());
 		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());
+		bundle.putInt("ICON", item.getmIcon());*/
 		
-		Fragment fragment = ReviewTabFragment.newInstance(position);
-		fragment.setArguments(bundle);
+		Fragment fragment = ReviewTabFragment.newInstance("test_id");
+		//fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager()
 									.beginTransaction()

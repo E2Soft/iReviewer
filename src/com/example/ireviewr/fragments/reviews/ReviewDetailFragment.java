@@ -24,7 +24,6 @@ public class ReviewDetailFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -90,7 +89,7 @@ public class ReviewDetailFragment extends Fragment {
 		description.setText(bundle.getString(ReviewsPagerAdapter.DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.review_image_content);
-		setImageFromPath(image,bundle.getString(ReviewsPagerAdapter.IMAGE));
+		//setImageFromPath(image,bundle.getString(ReviewsPagerAdapter.IMAGE)); // TODO
 		
 		return view;
 	}

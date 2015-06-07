@@ -1,7 +1,5 @@
 package com.example.ireviewr.fragments;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +20,6 @@ import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GaleryAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
-import com.example.ireviewr.model.GaleryItem;
 import com.example.ireviewr.model.Image;
 
 public class GaleryGridFragment extends Fragment {
@@ -32,7 +29,7 @@ public class GaleryGridFragment extends Fragment {
 	private int SELECT_PHOTO = 200;
 	private GaleryAdapter myAdapter;
 	
-	public static GaleryGridFragment newInstance(ArrayList<GaleryItem> items) {
+	public static GaleryGridFragment newInstance(String itemId) {
 		GaleryGridFragment fragment = new GaleryGridFragment();
 	    return fragment;
 	}

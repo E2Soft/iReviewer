@@ -20,7 +20,7 @@ public class Review extends AbstractModel
 	private String description;
 	
 	@Column(name = "rating")
-	private int rating;
+	private float rating;
 	
 	@Column(name = "dateCreated", notNull=true)
 	private Date dateCreated;
@@ -34,7 +34,7 @@ public class Review extends AbstractModel
 	public Review() {} // required by activeandroid
 	
 	public Review(String modelId, Date dateModified, String name,
-			String description, int rating, Date dateCreated,
+			String description, float rating, Date dateCreated,
 			User userCreated, ReviewObject reviewObject) 
 	{
 		super(modelId, dateModified);
@@ -73,11 +73,11 @@ public class Review extends AbstractModel
 		this.description = description;
 	}
 
-	public int getRating() {
+	public float getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(float rating) {
 		this.rating = rating;
 	}
 

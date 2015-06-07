@@ -105,7 +105,7 @@ public class ReviewsGroupList extends ListFragment
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		Fragment fragment = ReviewTabFragment.newInstance(position);
+		Fragment fragment = ReviewTabFragment.newInstance("test_id");
 		
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()

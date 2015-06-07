@@ -1,6 +1,5 @@
 package com.example.ireviewr.fragments.reviews;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -14,17 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SearchView;
 
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.CommentsAdapter;
-import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Comment;
-import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.Mokap;
 
@@ -33,7 +29,7 @@ public class CommentsListFragment extends ListFragment
 	private CommentsAdapter myAdapter;
 	
 	// TODO da prima id reviewa i dobavlja komentare za njega
-	public static CommentsListFragment newInstance()
+	public static CommentsListFragment newInstance(String itemId)
 	{
 		CommentsListFragment fragment = new CommentsListFragment();
 	    return fragment;
