@@ -77,9 +77,9 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		
-		/*if(bitmap != null){
+		if(bitmap != null){
 			outState.putParcelable(SAVED_PHOTO, bitmap);
-		}*/
+		}
 	}
 	
 	
@@ -115,15 +115,11 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
 		
-		/*if (savedInstanceState != null) {
+		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
 			if(bitmap != null){
 				mImageView.setImageBitmap(bitmap);
 			}
-		}*/
-		
-		if(mImageView == null){
-			Toast.makeText(getActivity(), "NULL", Toast.LENGTH_LONG).show();
 		}
 		
 		Button chooseImage = (Button)view.findViewById(R.id.reviewobject_image_choose);
