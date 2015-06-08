@@ -1,5 +1,10 @@
 package com.example.ireviewr.fragments;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,8 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.LocationDialog;
 import com.example.ireviewr.fragments.reviewobjects.CreateReviewObjectFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,13 +26,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MyMapFragment extends Fragment{
+public class MyMapFragment extends Fragment implements LocationListener, OnMapReadyCallback{
 	
 	private GoogleMap map;
 	private SupportMapFragment mMapFragment;
-
+	private LocationManager locationManager;
+	String provider;
+	
+	private Marker home;
+	
 	public static MyMapFragment newInstance() {
 		MyMapFragment mpf = new MyMapFragment();
 		
@@ -33,12 +45,36 @@ public class MyMapFragment extends Fragment{
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		// Get LocationManager object from System Service LOCATION_SERVICE
+		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		
+		Criteria criteria = new Criteria();
+	    provider = locationManager.getBestProvider(criteria, true);
+	}
+	
+	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Toast.makeText(getActivity(), "onResume()", Toast.LENGTH_SHORT).show();
 		
 		getActivity().getActionBar().setTitle(R.string.home);
 	    setHasOptionsMenu(true);
+	    
+	    if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			
+	    	Toast.makeText(getActivity(), "hasService", Toast.LENGTH_SHORT).show();
+	    }else{
+	    	Toast.makeText(getActivity(), "noService", Toast.LENGTH_SHORT).show();
+	    	
+	    	new LocationDialog(getActivity()).prepareDialog().show();
+	    }
+	    
 	}
 	
 	@Override
@@ -48,6 +84,7 @@ public class MyMapFragment extends Fragment{
 		//dodati meni
 		inflater.inflate(R.menu.home_menu, menu);
 	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,41 +110,90 @@ public class MyMapFragment extends Fragment{
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.map_container, mMapFragment).commit();
         
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
-			
-			@Override
-			public void onMapReady(GoogleMap googleMap) {
-				map = googleMap;
-                initMap();
-			}
-		});
+        mMapFragment.getMapAsync(this);;
         
 		return view;
 
     }
     
-    private void initMap(){
-    	double latitude = 17.385044;
-	    double longitude = 78.486671;
-	    
-	    map.getUiSettings().setMyLocationButtonEnabled(true);
-	    map.setMyLocationEnabled(true);
-	    
-	    // create marker
-	    MarkerOptions marker = new MarkerOptions().position(
-	            new LatLng(latitude, longitude)).title("Hello Maps").snippet("Snippet");
-
-	    // Changing marker icon
-	    marker.icon(BitmapDescriptorFactory
-	            .defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-
-	    // adding marker
-	    map.addMarker(marker);
-	    CameraPosition cameraPosition = new CameraPosition.Builder()
-	            .target(new LatLng(17.385044, 78.486671)).zoom(12).build();
-	    map.animateCamera(CameraUpdateFactory
-	            .newCameraPosition(cameraPosition));
-	    //googleMap.setOnMarkerClickListener(new MapMarkerEvent());
+    
+    @Override
+    public void onPause() {
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	
+    	locationManager.removeUpdates(this);
     }
+    
+    
+    @Override
+    public void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    	
+    	locationManager.removeUpdates(this);
+    }
+
+    private void addMarker(Location location){
+    	Toast.makeText(getActivity(), "addMarker", Toast.LENGTH_SHORT).show();
+    	LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+    	
+    	if(home != null){
+			home.remove();
+		}
+		
+		home = map.addMarker(new MarkerOptions()
+			.title("Title")
+			.snippet("Contnet")
+			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+			.position(loc));
+			
+			
+			CameraPosition cameraPosition = new CameraPosition
+					.Builder().target(loc)
+					.zoom(12).build();
+			
+			map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+    
+	@Override
+	public void onLocationChanged(Location location) {
+		Toast.makeText(getActivity(), "onLocationChanged()"+location.toString(), Toast.LENGTH_SHORT).show();
+		
+		addMarker(location);
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMapReady(GoogleMap googleMap) {
+		Toast.makeText(getActivity(), "onMapReady()", Toast.LENGTH_SHORT).show();
+		Location location = locationManager.getLastKnownLocation(provider);
+		
+		map = googleMap;
+		
+		if (location != null) {
+			addMarker(location);
+		}
+		
+		locationManager.requestLocationUpdates(provider,0,0,this);
+		
+	}
 	
 }
