@@ -15,6 +15,9 @@ public class Image extends AbstractModel
 	@Column(name = "path", notNull=true)
 	private String path;
 	
+	@Column(name = "isMain")
+	private boolean isMain;
+	
 	@Column(name = "reviewObject", onDelete=ForeignKeyAction.CASCADE)
 	private ReviewObject reviewObject;
 	
@@ -23,32 +26,36 @@ public class Image extends AbstractModel
 	
 	public Image() {} // required by activeandroid
 
-	public Image(String modelId, Date dateModified, String path, ReviewObject reviewObject)
+	public Image(String modelId, Date dateModified, String path, boolean isMain, ReviewObject reviewObject)
 	{
 		super(modelId, dateModified);
 		this.path = path;
+		this.isMain = isMain;
 		this.reviewObject = reviewObject;
 		this.review = null;
 	}
 	
-	public Image(String modelId, Date dateModified, String path, Review review)
+	public Image(String modelId, Date dateModified, String path, boolean isMain, Review review)
 	{
 		super(modelId, dateModified);
 		this.path = path;
+		this.isMain = isMain;
 		this.review = review;
 		this.reviewObject = null;
 	}
 
-	public Image(String path, ReviewObject reviewObject)
+	public Image(String path, boolean isMain, ReviewObject reviewObject)
 	{
 		this.path = path;
+		this.isMain = isMain;
 		this.reviewObject = reviewObject;
 		this.review = null;
 	}
 	
-	public Image(String path, Review review)
+	public Image(String path, boolean isMain, Review review)
 	{
 		this.path = path;
+		this.isMain = isMain;
 		this.review = review;
 		this.reviewObject = null;
 	}
@@ -59,6 +66,16 @@ public class Image extends AbstractModel
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public boolean isMain()
+	{
+		return isMain;
+	}
+
+	public void setMain(boolean isMain)
+	{
+		this.isMain = isMain;
 	}
 
 	public ReviewObject getReviewObject() {

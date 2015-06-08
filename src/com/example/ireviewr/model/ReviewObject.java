@@ -122,6 +122,11 @@ public class ReviewObject extends AbstractModel
         return getMany(Image.class, "reviewObject");
     }
 	
+	public Image getMainImage()
+	{
+		return new Select().from(Image.class).where("reviewObject = ? and isMain", getId()).executeSingle();
+	}
+	
 	public void addImage(Image toAdd)
 	{
 		ValidationUtils.checkSaved(toAdd, this);

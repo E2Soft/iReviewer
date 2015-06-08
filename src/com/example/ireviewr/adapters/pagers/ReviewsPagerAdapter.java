@@ -10,6 +10,7 @@ import com.example.ireviewr.fragments.GaleryGridFragment;
 import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
+import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.ReviewerTools;
 
@@ -57,7 +58,11 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 				bundle.putString(DESCRIPTION, review.getDescription());
 				bundle.putString(CREATED,ReviewerTools.preapreDate(review.getDateCreated()));
 				bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getDateModified()));
-				//bundle.putString(IMAGE, review.getPicture().getPath()); // TODO
+				Image mainImage = review.getMainImage();
+				if(mainImage != null)
+				{
+					bundle.putString(IMAGE, mainImage.getPath());
+				}
 				bundle.putDouble(RATING, review.getRating());
 				
 				Fragment fragment = new ReviewDetailFragment();
