@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
@@ -47,9 +48,15 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
-	private String SAVED_PHOTO = "SAVED_IMAGE";
 	private ImageView mImageView;
+	
 	private Bitmap bitmap;
+	private String name;
+	private String desc;
+	
+	private String SAVED_PHOTO = "SAVED_IMAGE";
+	private String SAVED_NAME = "SAVED_NAME";
+	private String SAVED_DESC = "SAVED_DESC";
 	
 	private GoogleMap map;
 	private SupportMapFragment mMapFragment;
@@ -79,6 +86,14 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 		
 		if(bitmap != null){
 			outState.putParcelable(SAVED_PHOTO, bitmap);
+		}
+		
+		if(name != null){
+			outState.putString(SAVED_NAME, name);
+		}
+		
+		if(desc != null){
+			outState.putString(SAVED_DESC, desc);
 		}
 	}
 	
@@ -114,11 +129,22 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 		View view = inflater.inflate(R.layout.frag_4, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
+		TextView textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
+		TextView textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
 		
 		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			
 			if(bitmap != null){
 				mImageView.setImageBitmap(bitmap);
+			}
+			
+			if(name != null){
+				textName.setText(name);
+			}
+			
+			if(desc != null){
+				textDesc.setText(desc);
 			}
 		}
 		
