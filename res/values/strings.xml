@@ -53,5 +53,8 @@
     
     <string name="tag_name">Add tag</string>
     <string name="tag_content">Enter tag name</string>
+    <string name="new_group">New Group</string>
+    <string name="new_group_hint">Enter new group name here..</string>
+    <string name="create">Create</string>
     
 </resources>

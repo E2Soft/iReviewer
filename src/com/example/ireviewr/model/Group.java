@@ -10,7 +10,7 @@ import com.activeandroid.annotation.Table;
 @Table(name = "UserGroup", id="_id")
 public class Group extends AbstractModel 
 {
-	@Column(name = "name", notNull=true)
+	@Column(name = "name", notNull=true, unique=true)
 	private String name;
 	
 	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)

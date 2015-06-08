@@ -3,6 +3,8 @@ package com.example.ireviewr.model;
 import java.util.Date;
 import java.util.UUID;
 
+import android.database.sqlite.SQLiteConstraintException;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ConflictAction;
@@ -47,5 +49,18 @@ public abstract class AbstractModel extends Model
 	public static <T extends AbstractModel> T getByModelId(Class<T> modelClass,String modelId)
 	{
 		return new Select().from(modelClass).where("modelId = ?", modelId).executeSingle();
+	}
+	
+	public Long saveOrThrow()
+	{
+		Long newId = save();
+		if(newId == -1)
+		{
+			throw new SQLiteConstraintException("Object not unique.");
+		}
+		else
+		{
+			return newId;
+		}
 	}
 }

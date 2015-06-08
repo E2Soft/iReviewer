@@ -13,7 +13,7 @@ import com.activeandroid.query.Select;
 @Table(name = "ReviewObject", id="_id")
 public class ReviewObject extends AbstractModel 
 {
-	@Column(name = "name", notNull=true)
+	@Column(name = "name", notNull=true, unique=true)
 	private String name;
 	
 	@Column(name = "description")
