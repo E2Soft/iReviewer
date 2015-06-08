@@ -110,7 +110,7 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.map_container, mMapFragment).commit();
         
-        mMapFragment.getMapAsync(this);;
+        mMapFragment.getMapAsync(this);
         
 		return view;
 
@@ -124,7 +124,6 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
     	
     	locationManager.removeUpdates(this);
     }
-    
     
     @Override
     public void onDestroy() {

@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="@string/review_name"
-        android:padding="5dp" />
+        android:layout_margin="5dp" />
     
     <EditText 
         android:id="@id/reviewobject_name_edit"
@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/review_name_edit"
         android:layout_toRightOf="@id/reviewobject_name"
-        android:layout_toEndOf="@id/reviewobject_name" />
+        android:layout_toEndOf="@id/reviewobject_name" 
+        android:layout_margin="5dp"/>
     
     <TextView
         android:id="@+id/reviewobject_description"
@@ -33,7 +34,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/review_description"
         android:layout_below="@id/reviewobject_name"
-        android:padding="5dp"/>
+        android:layout_margin="5dp"/>
    	
    	<EditText 
         android:id="@id/reviewobject_desc"
@@ -42,7 +43,8 @@
         android:hint="@string/review_desc"
         android:layout_toRightOf="@id/reviewobject_description"
         android:layout_toEndOf="@id/reviewobject_description" 
-        android:layout_below="@id/reviewobject_name_edit"/>
+        android:layout_below="@id/reviewobject_name_edit"
+        android:layout_margin="5dp"/>
    	
    	<TextView
         android:id="@+id/reviewobject_image_name"
@@ -54,7 +56,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/review_image"
         android:layout_below="@id/reviewobject_description"
-        android:padding="5dp"/>
+        android:layout_margin="5dp"/>
    	
    	<Button 
         android:id="@+id/reviewobject_image_choose"
@@ -65,7 +67,7 @@
         android:layout_toRightOf="@id/reviewobject_image_name"
         android:layout_toEndOf="@id/reviewobject_image_name"
         android:layout_below="@id/reviewobject_desc"
-        android:padding="5dp"/>
+        android:layout_margin="5dp"/>
    	
    	<ImageView 
    	    android:id="@+id/reviewobject_image"
@@ -76,6 +78,18 @@
         android:src="@drawable/ic_action_picture"
         android:layout_height="48dp"
         android:layout_width="48dp"
-        android:scaleType="center"/>
+        android:scaleType="center"
+        android:layout_margin="5dp"/>
+   	
+   	<LinearLayout 
+   	    android:id="@+id/reviewobject_map"
+   	    android:orientation="vertical"
+   	    android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/reviewobject_image"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
 
 </RelativeLayout>
