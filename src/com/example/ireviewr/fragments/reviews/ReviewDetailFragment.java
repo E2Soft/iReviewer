@@ -1,9 +1,5 @@
 package com.example.ireviewr.fragments.reviews;
 
-import java.io.File;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.ReviewsPagerAdapter;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewDetailFragment extends Fragment {
 
@@ -54,17 +51,6 @@ public class ReviewDetailFragment extends Fragment {
 		}
 	}
 	
-	private void setImageFromPath(ImageView imageView, String path){
-		File imgFile = new  File(path);
-
-		if(imgFile.exists()){
-		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-		    imageView.setImageBitmap(myBitmap);
-		}else{
-			imageView.setImageResource(R.drawable.ic_action_picture);
-		}
-	}
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -89,7 +75,7 @@ public class ReviewDetailFragment extends Fragment {
 		description.setText(bundle.getString(ReviewsPagerAdapter.DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.review_image_content);
-		//setImageFromPath(image,bundle.getString(ReviewsPagerAdapter.IMAGE)); // TODO
+		ReviewerTools.setImageFromPath(image,bundle.getString(ReviewsPagerAdapter.IMAGE));
 		
 		return view;
 	}

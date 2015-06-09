@@ -1,0 +1,5 @@
+<resources>
+    <string name="current_user_id">current_user_id</string>
+    <string name="current_user_email">current_user_email</string>
+    <string name="current_user_name">current_user_name</string>
+</resources>

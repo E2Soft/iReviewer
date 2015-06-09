@@ -1,7 +1,10 @@
 package com.example.ireviewr.fragments.groups;
 
-import java.util.UUID;
-
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -11,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -28,7 +32,8 @@ public class GroupsListFragment extends ListFragment
 	private GroupAdapter myAdapter;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -44,9 +49,7 @@ public class GroupsListFragment extends ListFragment
 		myAdapter = new GroupAdapter(getActivity());
 		
 		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.GROUP, null, 
-				new ModelLoaderCallbacks<Group>(getActivity(), 
-				Group.class, 
-				myAdapter));
+				new ModelLoaderCallbacks<Group>(getActivity(), Group.class, myAdapter));
 		
 		setListAdapter(myAdapter);
 		
@@ -54,20 +57,13 @@ public class GroupsListFragment extends ListFragment
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		// handle item selection
-		switch (item.getItemId()) {
+		switch (item.getItemId())
+		{
 			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add Group item pressed", Toast.LENGTH_LONG).show();
-				
-				///////test////////
-				String newid = ""+UUID.randomUUID().getLeastSignificantBits()%10000;
-				User testUser = new Select().from(User.class).executeSingle();
-				Group group = new Group("mygroup"+newid, testUser);
-				group.save();
-				///////////////
-				
+				createGroupDialog();
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -75,7 +71,8 @@ public class GroupsListFragment extends ListFragment
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		//dodati meni
@@ -95,9 +92,6 @@ public class GroupsListFragment extends ListFragment
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                // this is your adapter that will be filtered
-                //myAdapter.getFilter().filter(query.toString());
-                //System.out.println("on query submit: "+query);
                 return false;
             }
         };
@@ -105,8 +99,8 @@ public class GroupsListFragment extends ListFragment
 	}
 	
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		
+	public void onListItemClick(ListView l, View v, int position, long id)
+	{
 		String modelId = myAdapter.getItem(position).getModelId();
 		Fragment fragment = GroupTabsFragment.newInstance(modelId);
 		
@@ -117,9 +111,49 @@ public class GroupsListFragment extends ListFragment
 	}
 	
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		super.onResume();
 		getActivity().getActionBar().setTitle(R.string.groups);
 		setHasOptionsMenu(true);
+	}
+	
+	@SuppressLint("InflateParams")
+	private void createGroupDialog()
+	{
+		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+		final View promptView = layoutInflater.inflate(R.layout.new_group_dialog, null);
+		new AlertDialog.Builder(getActivity())
+			.setView(promptView)
+			.setCancelable(false)
+			.setPositiveButton(R.string.create, new OnClickListener()
+			{
+				@Override
+				public void onClick(DialogInterface dialog, int which)
+				{
+					//get data
+					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+					String text = editText.getText().toString();
+					//create object
+					// TODO find current user by username
+					User testUser = new Select().from(User.class).executeSingle();
+					try
+					{
+						new Group(text, testUser).saveOrThrow();
+					}
+					catch(SQLiteConstraintException ex)
+					{
+						Toast.makeText(getActivity(), "A group with name: "+text+" already exists.", Toast.LENGTH_LONG).show();
+					}
+				}
+			})
+			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel();
+				}
+			})
+			.show();
 	}
 }
