@@ -6,13 +6,19 @@ import java.io.InputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,19 +27,46 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.LocationDialog;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CreateReviewObjectFragment extends Fragment {
+public class CreateReviewObjectFragment extends Fragment implements LocationListener, OnMapReadyCallback{
 	
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
-	private String SAVED_PHOTO = "SAVED_IMAGE";
 	private ImageView mImageView;
+	
 	private Bitmap bitmap;
+	private String name;
+	private String desc;
+	private String tags;
+	
+	private String SAVED_PHOTO = "SAVED_IMAGE";
+	private String SAVED_NAME = "SAVED_NAME";
+	private String SAVED_DESC = "SAVED_DESC";
+	private String SAVED_TAGS = "SAVED_TAGS";
+	
+	private GoogleMap map;
+	private SupportMapFragment mMapFragment;
+	private LocationManager locationManager;
+	String provider;
+	
+	private Marker home;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +74,12 @@ public class CreateReviewObjectFragment extends Fragment {
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
+		
+		// Get LocationManager object from System Service LOCATION_SERVICE
+		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+				
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, true);
 	}
 	
 	//to save image taken by user when orientation change
@@ -48,9 +87,21 @@ public class CreateReviewObjectFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		
-		/*if(bitmap != null){
+		if(bitmap != null){
 			outState.putParcelable(SAVED_PHOTO, bitmap);
-		}*/
+		}
+		
+		if(name != null){
+			outState.putString(SAVED_NAME, name);
+		}
+		
+		if(desc != null){
+			outState.putString(SAVED_DESC, desc);
+		}
+		
+		if(tags != null){
+			outState.putString(SAVED_TAGS, tags);
+		}
 	}
 	
 	
@@ -85,16 +136,41 @@ public class CreateReviewObjectFragment extends Fragment {
 		View view = inflater.inflate(R.layout.frag_4, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
+		TextView textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
+		TextView textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
+		final TextView textTags = (TextView)view.findViewById(R.id.review_object_tags_list);
 		
-		/*if (savedInstanceState != null) {
+		Button choose_tags = (Button)view.findViewById(R.id.choose_object_tags);
+		choose_tags.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//Toast.makeText(getActivity(), "Tags clicked", Toast.LENGTH_LONG).show();
+				addTagDialog(textTags);
+			}
+		});
+		
+		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			name = savedInstanceState.getString(SAVED_NAME);
+			desc = savedInstanceState.getString(SAVED_DESC);
+			tags = savedInstanceState.getString(SAVED_TAGS);
+			
 			if(bitmap != null){
 				mImageView.setImageBitmap(bitmap);
 			}
-		}*/
-		
-		if(mImageView == null){
-			Toast.makeText(getActivity(), "NULL", Toast.LENGTH_LONG).show();
+			
+			if(name != null){
+				textName.setText(name);
+			}
+			
+			if(desc != null){
+				textDesc.setText(desc);
+			}
+			
+			if(tags != null){
+				textTags.setText(tags);
+			}
 		}
 		
 		Button chooseImage = (Button)view.findViewById(R.id.reviewobject_image_choose);
@@ -106,7 +182,45 @@ public class CreateReviewObjectFragment extends Fragment {
 			}
 		});
 		
+		mMapFragment = SupportMapFragment.newInstance();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.reviewobject_map, mMapFragment).commit();
+        
+        mMapFragment.getMapAsync(this);
+		
 		return view;
+	}
+	
+	private void addTagDialog(final TextView tagContent){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+		final View promptView = layoutInflater.inflate(R.layout.add_tag_layout, null);
+		alertDialogBuilder.setView(promptView);
+		
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					EditText content = (EditText)promptView.findViewById(R.id.tag_content);
+					
+					String oldValue = tagContent.getText().toString();
+					String newValue = oldValue+" #"+content.getText().toString();
+					
+					tagContent.setText(newValue);
+				}
+			})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+			});
+		
+		
+		// create an alert dialog
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
 	}
 	
 	private void selectImage() {
@@ -191,6 +305,95 @@ public class CreateReviewObjectFragment extends Fragment {
 		getActivity().getActionBar().setTitle(R.string.home);
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
+		
+		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			
+	    	Toast.makeText(getActivity(), "hasService", Toast.LENGTH_SHORT).show();
+	    }else{
+	    	Toast.makeText(getActivity(), "noService", Toast.LENGTH_SHORT).show();
+	    	
+	    	new LocationDialog(getActivity()).prepareDialog().show();
+	    }
+	}
+	
+	@Override
+    public void onPause() {
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	
+    	locationManager.removeUpdates(this);
+    }
+    
+    @Override
+    public void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    	
+    	locationManager.removeUpdates(this);
+    }
+    
+    private void addMarker(Location location){
+    	Toast.makeText(getActivity(), "addMarker", Toast.LENGTH_SHORT).show();
+    	LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+    	
+    	if(home != null){
+			home.remove();
+		}
+		
+		home = map.addMarker(new MarkerOptions()
+			.title("Title")
+			.snippet("Contnet")
+			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+			.position(loc));
+			
+			
+			CameraPosition cameraPosition = new CameraPosition
+					.Builder().target(loc)
+					.zoom(12).build();
+			
+			map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+	@Override
+	public void onMapReady(GoogleMap googleMap) {
+		Toast.makeText(getActivity(), "onMapReady()", Toast.LENGTH_SHORT).show();
+		Location location = locationManager.getLastKnownLocation(provider);
+		
+		map = googleMap;
+		
+		if (location != null) {
+			addMarker(location);
+		}
+		
+		locationManager.requestLocationUpdates(provider,0,0,this);
+		
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		Toast.makeText(getActivity(), "onLocationChanged()"+location.toString(), Toast.LENGTH_SHORT).show();
+		
+		addMarker(location);
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

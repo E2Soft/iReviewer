@@ -14,6 +14,7 @@
     <string name="detail">Detail</string>
     <string name="comments">Comments</string>
     <string name="galery">Galery</string>
+    <string name="position">Location</string>
     
     <string name="create_review">Create review</string>
     <string name="created">Created</string>

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,27 +26,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.TagsAdapter;
-import com.example.ireviewr.tools.Mokap;
 
 public class CreateReviewFragment extends Fragment {
 	
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
+	
 	private ImageView mImageView;
 	private Bitmap bitmap;
-	private HashMap<Integer, Boolean> mSelectedItems = new HashMap<Integer, Boolean>();
+	private String name;
+	private String desc;
+	private String tags;
+	private Float rating;
+	
+	private String SAVED_PHOTO = "SAVED_IMAGE";
+	private String SAVED_NAME = "SAVED_NAME";
+	private String SAVED_DESC = "SAVED_DESC";
+	private String SAVED_RATING = "SAVED_RATING";
+	private String SAVED_TAGS = "SAVED_TAGS";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,32 @@ public class CreateReviewFragment extends Fragment {
 		}
 	}
 	
+	//to save image taken by user when orientation change
+		@Override
+		public void onSaveInstanceState(Bundle outState) {
+			super.onSaveInstanceState(outState);
+			
+			if(bitmap != null){
+				outState.putParcelable(SAVED_PHOTO, bitmap);
+			}
+			
+			if(name != null){
+				outState.putString(SAVED_NAME, name);
+			}
+			
+			if(desc != null){
+				outState.putString(SAVED_DESC, desc);
+			}
+			
+			if(tags != null){
+				outState.putString(SAVED_TAGS, tags);
+			}
+			
+			if(rating != null){
+				outState.putFloat(SAVED_RATING, rating);
+			}
+		}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -89,6 +120,38 @@ public class CreateReviewFragment extends Fragment {
 		View view = inflater.inflate(R.layout.frag_1, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.review_image);
+		TextView textName = (TextView)view.findViewById(R.id.review_name_edit);
+		TextView textDesc = (TextView)view.findViewById(R.id.review_desc);
+		TextView textTags = (TextView)view.findViewById(R.id.review_tags_list);
+		RatingBar ratingBar = (RatingBar)view.findViewById(R.id.review_rating_choose);
+		
+		if (savedInstanceState != null) {
+			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			name = savedInstanceState.getString(SAVED_NAME);
+			desc = savedInstanceState.getString(SAVED_DESC);
+			tags = savedInstanceState.getString(SAVED_TAGS);
+			rating = savedInstanceState.getFloat(SAVED_RATING);
+			
+			if(bitmap != null){
+				mImageView.setImageBitmap(bitmap);
+			}
+			
+			if(name != null){
+				textName.setText(name);
+			}
+			
+			if(desc != null){
+				textDesc.setText(desc);
+			}
+			
+			if(tags != null){
+				textTags.setText(tags);
+			}
+			
+			if(rating != null){
+				ratingBar.setRating(rating);
+			}
+		}
 		
 		Button chooseButton =  (Button)view.findViewById(R.id.choose_review_picture);
 		chooseButton.setOnClickListener(new OnClickListener() {
@@ -144,65 +207,6 @@ public class CreateReviewFragment extends Fragment {
 		// create an alert dialog
 		AlertDialog alert = alertDialogBuilder.create();
 		alert.show();
-	}
-	
-	//set up tags dialog
-	private void setUpTags(){
-		/*AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-		.setTitle("Select tags")
-		.setAdapter(new TagsAdapter(getActivity(), R.layout.tags_item, Mokap.getTags()),null)
-		.setCancelable(false)
-	           .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int id) {
-	                   
-	               }
-	           })
-	           .setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int id) {
-	                    dialog.cancel();
-	               }
-	           });
-		
-		
-		AlertDialog dialog = builder.create();
-		
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			
-			@Override
-			public void onShow(DialogInterface dialog) {
-				ListView listView = (((AlertDialog) dialog).getListView());
-				
-				for(Integer key : mSelectedItems.keySet()){
-					listView.setItemChecked(key, mSelectedItems.get(key));
-				}
-			}
-		});
-		
-		dialog.getListView().setItemsCanFocus(false);
-		dialog.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		dialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, 
-					int position, long id) {
-				
-				CheckedTextView textView = (CheckedTextView)view.findViewById(R.id.tag_name);
-				
-				//put value
-				mSelectedItems.put(position, textView.isChecked());
-				
-		        if(textView.isChecked()) {
-		        	textView.setChecked(false);
-		        	Toast.makeText(getActivity(), "Chacked: "+position, Toast.LENGTH_SHORT).show();
-		        } else {
-		        	textView.setChecked(true);
-		        	Toast.makeText(getActivity(), "Unchacked: "+position, Toast.LENGTH_SHORT).show();
-		        }
-			}
-		});
-		
-		dialog.show();
-		*/
 	}
 	
 	//Choose image from camera or galery
