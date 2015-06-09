@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,9 +40,19 @@ public class CreateReviewFragment extends Fragment {
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
-	private String SAVED_PHOTO = "SAVED_IMAGE";
+	
 	private ImageView mImageView;
 	private Bitmap bitmap;
+	private String name;
+	private String desc;
+	private String tags;
+	private Float rating;
+	
+	private String SAVED_PHOTO = "SAVED_IMAGE";
+	private String SAVED_NAME = "SAVED_NAME";
+	private String SAVED_DESC = "SAVED_DESC";
+	private String SAVED_RATING = "SAVED_RATING";
+	private String SAVED_TAGS = "SAVED_TAGS";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +94,22 @@ public class CreateReviewFragment extends Fragment {
 			if(bitmap != null){
 				outState.putParcelable(SAVED_PHOTO, bitmap);
 			}
+			
+			if(name != null){
+				outState.putString(SAVED_NAME, name);
+			}
+			
+			if(desc != null){
+				outState.putString(SAVED_DESC, desc);
+			}
+			
+			if(tags != null){
+				outState.putString(SAVED_TAGS, tags);
+			}
+			
+			if(rating != null){
+				outState.putFloat(SAVED_RATING, rating);
+			}
 		}
 	
 	@Override
@@ -93,11 +120,36 @@ public class CreateReviewFragment extends Fragment {
 		View view = inflater.inflate(R.layout.frag_1, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.review_image);
+		TextView textName = (TextView)view.findViewById(R.id.review_name_edit);
+		TextView textDesc = (TextView)view.findViewById(R.id.review_desc);
+		TextView textTags = (TextView)view.findViewById(R.id.review_tags_list);
+		RatingBar ratingBar = (RatingBar)view.findViewById(R.id.review_rating_choose);
 		
 		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			name = savedInstanceState.getString(SAVED_NAME);
+			desc = savedInstanceState.getString(SAVED_DESC);
+			tags = savedInstanceState.getString(SAVED_TAGS);
+			rating = savedInstanceState.getFloat(SAVED_RATING);
+			
 			if(bitmap != null){
 				mImageView.setImageBitmap(bitmap);
+			}
+			
+			if(name != null){
+				textName.setText(name);
+			}
+			
+			if(desc != null){
+				textDesc.setText(desc);
+			}
+			
+			if(tags != null){
+				textTags.setText(tags);
+			}
+			
+			if(rating != null){
+				ratingBar.setRating(rating);
 			}
 		}
 		

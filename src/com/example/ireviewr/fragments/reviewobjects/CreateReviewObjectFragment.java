@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,10 +54,12 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 	private Bitmap bitmap;
 	private String name;
 	private String desc;
+	private String tags;
 	
 	private String SAVED_PHOTO = "SAVED_IMAGE";
 	private String SAVED_NAME = "SAVED_NAME";
 	private String SAVED_DESC = "SAVED_DESC";
+	private String SAVED_TAGS = "SAVED_TAGS";
 	
 	private GoogleMap map;
 	private SupportMapFragment mMapFragment;
@@ -95,6 +98,10 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 		if(desc != null){
 			outState.putString(SAVED_DESC, desc);
 		}
+		
+		if(tags != null){
+			outState.putString(SAVED_TAGS, tags);
+		}
 	}
 	
 	
@@ -131,9 +138,23 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
 		TextView textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
 		TextView textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
+		final TextView textTags = (TextView)view.findViewById(R.id.review_object_tags_list);
+		
+		Button choose_tags = (Button)view.findViewById(R.id.choose_object_tags);
+		choose_tags.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//Toast.makeText(getActivity(), "Tags clicked", Toast.LENGTH_LONG).show();
+				addTagDialog(textTags);
+			}
+		});
 		
 		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
+			name = savedInstanceState.getString(SAVED_NAME);
+			desc = savedInstanceState.getString(SAVED_DESC);
+			tags = savedInstanceState.getString(SAVED_TAGS);
 			
 			if(bitmap != null){
 				mImageView.setImageBitmap(bitmap);
@@ -145,6 +166,10 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 			
 			if(desc != null){
 				textDesc.setText(desc);
+			}
+			
+			if(tags != null){
+				textTags.setText(tags);
 			}
 		}
 		
@@ -164,6 +189,38 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
         mMapFragment.getMapAsync(this);
 		
 		return view;
+	}
+	
+	private void addTagDialog(final TextView tagContent){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+		final View promptView = layoutInflater.inflate(R.layout.add_tag_layout, null);
+		alertDialogBuilder.setView(promptView);
+		
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					EditText content = (EditText)promptView.findViewById(R.id.tag_content);
+					
+					String oldValue = tagContent.getText().toString();
+					String newValue = oldValue+" #"+content.getText().toString();
+					
+					tagContent.setText(newValue);
+				}
+			})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+			});
+		
+		
+		// create an alert dialog
+		AlertDialog alert = alertDialogBuilder.create();
+		alert.show();
 	}
 	
 	private void selectImage() {
