@@ -61,4 +61,6 @@
     <string name="new_user">New User</string>
     <string name="register">Register</string>
     <string name="register_hint">Enter unique username here..</string>
+    
+    <string name="splash_screen">Splash Screen</string>
 </resources>
