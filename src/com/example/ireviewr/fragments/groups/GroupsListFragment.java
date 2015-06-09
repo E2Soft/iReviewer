@@ -154,7 +154,6 @@ public class GroupsListFragment extends ListFragment
 					dialog.cancel();
 				}
 			})
-			.create()
 			.show();
 	}
 }
