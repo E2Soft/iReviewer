@@ -119,7 +119,6 @@ public class MainActivity extends FragmentActivity{
     }
     
     private void setUpReceiver(){
-    	
     	sync = new SyncReceiver();
     	
     	// Retrieve a PendingIntent that will perform a broadcast
@@ -255,23 +254,26 @@ public class MainActivity extends FragmentActivity{
     
     @Override
     protected void onPause() {
-    	
-    	unregisterReceiver(sync);
-    	
     	super.onPause();
+    	
+    	if(sync != null){
+    		unregisterReceiver(sync);
+    	}
+    	
     }
     
     @Override
     protected void onDestroy() {
+    	super.onDestroy();
     	
     	if (manager != null) {
 			manager.cancel(pendingIntent);
 	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
 		}
     	
-    	unregisterReceiver(sync);
-    	
-    	super.onDestroy();
+    	if(sync != null){
+    		unregisterReceiver(sync);
+    	}
     }
 	
 }
