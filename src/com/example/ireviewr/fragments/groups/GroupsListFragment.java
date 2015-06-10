@@ -19,13 +19,13 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.activeandroid.query.Select;
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.CurrentUserUtils;
 
 public class GroupsListFragment extends ListFragment
 {
@@ -86,7 +86,7 @@ public class GroupsListFragment extends ListFragment
             {
                 // this is your adapter that will be filtered
                 myAdapter.getFilter().filter(newText.toString());
-                //System.out.println("on text chnge text: "+newText);
+                
                 return true;
             }
             @Override
@@ -125,7 +125,6 @@ public class GroupsListFragment extends ListFragment
 		final View promptView = layoutInflater.inflate(R.layout.new_group_dialog, null);
 		new AlertDialog.Builder(getActivity())
 			.setView(promptView)
-			.setCancelable(false)
 			.setPositiveButton(R.string.create, new OnClickListener()
 			{
 				@Override
@@ -135,8 +134,7 @@ public class GroupsListFragment extends ListFragment
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
 					String text = editText.getText().toString();
 					//create object
-					// TODO find current user by username
-					User testUser = new Select().from(User.class).executeSingle();
+					User testUser = CurrentUserUtils.getModel(GroupsListFragment.this.getActivity());
 					try
 					{
 						new Group(text, testUser).saveOrThrow();

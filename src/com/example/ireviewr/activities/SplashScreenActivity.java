@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.CurrentUserUtils;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 
@@ -218,16 +218,7 @@ public class SplashScreenActivity extends Activity
 	 */
 	private void login(User user)
 	{
-		getPreferences(Context.MODE_PRIVATE).edit()
-			.putString(getString(R.string.current_user_id), user.getModelId())
-			.putString(getString(R.string.current_user_email), user.getEmail())
-			.putString(getString(R.string.current_user_name), user.getName())
-			.commit();
-		Log.d("LOGIN", 
-				"logovo se sa id: "+getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.current_user_id), null)+
-				" useraname: "+getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.current_user_name), null)+
-				" email: "+getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.current_user_email), null));
-		
+		CurrentUserUtils.login(user, this);
 		startMainActivity();
 	}
 	
