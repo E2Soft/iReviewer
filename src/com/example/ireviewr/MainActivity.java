@@ -18,6 +18,11 @@ package com.example.ireviewr;
 
 import java.util.ArrayList;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -41,6 +46,8 @@ import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.sync.SyncReceiver;
+import com.example.ireviewr.sync.auto.SyncService;
 import com.example.ireviewr.tools.Mokap;
 
 public class MainActivity extends FragmentActivity{
@@ -51,6 +58,12 @@ public class MainActivity extends FragmentActivity{
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
+    
+    //Sync stuff
+    private PendingIntent pendingIntent;
+	private AlarmManager manager;
+	
+	private SyncReceiver sync;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +113,32 @@ public class MainActivity extends FragmentActivity{
         if (savedInstanceState == null) {
             selectItemFromDrawer(0);
         }
+        
+        setUpReceiver();
+        
+    }
+    
+    private void setUpReceiver(){
+    	
+    	sync = new SyncReceiver();
+    	
+    	// Retrieve a PendingIntent that will perform a broadcast
+        Intent alarmIntent = new Intent(this, SyncService.class);
+        pendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
+        
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		int interval = 10000; // 10 seconds
+		
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    }
+    
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	
+    	registerReceiver(sync, new IntentFilter("SYNC_DATA"));
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
@@ -211,6 +250,28 @@ public class MainActivity extends FragmentActivity{
 
     public void getProfile(View view){
     	Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
+    }
+    
+    
+    @Override
+    protected void onPause() {
+    	
+    	unregisterReceiver(sync);
+    	
+    	super.onPause();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	
+    	if (manager != null) {
+			manager.cancel(pendingIntent);
+	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+		}
+    	
+    	unregisterReceiver(sync);
+    	
+    	super.onDestroy();
     }
 	
 }
