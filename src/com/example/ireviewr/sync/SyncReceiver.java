@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class SyncReceiver extends BroadcastReceiver {
 	
@@ -23,14 +24,30 @@ public class SyncReceiver extends BroadcastReceiver {
 			String bla = intent.getExtras().getString("bla");
 			
 			NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-			
+			Bitmap bm = null;
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-			mBuilder.setSmallIcon(R.drawable.ic_action_accept);
-			mBuilder.setContentTitle("Notification Alert, Click Me!");
-			mBuilder.setContentText("Hi, This is Android Notification Detail!");
-			mBuilder.setLargeIcon(bm);
 			
+			int status = ReviewerTools.getConnectivityStatus(context);
+			
+			if(status == ReviewerTools.TYPE_NOT_CONNECTED){
+				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_wifi);
+				mBuilder.setSmallIcon(R.drawable.ic_action_error);
+				mBuilder.setContentTitle("Automatic Sync problem");
+				mBuilder.setContentText("Bad news, no internet connection");
+			}else if(status == ReviewerTools.TYPE_MOBILE){
+				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_cell);
+				mBuilder.setSmallIcon(R.drawable.ic_action_warning);
+				mBuilder.setContentTitle("Automatic Sync warning");
+				mBuilder.setContentText("Please connect to wifi to sync data");
+			}else{
+				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+				mBuilder.setSmallIcon(R.drawable.ic_action_refresh);
+				mBuilder.setContentTitle("Automatic Sync");
+				mBuilder.setContentText("Good news, everything is sync now.");
+			}
+
+			
+			mBuilder.setLargeIcon(bm);
 			// notificationID allows you to update the notification later on.
 			mNotificationManager.notify(notificationID, mBuilder.build());
 			

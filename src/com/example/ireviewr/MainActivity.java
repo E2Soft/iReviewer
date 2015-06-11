@@ -254,18 +254,16 @@ public class MainActivity extends FragmentActivity{
     
     @Override
     protected void onPause() {
-    	super.onPause();
-    	
     	if(sync != null){
     		unregisterReceiver(sync);
     	}
+    	
+    	super.onPause();
     	
     }
     
     @Override
     protected void onDestroy() {
-    	super.onDestroy();
-    	
     	if (manager != null) {
 			manager.cancel(pendingIntent);
 	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
@@ -274,6 +272,8 @@ public class MainActivity extends FragmentActivity{
     	if(sync != null){
     		unregisterReceiver(sync);
     	}
+    	
+    	super.onDestroy();
     }
 	
 }
