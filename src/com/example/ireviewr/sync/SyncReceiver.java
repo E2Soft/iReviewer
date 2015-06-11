@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.tools.ReviewerTools;
 
@@ -20,7 +21,7 @@ public class SyncReceiver extends BroadcastReceiver {
 		/*Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
 		context.startService(new Intent(context,SyncService.class));*/
 		
-		if(intent.getAction().equals("SYNC_DATA")){
+		if(intent.getAction().equals(MainActivity.SYNC_DATA)){
 			String bla = intent.getExtras().getString("bla");
 			
 			NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -64,6 +64,7 @@ public class MainActivity extends FragmentActivity{
 	private AlarmManager manager;
 	
 	private SyncReceiver sync;
+	public static String SYNC_DATA = "SYNC_DATA";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,10 +127,6 @@ public class MainActivity extends FragmentActivity{
         pendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
         
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-		int interval = 10000; // 10 seconds
-		
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
     
     @Override
@@ -137,7 +134,11 @@ public class MainActivity extends FragmentActivity{
     	// TODO Auto-generated method stub
     	super.onResume();
     	
-    	registerReceiver(sync, new IntentFilter("SYNC_DATA"));
+    	int interval = 10000; // 10 seconds
+    	manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    	
+    	registerReceiver(sync, new IntentFilter(SYNC_DATA));
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
@@ -254,26 +255,17 @@ public class MainActivity extends FragmentActivity{
     
     @Override
     protected void onPause() {
+    	if (manager != null) {
+			manager.cancel(pendingIntent);
+	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+		}
+
     	if(sync != null){
     		unregisterReceiver(sync);
     	}
     	
     	super.onPause();
     	
-    }
-    
-    @Override
-    protected void onDestroy() {
-    	if (manager != null) {
-			manager.cancel(pendingIntent);
-	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
-		}
-    	
-    	if(sync != null){
-    		unregisterReceiver(sync);
-    	}
-    	
-    	super.onDestroy();
     }
 	
 }

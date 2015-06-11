@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.example.ireviewr.MainActivity;
+
 public class SyncService extends Service {
 
 	@Override
@@ -12,7 +14,7 @@ public class SyncService extends Service {
 		
 		Toast.makeText(getApplicationContext(), "onStartCommand()", Toast.LENGTH_SHORT).show();
 		
-		Intent ints = new Intent("SYNC_DATA");
+		Intent ints = new Intent(MainActivity.SYNC_DATA);
 		ints.putExtra("bla", "bla");
 		
 		sendBroadcast(ints);
