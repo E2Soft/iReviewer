@@ -9,7 +9,7 @@ import com.example.ireviewr.R;
 import com.example.ireviewr.activities.SplashScreenActivity;
 import com.example.ireviewr.model.User;
 
-public class CurrentUserUtils
+public class CurrentUser
 {
 	public static String getName(Context context)
 	{

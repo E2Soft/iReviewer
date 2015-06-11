@@ -22,10 +22,11 @@ import android.widget.Toast;
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GroupAdapter;
+import com.example.ireviewr.dialogs.DefaultCancelListener;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
-import com.example.ireviewr.tools.CurrentUserUtils;
+import com.example.ireviewr.tools.CurrentUser;
 
 public class GroupsListFragment extends ListFragment
 {
@@ -102,7 +103,7 @@ public class GroupsListFragment extends ListFragment
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
 		String modelId = myAdapter.getItem(position).getModelId();
-		Fragment fragment = GroupTabsFragment.newInstance(modelId);
+		Fragment fragment = new GroupTabsFragment(modelId);
 		
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()
@@ -115,26 +116,26 @@ public class GroupsListFragment extends ListFragment
 	{
 		super.onResume();
 		getActivity().getActionBar().setTitle(R.string.groups);
-		setHasOptionsMenu(true);
 	}
 	
 	@SuppressLint("InflateParams")
 	private void createGroupDialog()
 	{
-		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-		final View promptView = layoutInflater.inflate(R.layout.new_group_dialog, null);
+		final EditText promptView = new EditText(getActivity());
+		promptView.setHint(R.string.new_group_hint);
 		new AlertDialog.Builder(getActivity())
 			.setView(promptView)
+			.setTitle(R.string.new_group)
 			.setPositiveButton(R.string.create, new OnClickListener()
 			{
 				@Override
 				public void onClick(DialogInterface dialog, int which)
 				{
 					//get data
-					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
-					String text = editText.getText().toString();
+					//EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+					String text = promptView.getText().toString();//editText.getText().toString();
 					//create object
-					User testUser = CurrentUserUtils.getModel(GroupsListFragment.this.getActivity());
+					User testUser = CurrentUser.getModel(GroupsListFragment.this.getActivity());
 					try
 					{
 						new Group(text, testUser).saveOrThrow();
@@ -145,13 +146,7 @@ public class GroupsListFragment extends ListFragment
 					}
 				}
 			})
-			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int id)
-				{
-					dialog.cancel();
-				}
-			})
+			.setNegativeButton(R.string.cancel, new DefaultCancelListener())
 			.show();
 	}
 }

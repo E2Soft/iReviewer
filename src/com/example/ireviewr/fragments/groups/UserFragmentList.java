@@ -5,6 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -129,12 +130,4 @@ public class UserFragmentList extends ListFragment
 		getActivity().getSupportFragmentManager().beginTransaction().
 					replace(R.id.mainContent, fragment).addToBackStack(null).commit();
 	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.users);
-		setHasOptionsMenu(true);
-	}
-	
 }

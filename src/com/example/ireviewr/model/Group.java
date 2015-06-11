@@ -46,6 +46,11 @@ public class Group extends AbstractModel
 		this.userCreated = userCreated;
 	}
 	
+	public boolean isCreatedBy(String userId)
+	{
+		return userCreated.getModelId().equals(userId);
+	}
+	
 	public List<User> getUsers()
 	{
 		List<GroupToUser> manyToMany = getMany(GroupToUser.class, "userGroup");

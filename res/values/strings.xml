@@ -25,7 +25,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="hello_first">Open navigation drawer</string>
     
-    <string name="group_detail">Group detail</string>
+    <string name="group_details">Group details</string>
     <string name="add_item">Add</string>
     <string name="edit_item">Edit</string>
     <string name="remove_item">Remove</string>
@@ -55,6 +55,7 @@
     <string name="tag_name">Add tag</string>
     <string name="tag_content">Enter tag name</string>
     <string name="new_group">New Group</string>
+    <string name="edit_group">Edit Group</string>
     <string name="new_group_hint">Enter new group name here..</string>
     <string name="create">Create</string>
     

@@ -50,6 +50,11 @@ public class Comment extends AbstractModel
 	public void setUserCreated(User userCreated) {
 		this.userCreated = userCreated;
 	}
+	
+	public boolean isCreatedBy(String userId)
+	{
+		return userCreated.getModelId().equals(userId);
+	}
 
 	public Review getReview() {
 		return review;

@@ -29,7 +29,7 @@ import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
-import com.example.ireviewr.tools.CurrentUserUtils;
+import com.example.ireviewr.tools.CurrentUser;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 
@@ -218,7 +218,7 @@ public class SplashScreenActivity extends Activity
 	 */
 	private void login(User user)
 	{
-		CurrentUserUtils.login(user, this);
+		CurrentUser.login(user, this);
 		startMainActivity();
 	}
 	
@@ -233,10 +233,13 @@ public class SplashScreenActivity extends Activity
 		User testUser = new User("test_user", "test@user.com");
 		testUser.save();
 		
+		User testUser2 = new User("test_user2", "test@user2.com");
+		testUser2.save();
+		
 		Log.d("DATABASE", "starting save test");
 		Group group = new Group("mygroup", testUser);
 		group.save();
-		group = new Group("mygroup2", testUser);
+		group = new Group("mygroup2", testUser2);
 		group.save();
 		group = new Group("mygroup3", testUser);
 		group.save();

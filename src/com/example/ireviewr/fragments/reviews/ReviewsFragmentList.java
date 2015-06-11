@@ -126,11 +126,4 @@ public class ReviewsFragmentList extends ListFragment {
 									.replace(R.id.mainContent, fragment).
 									addToBackStack(null).commit();
 	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.reviews);
-		setHasOptionsMenu(true);
-	}
 }
