@@ -292,5 +292,8 @@ public class SplashScreenActivity extends Activity
 		
 		Review rev2 = new Review("test_id2", new Date(), "review2", "desc1sdfsdf", 3, new Date(), testUser, ro);
 		rev2.save();
+		
+		group.addReview(rev1);
+		group.addReview(rev2);
 	}
 }

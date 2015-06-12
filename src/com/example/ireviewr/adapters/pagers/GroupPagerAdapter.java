@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.example.ireviewr.fragments.groups.GroupDetailFragment;
 import com.example.ireviewr.fragments.groups.UserFragmentList;
-import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
+import com.example.ireviewr.fragments.reviews.GroupReviewsListFragment;
 import com.example.ireviewr.model.Group;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
@@ -33,7 +33,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 			}
 			case 1:
 			{
-				return ReviewsGroupList.newInstance(itemId);
+				return new GroupReviewsListFragment(itemId);
 			}
 			case 2:
 			{

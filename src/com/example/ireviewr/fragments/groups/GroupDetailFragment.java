@@ -61,41 +61,7 @@ public class GroupDetailFragment extends Fragment
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.edit_item:
-				final EditText promptView = new EditText(getActivity());
-				promptView.setText(getArguments().getString(NAME));
-				new AlertDialog.Builder(getActivity())
-				.setView(promptView)
-				.setTitle(R.string.edit_group)
-				.setPositiveButton(R.string.edit_item, new OnClickListener()
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
-						//get data
-						String text = promptView.getText().toString();
-						//create object
-						Group group = getGroup();
-						group.setName(text);
-						try
-						{
-							group.saveOrThrow();
-							refreshView(group);
-						}
-						catch(SQLiteConstraintException ex)
-						{
-							Toast.makeText(getActivity(), "A group with name: "+text+" already exists.", Toast.LENGTH_LONG).show();
-						}
-					}
-				})
-				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-				{
-					public void onClick(DialogInterface dialog, int id)
-					{
-						dialog.cancel();
-					}
-				})
-				.show();
-				
+				showEditDialog();
 				return true;
 			case R.id.delete_item:
 				Toast.makeText(getActivity(), "Delete Group item pressed", Toast.LENGTH_LONG).show();
@@ -106,6 +72,45 @@ public class GroupDetailFragment extends Fragment
 		}
 	}
 	
+	private void showEditDialog()
+	{
+		final EditText promptView = new EditText(getActivity());
+		promptView.setText(getArguments().getString(NAME));
+		new AlertDialog.Builder(getActivity())
+		.setView(promptView)
+		.setTitle(R.string.edit_group)
+		.setPositiveButton(R.string.edit_item, new OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				//get data
+				String text = promptView.getText().toString();
+				//create object
+				Group group = getGroup();
+				group.setName(text);
+				try
+				{
+					group.saveOrThrow();
+					refreshView(group);
+				}
+				catch(SQLiteConstraintException ex)
+				{
+					Toast.makeText(getActivity(), "A group with name: "+text+" already exists.", Toast.LENGTH_LONG).show();
+					showEditDialog();
+				}
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int id)
+			{
+				dialog.cancel();
+			}
+		})
+		.show();
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
