@@ -88,6 +88,11 @@ public class ReviewObject extends AbstractModel
 		this.userCreated = userCreated;
 	}
 	
+	public boolean isCreatedBy(String userId)
+	{
+		return userCreated.getModelId().equals(userId);
+	}
+	
 	public List<Review> getReviews()
 	{
         return getMany(Review.class, "reviewObject");

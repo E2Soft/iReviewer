@@ -15,44 +15,26 @@ public class GroupTabsFragment extends Fragment {
 	private GroupPagerAdapter mGroupPagerAdapter;
 	private ViewPager mViewPager;
 	
-	public static String ID = "ID";
+	public static final String ID = "ID";
 	
-	public static GroupTabsFragment newInstance(String id) {
-		GroupTabsFragment fragment = new GroupTabsFragment();
-	    
+	public GroupTabsFragment()
+	{}
+	
+	public GroupTabsFragment(String id)
+	{
 		Bundle bundle = new Bundle();
 		bundle.putString(ID, id);
-		fragment.setArguments(bundle);
-		
-	    return fragment;
+		setArguments(bundle);
 	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
-		/*if(savedInstanceState == null || !savedInstanceState.containsKey(GROUPS)
-				|| !savedInstanceState.containsKey(USERS)) {
-			groups = getArguments().getParcelableArrayList(GROUPS);
-			users = getArguments().getParcelableArrayList(USERS);
-		}else{
-			groups = savedInstanceState.getParcelableArrayList(GROUPS);
-			users = savedInstanceState.getParcelableArrayList(USERS);
-		}*/
-		
-		/*groups = getArguments().getParcelableArrayList(GROUPS);
-		users = getArguments().getParcelableArrayList(USERS);
-		bundleArgs = getArguments().getBundle(ARGS);*/
-		
+		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
 	}
-	
-	/*@Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(GROUPS, users);
-        outState.putParcelableArrayList(USERS, groups);
-        super.onSaveInstanceState(outState);
-    }*/
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,8 +55,6 @@ public class GroupTabsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.detail);
-		setHasOptionsMenu(true);
+		getActivity().getActionBar().setTitle(R.string.group_details);
 	}
-	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 @Table(name = "User", id="_id")
 public class User extends AbstractModel
@@ -83,4 +84,9 @@ public class User extends AbstractModel
 	{
         return getMany(ReviewObject.class, "userCreated");
     }
+	
+	public static User getByEmail(String email)
+	{
+		return new Select().from(User.class).where("email = ?", email).executeSingle();
+	}
 }
