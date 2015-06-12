@@ -134,6 +134,11 @@ public class MainActivity extends FragmentActivity{
     	// TODO Auto-generated method stub
     	super.onResume();
     	
+    	//Za slucaj da referenca nije postavljena da se izbegne problem sa androidom!
+    	if (manager == null) {
+    		setUpReceiver();
+		}
+    	
     	int interval = 10000; // 10 seconds
     	manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();

@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
+import com.example.ireviewr.sync.auto.SyncService;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class SyncReceiver extends BroadcastReceiver {
@@ -22,27 +23,25 @@ public class SyncReceiver extends BroadcastReceiver {
 		context.startService(new Intent(context,SyncService.class));*/
 		
 		if(intent.getAction().equals(MainActivity.SYNC_DATA)){
-			String bla = intent.getExtras().getString("bla");
+			int resultCode = intent.getExtras().getInt(SyncService.RESULT_CODE);
 			
 			NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 			Bitmap bm = null;
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
 			
-			int status = ReviewerTools.getConnectivityStatus(context);
-			
-			if(status == ReviewerTools.TYPE_NOT_CONNECTED){
+			if(resultCode == ReviewerTools.TYPE_NOT_CONNECTED){
 				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_wifi);
 				mBuilder.setSmallIcon(R.drawable.ic_action_error);
 				mBuilder.setContentTitle("Automatic Sync problem");
 				mBuilder.setContentText("Bad news, no internet connection");
-			}else if(status == ReviewerTools.TYPE_MOBILE){
+			}else if(resultCode == ReviewerTools.TYPE_MOBILE){
 				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_cell);
 				mBuilder.setSmallIcon(R.drawable.ic_action_warning);
 				mBuilder.setContentTitle("Automatic Sync warning");
 				mBuilder.setContentText("Please connect to wifi to sync data");
 			}else{
 				bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-				mBuilder.setSmallIcon(R.drawable.ic_action_refresh);
+				mBuilder.setSmallIcon(R.drawable.ic_action_refresh_w);
 				mBuilder.setContentTitle("Automatic Sync");
 				mBuilder.setContentText("Good news, everything is sync now.");
 			}
