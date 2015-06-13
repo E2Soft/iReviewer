@@ -58,6 +58,7 @@
     <string name="edit_group">Edit Group</string>
     <string name="new_group_hint">Enter new group name here..</string>
     <string name="user_count">User count</string>
+    <string name="review_count">Review count</string>
     <string name="create">Create</string>
     
     <string name="new_user">New User</string>

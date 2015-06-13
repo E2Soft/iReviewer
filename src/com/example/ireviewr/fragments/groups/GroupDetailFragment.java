@@ -27,6 +27,7 @@ public class GroupDetailFragment extends Fragment
 	public static final String NAME = "NAME";
 	public static final String LAST_MODIFIED = "LAST MODIFIED";
 	public static final String USER_COUNT = "USER_COUNT";
+	public static final String REVIEW_COUNT = "REVIEW_COUNT";
 	public static final String USER_CREATED = "USER_CREATED";
 	public static final String ID = "ID";
 	
@@ -45,6 +46,7 @@ public class GroupDetailFragment extends Fragment
 		bundle.putString(NAME, group.getName());
 		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getDateModified()));
 		bundle.putInt(USER_COUNT, group.getUsers().size());
+		bundle.putInt(REVIEW_COUNT, group.getReviews().size());
 		bundle.putString(USER_CREATED, group.getUserCreated().getName());
 		bundle.putString(ID, group.getModelId());
 	}
@@ -159,6 +161,9 @@ public class GroupDetailFragment extends Fragment
 		TextView gUserCount = (TextView)view.findViewById(R.id.group_user_count);
 		gUserCount.setText(Integer.toString(bundle.getInt(USER_COUNT)));
 		
+		TextView gReviewCount = (TextView)view.findViewById(R.id.group_review_count);
+		gReviewCount.setText(Integer.toString(bundle.getInt(REVIEW_COUNT)));
+		
 		TextView gUserCreated = (TextView)view.findViewById(R.id.group_user_created);
 		gUserCreated.setText(bundle.getString(USER_CREATED));
 	}
@@ -172,5 +177,13 @@ public class GroupDetailFragment extends Fragment
 	private Group getGroup()
 	{
 		return Group.getByModelId(Group.class, getArguments().getString(ID));
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		// da bi se osvezilo kad se promeni user ili review count
+		refreshView(getGroup());
 	}
 }
