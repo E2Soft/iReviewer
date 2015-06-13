@@ -2,7 +2,6 @@ package com.example.ireviewr.fragments.reviews;
 
 import android.support.v4.app.Fragment;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.ReviewsAdapter;
@@ -21,7 +20,7 @@ public abstract class AbstractReviewsListFragment extends AbstractDetailListFrag
 	
 	public AbstractReviewsListFragment(String itemId, int menuIcon)
 	{
-		super(MainActivity.LOADER_ID.REVIEW, menuIcon);
+		super(R.id.GROUP_REVIEW_LOADER, menuIcon);
 		getArguments().putString(RELATED_ID, itemId);
 	}
 

@@ -57,6 +57,7 @@
     <string name="new_group">New Group</string>
     <string name="edit_group">Edit Group</string>
     <string name="new_group_hint">Enter new group name here..</string>
+    <string name="user_count">User count</string>
     <string name="create">Create</string>
     
     <string name="new_user">New User</string>
@@ -64,4 +65,6 @@
     <string name="register_hint">Enter unique username here..</string>
     
     <string name="splash_screen">Splash Screen</string>
+    
+    <string name="user_created">Created by</string>
 </resources>

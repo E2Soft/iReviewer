@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SearchView;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.CommentsAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
@@ -53,7 +52,7 @@ public class CommentsListFragment extends ListFragment
 		myAdapter = new CommentsAdapter(getActivity());
 		
 		// TODO da prima id reviewa i dobavlja komentare za njega
-		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.COMMENT, null, 
+		getActivity().getSupportLoaderManager().initLoader(R.id.COMMENT_LOADER, null, 
 				new ModelLoaderCallbacks<Comment>(getActivity(), 
 				Comment.class, 
 				myAdapter)

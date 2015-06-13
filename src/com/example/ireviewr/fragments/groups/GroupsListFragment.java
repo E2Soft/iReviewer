@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.GroupAdapter;
@@ -26,7 +25,7 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 {
 	public GroupsListFragment()
 	{
-		super(MainActivity.LOADER_ID.GROUP, R.menu.standard_list_menu);
+		super(R.id.GROUP_LOADER, R.menu.standard_list_menu);
 	}
 	
 	@Override

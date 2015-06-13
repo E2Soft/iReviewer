@@ -2,12 +2,10 @@ package com.example.ireviewr.fragments.reviews;
 
 import java.util.List;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.ReviewsCheckAdapter;
@@ -15,6 +13,7 @@ import com.example.ireviewr.fragments.AbstractCheckListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.Review;
+import com.example.ireviewr.tools.CurrentUser;
 
 /**
  * Check lista reviewova koje je kreirao korisnik, cekirani se nalaze u grupi.
@@ -28,7 +27,7 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 	
 	public GroupReviewsCheckListFragment(String itemId)
 	{
-		super(MainActivity.LOADER_ID.REVIEW, R.menu.standard_list_menu);
+		super(R.id.GROUP_REVIEW_CHECK_LOADER, R.menu.standard_list_menu);
 		getArguments().putString(RELATED_ID, itemId);
 	}
 
@@ -40,8 +39,7 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 			@Override
 			protected List<Review> getData()
 			{
-				// TODO da vraca samo one od trenutnog usera i cekira one koji su u grupi
-				return Group.getByModelId(Group.class, getArguments().getString(RELATED_ID)).getReviews();
+				return CurrentUser.getModel(context).getReviews();
 			}
 		};
 	}
@@ -49,14 +47,34 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 	@Override
 	protected void onItemCheck(Review item, boolean checked)
 	{
-		Log.d("MULTISELECT", "selected "+item.getName()+" "+checked);
-		// TODO da na cekiranje doda, na odcekiranje brise vezu
+		Group group = Group.getByModelId(Group.class, getArguments().getString(RELATED_ID));
+		if(checked)
+		{
+			group.addReview(item);
+		}
+		else
+		{
+			group.removeReview(item);
+		}
 	}
 
 	@Override
 	protected AbstractArrayAdapter<Review> createAdapter()
 	{
-		return new ReviewsCheckAdapter(getActivity());
+		return new ReviewsCheckAdapter(getActivity())
+		{
+			private String groupId;
+			public ReviewsCheckAdapter setGroupId(String groupId)
+			{
+				this.groupId = groupId;
+				return this;
+			}
+			@Override
+			protected boolean isChecked(Review item)
+			{
+				return item.isInGroup(groupId);
+			}
+		}.setGroupId(getArguments().getString(RELATED_ID));
 	}
 	
 	@Override

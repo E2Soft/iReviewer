@@ -1,17 +1,14 @@
 package com.example.ireviewr.tools;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.GaleryItem;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.model.Review;
-import com.example.ireviewr.model.ReviewItem;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
-import com.example.ireviewr.model.UserItem;
 
 public class Mokap {
 
@@ -80,7 +77,7 @@ public class Mokap {
 		
 		return items;
 	}
-	
+	/*
 	public static ArrayList<UserItem> getUserList(){
 		ArrayList<UserItem> items = new ArrayList<UserItem>();
 		
@@ -93,7 +90,7 @@ public class Mokap {
 		items.add(new UserItem("User7","mail@mail.com",new Date()));
 		
 		return items;
-	}
+	}*/
 	
 	public static ArrayList<User> getUserModelList()
 	{
@@ -106,7 +103,7 @@ public class Mokap {
 		return items;
 	}
 	
-	public static ArrayList<ReviewItem> getReviewList(){
+	/*public static ArrayList<ReviewItem> getReviewList(){
 		ArrayList<ReviewItem> items = new ArrayList<ReviewItem>();
 		
 		items.add(new ReviewItem("Name1", "Bla1", 2, getUserList().get(0), 
@@ -126,7 +123,7 @@ public class Mokap {
 				gatGaleryList(), getTags(),new GaleryItem("", "")));
 		
 		return items;
-	}
+	}*/
 	/*
 	public static ArrayList<Group> getGroupList(){
 		ArrayList<Group> items = new ArrayList<Group>();

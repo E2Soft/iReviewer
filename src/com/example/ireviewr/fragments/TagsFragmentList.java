@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SearchView;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.TagsAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
@@ -48,7 +47,7 @@ public class TagsFragmentList extends ListFragment {
 		
 		myAdapter = new TagsAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.TAG, null, 
+		getActivity().getSupportLoaderManager().initLoader(R.id.TAG_LOADER, null, 
 				new ModelLoaderCallbacks<Tag>(getActivity(), 
 				Tag.class, 
 				myAdapter)
