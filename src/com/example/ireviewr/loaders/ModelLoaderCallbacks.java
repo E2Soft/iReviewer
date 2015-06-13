@@ -24,11 +24,11 @@ import com.example.ireviewr.adapters.AbstractArrayAdapter;
  */
 public class ModelLoaderCallbacks<T extends Model> implements LoaderCallbacks<List<T>>
 {
-	Class<T> modelClass;
-	Context context;
-	AbstractArrayAdapter<T> adapter;
-	boolean updateOnRelChange = false; // radi se update kada se povezane tabele updateuju
-	From query = null; // active-android sql upit npr.: new Select().from(MojModel.class).where("n=?",5)
+	protected Class<T> modelClass;
+	protected Context context;
+	protected AbstractArrayAdapter<T> adapter;
+	private boolean updateOnRelChange = false; // radi se update kada se povezane tabele updateuju
+	protected From query = null; // active-android sql upit npr.: new Select().from(MojModel.class).where("n=?",5)
 	
 	public ModelLoaderCallbacks(Context context, Class<T> modelClass, AbstractArrayAdapter<T> adapter)
 	{

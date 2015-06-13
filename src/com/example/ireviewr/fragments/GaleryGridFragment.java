@@ -16,7 +16,6 @@ import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GaleryAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
@@ -117,7 +116,7 @@ public class GaleryGridFragment extends Fragment {
 		
 		myAdapter = new GaleryAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.IMAGE, null, 
+		getActivity().getSupportLoaderManager().initLoader(R.id.IMAGE_LOADER, null, 
 				new ModelLoaderCallbacks<Image>(getActivity(), 
 				Image.class, 
 				myAdapter));

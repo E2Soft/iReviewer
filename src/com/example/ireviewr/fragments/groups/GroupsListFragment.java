@@ -5,42 +5,65 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.sqlite.SQLiteConstraintException;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.dialogs.DefaultCancelListener;
-import com.example.ireviewr.fragments.AbstractListFragment;
+import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 
-public class GroupsListFragment extends AbstractListFragment<Group>
+public class GroupsListFragment extends AbstractDetailListFragment<Group>
 {
-	@Override
-	protected ModelLoaderCallbacks<Group> getModelLoaderCallbacks()
+	public GroupsListFragment()
 	{
-		return new ModelLoaderCallbacks<Group>(getActivity(), Group.class, myAdapter);
+		super(R.id.GROUP_LOADER, R.menu.standard_list_menu);
+	}
+	
+	@Override
+	protected ModelLoaderCallbacks<Group> createLoaderCallbacks()
+	{
+		// sve grupe
+		return new ModelLoaderCallbacks<Group>(getActivity(), Group.class, adapter);
 	}
 
 	@Override
-	protected AbstractArrayAdapter<Group> getAdapter()
+	protected AbstractArrayAdapter<Group> createAdapter()
 	{
 		return new GroupAdapter(getActivity());
 	}
 
 	@Override
-	protected int getLoaderId()
+	protected void configureMenu(Menu menu, MenuInflater inflater)
 	{
-		return MainActivity.LOADER_ID.GROUP;
+		menu.findItem(R.id.menu_action)
+		.setIcon(R.drawable.ic_action_new)
+		.setTitle(R.string.add_item);
 	}
-
+	
 	@Override
-	protected void addItem()
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// handle item selection
+		switch (item.getItemId()) {
+			case R.id.menu_action:
+				onMenuAction();
+				return true;
+		    default:
+		    	return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	// pitaj korisnika kako da se zove nova grupa i kreiraj novu grupu
+	private void onMenuAction()
 	{
 		final EditText promptView = new EditText(getActivity());
 		promptView.setHint(R.string.new_group_hint);
@@ -71,9 +94,9 @@ public class GroupsListFragment extends AbstractListFragment<Group>
 	}
 
 	@Override
-	protected void onItemClick(String modelId)
+	protected void onItemClick(Group item)
 	{
-		Fragment fragment = new GroupTabsFragment(modelId);
+		Fragment fragment = new GroupTabsFragment(item.getModelId());
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()
 												.replace(R.id.mainContent, fragment)

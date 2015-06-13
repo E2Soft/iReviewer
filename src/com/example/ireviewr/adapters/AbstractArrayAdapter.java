@@ -528,6 +528,11 @@ public abstract class AbstractArrayAdapter<T> extends BaseAdapter implements Fil
     	return new String[]{item.toString()};
     }
     
+    protected String getMainDataToDisplay(T item)
+    {
+    	return getDataToDisplay(item)[0];
+    }
+    
     /**
      * Returns text to be used in a filter.
      * @param item
@@ -535,6 +540,6 @@ public abstract class AbstractArrayAdapter<T> extends BaseAdapter implements Fil
      */
     protected String getTextToFilter(T item)
     {
-    	return getDataToDisplay(item)[0];
+    	return getMainDataToDisplay(item);
     }
 }

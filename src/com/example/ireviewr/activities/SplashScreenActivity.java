@@ -290,8 +290,14 @@ public class SplashScreenActivity extends Activity
 		Review rev1 = new Review("test_id", new Date(), "review1", "desc1sdfsdf", 2, new Date(), testUser, ro);
 		rev1.save();
 		
-		Review rev2 = new Review("test_id2", new Date(), "review2", "desc1sdfsdf", 3, new Date(), testUser, ro);
+		Review rev2 = new Review("test_id2", new Date(), "review2", "desc1sdfsdf2", 3, new Date(), testUser, ro);
 		rev2.save();
+		
+		Review rev3 = new Review("test_id3", new Date(), "review3", "desc1sdfsdf3", 2, new Date(), testUser, ro);
+		rev3.save();
+		
+		Review rev4 = new Review("test_id4", new Date(), "review4", "desc1sdfsdf4", 4, new Date(), testUser2, ro);
+		rev4.save();
 		
 		group.addReview(rev1);
 		group.addReview(rev2);

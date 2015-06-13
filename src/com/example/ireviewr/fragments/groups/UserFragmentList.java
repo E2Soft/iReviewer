@@ -5,7 +5,6 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +15,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.UserAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
@@ -46,7 +44,7 @@ public class UserFragmentList extends ListFragment
 		
 		myAdapter = new UserAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(MainActivity.LOADER_ID.USER, null, 
+		getActivity().getSupportLoaderManager().initLoader(R.id.USER_LOADER, null, 
 				new ModelLoaderCallbacks<User>(getActivity(), 
 				User.class, 
 				myAdapter)

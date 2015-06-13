@@ -182,4 +182,14 @@ public class Review extends AbstractModel
 		
 		return query.execute();
 	}
+
+	public boolean isInGroup(String groupId)
+	{
+		// ako postoji veza izmedju ovog reviewa i grupe sa modelId = groupId
+		return new Select()
+			.from(GroupToReview.class).as("GRP_TO_REV")
+			.join(Group.class).as("GRP")
+			.on("GRP._id = GRP_TO_REV.userGroup")
+			.where("GRP_TO_REV.review = ? and GRP.modelId = ?", getId(), groupId).executeSingle() != null;
+	}
 }

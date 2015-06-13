@@ -26,6 +26,8 @@ public class GroupDetailFragment extends Fragment
 {
 	public static final String NAME = "NAME";
 	public static final String LAST_MODIFIED = "LAST MODIFIED";
+	public static final String USER_COUNT = "USER_COUNT";
+	public static final String USER_CREATED = "USER_CREATED";
 	public static final String ID = "ID";
 	
 	public GroupDetailFragment()
@@ -42,6 +44,8 @@ public class GroupDetailFragment extends Fragment
 		Bundle bundle = getArguments();
 		bundle.putString(NAME, group.getName());
 		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getDateModified()));
+		bundle.putInt(USER_COUNT, group.getUsers().size());
+		bundle.putString(USER_CREATED, group.getUserCreated().getName());
 		bundle.putString(ID, group.getModelId());
 	}
 	
@@ -64,8 +68,15 @@ public class GroupDetailFragment extends Fragment
 				showEditDialog();
 				return true;
 			case R.id.delete_item:
-				Toast.makeText(getActivity(), "Delete Group item pressed", Toast.LENGTH_LONG).show();
-				// TODO
+				// obrisi grupu
+				getGroup().deleteSynced();
+				
+				// obrisi ovaj fragment
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.remove(this)
+				.commit();
+				getActivity().getSupportFragmentManager().popBackStack();
+				
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -144,6 +155,12 @@ public class GroupDetailFragment extends Fragment
 		
 		TextView gText = (TextView)view.findViewById(R.id.group_lastModified);
 		gText.setText(bundle.getString(LAST_MODIFIED));
+		
+		TextView gUserCount = (TextView)view.findViewById(R.id.group_user_count);
+		gUserCount.setText(Integer.toString(bundle.getInt(USER_COUNT)));
+		
+		TextView gUserCreated = (TextView)view.findViewById(R.id.group_user_created);
+		gUserCreated.setText(bundle.getString(USER_CREATED));
 	}
 	
 	private void refreshView(Group group)

@@ -3,9 +3,11 @@ package com.example.ireviewr.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 @Table(name = "UserGroup", id="_id")
 public class Group extends AbstractModel 
@@ -79,9 +81,37 @@ public class Group extends AbstractModel
         return ret;
     }
 	
+	public List<Review> getReviewsByUser(String userId)
+	{
+		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "userGroup");
+		List<Review> ret = new ArrayList<Review>();
+		for(GroupToReview m2m : manyToMany)
+		{
+			Review rev = m2m.getReview();
+			if(rev.getUserCreated().getId().equals(userId))
+			{
+				ret.add(rev);
+			}
+		}
+        return ret;
+    }
+	
 	public void addReview(Review toAdd)
 	{
 		ValidationUtils.checkSaved(toAdd, this);
 		new GroupToReview(toAdd, this).save();
+	}
+	
+	public void removeReview(Review toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		GroupToReview m2m = new Select().from(GroupToReview.class)
+				.where("review = ? and userGroup = ?", toRemove.getId(), getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
 	}
 }

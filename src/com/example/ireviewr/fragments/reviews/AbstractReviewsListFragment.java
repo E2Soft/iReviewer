@@ -1,38 +1,39 @@
 package com.example.ireviewr.fragments.reviews;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.ReviewsAdapter;
-import com.example.ireviewr.fragments.AbstractListFragment;
+import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.model.Review;
 
-public abstract class AbstractReviewsListFragment extends AbstractListFragment<Review>
+/**
+ * Lista reviewova sa detaljima. Na klik otvara detalje za review.
+ */
+public abstract class AbstractReviewsListFragment extends AbstractDetailListFragment<Review>
 {
 	public static final String RELATED_ID = "RELATED_ID";
 	
 	public AbstractReviewsListFragment()
 	{}
 	
-	public AbstractReviewsListFragment(String itemId)
+	public AbstractReviewsListFragment(String itemId, int menuIcon)
 	{
-		Bundle bundle = new Bundle();
-		bundle.putString(RELATED_ID, itemId);
-		setArguments(bundle);
+		super(R.id.GROUP_REVIEW_LOADER, menuIcon);
+		getArguments().putString(RELATED_ID, itemId);
 	}
 
 	@Override
-	protected AbstractArrayAdapter<Review> getAdapter()
+	protected AbstractArrayAdapter<Review> createAdapter()
 	{
 		return new ReviewsAdapter(getActivity());
 	}
 
 	@Override
-	protected void onItemClick(String modelId)
+	protected void onItemClick(Review item)
 	{
-		Fragment fragment = ReviewTabFragment.newInstance(modelId);
+		Fragment fragment = ReviewTabFragment.newInstance(item.getModelId());
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()
 												.replace(R.id.mainContent, fragment).
@@ -43,6 +44,7 @@ public abstract class AbstractReviewsListFragment extends AbstractListFragment<R
 	public void onResume()
 	{
 		super.onResume();
+		// kad se pokrene sa novim povezanim id da se reloaduje
 		reloadData();
 	}
 }
