@@ -1,4 +1,4 @@
-package com.example.ireviewr.fragments.groups;
+package com.example.ireviewr.fragments.users;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.Mokap;
 import com.example.ireviewr.tools.ReviewerTools;
 
-public class UserFragmentList extends ListFragment
+public class GroupUsersListFragment extends ListFragment
 {
 	private UserAdapter myAdapter;
 	
@@ -30,9 +30,9 @@ public class UserFragmentList extends ListFragment
 	public static String NAME = "NAME";
 	public static String LAST_MODIFIED = "LAST MODIFIED";
 	
-	public static UserFragmentList newInstance(String itemId)
+	public static GroupUsersListFragment newInstance(String itemId)
 	{
-		UserFragmentList fragment = new UserFragmentList();
+		GroupUsersListFragment fragment = new GroupUsersListFragment();
 	    return fragment;
 	}
 	
@@ -44,7 +44,7 @@ public class UserFragmentList extends ListFragment
 		
 		myAdapter = new UserAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(R.id.USER_LOADER, null, 
+		getActivity().getSupportLoaderManager().initLoader(R.id.GROUP_USER_LOADER, null, 
 				new ModelLoaderCallbacks<User>(getActivity(), 
 				User.class, 
 				myAdapter)

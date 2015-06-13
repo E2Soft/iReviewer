@@ -1,4 +1,4 @@
-package com.example.ireviewr.fragments.groups;
+package com.example.ireviewr.fragments.users;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -56,10 +56,10 @@ public class UserDetailFragment extends Fragment {
 		Bundle bundle = getArguments();
 		
 		TextView gTitle = (TextView)view.findViewById(R.id.user_title);
-		gTitle.setText(bundle.getString(UserFragmentList.NAME));
+		gTitle.setText(bundle.getString(GroupUsersListFragment.NAME));
 		
 		TextView gText = (TextView)view.findViewById(R.id.user_lastModified);
-		gText.setText(bundle.getString(UserFragmentList.LAST_MODIFIED));
+		gText.setText(bundle.getString(GroupUsersListFragment.LAST_MODIFIED));
 		
 		return view;
 	}
