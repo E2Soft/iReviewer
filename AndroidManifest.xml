@@ -74,7 +74,8 @@
     					   com.example.ireviewr.model.Image,
     					   com.example.ireviewr.model.Review,
     					   com.example.ireviewr.model.Tag,
-    					   com.example.ireviewr.model.TagToReviewObject" />
+    					   com.example.ireviewr.model.TagToReviewObject,
+    					   com.example.ireviewr.model.DeletedEntry" />
         
         <provider android:authorities="com.example.ireviewr" android:exported="false" android:name="com.activeandroid.content.ContentProvider" />
         

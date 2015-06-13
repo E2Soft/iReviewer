@@ -18,7 +18,21 @@ import com.example.ireviewr.model.AbstractModel;
 
 public abstract class AbstractListFragment<T extends AbstractModel> extends ListFragment
 {
-	protected AbstractArrayAdapter<T> myAdapter;
+	public static final String MENU_LAYOUT = "MENU_ACTION_ICON";
+	public static final String LOADER_ID = "LOADER_ID";
+	
+	protected AbstractArrayAdapter<T> adapter;
+	
+	public AbstractListFragment()
+	{}
+	
+	public AbstractListFragment(int loaderId, int menuLayout)
+	{
+		Bundle bundle = new Bundle();
+		bundle.putInt(MENU_LAYOUT, menuLayout);
+		bundle.putInt(LOADER_ID, loaderId);
+		setArguments(bundle);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -35,38 +49,27 @@ public abstract class AbstractListFragment<T extends AbstractModel> extends List
 	{
 		View view = new ListView(getActivity());
 		
-		myAdapter = getAdapter();
+		adapter = createAdapter();
 		
-		getActivity().getSupportLoaderManager().initLoader(getLoaderId(), null, getModelLoaderCallbacks());
+		getActivity().getSupportLoaderManager().initLoader(getLoaderId(), null, createLoaderCallbacks());
 		
-		setListAdapter(myAdapter);
+		setListAdapter(adapter);
 		
 		return view;
 	}
 	
 	public void reloadData()
 	{
-		getActivity().getSupportLoaderManager().restartLoader(getLoaderId(), null, getModelLoaderCallbacks());
+		getActivity().getSupportLoaderManager().restartLoader(getLoaderId(), null, createLoaderCallbacks());
 	}
 	
-	protected abstract ModelLoaderCallbacks<T> getModelLoaderCallbacks();
-	protected abstract AbstractArrayAdapter<T> getAdapter();
-	protected abstract int getLoaderId();
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public int getLoaderId()
 	{
-		// handle item selection
-		switch (item.getItemId()) {
-			case R.id.add_item:
-				addItem();
-				return true;
-		    default:
-		    	return super.onOptionsItemSelected(item);
-		}
-	}
+		return getArguments().getInt(LOADER_ID);
+	};
 	
-	protected abstract void addItem();
+	protected abstract ModelLoaderCallbacks<T> createLoaderCallbacks();
+	protected abstract AbstractArrayAdapter<T> createAdapter();
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
@@ -74,32 +77,37 @@ public abstract class AbstractListFragment<T extends AbstractModel> extends List
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		//dodati meni
-		inflater.inflate(R.menu.activity_itemdetail, menu);
-		SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+		inflater.inflate(getArguments().getInt(MENU_LAYOUT), menu);
 		
-		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                myAdapter.getFilter().filter(newText.toString());
-                return true;
-            }
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                return false;
-            }
-        };
-        searchView.setOnQueryTextListener(textChangeListener);
+		// podesiti sta treba za custom meni
+		configureMenu(menu, inflater);
+		
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+		if(searchItem != null)
+		{
+			SearchView searchView = (SearchView)searchItem.getActionView();
+			SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
+	        {
+	            @Override
+	            public boolean onQueryTextChange(String newText)
+	            {
+	                adapter.getFilter().filter(newText.toString());
+	                return true;
+	            }
+	            @Override
+	            public boolean onQueryTextSubmit(String query)
+	            {
+	                return false;
+	            }
+	        };
+	        searchView.setOnQueryTextListener(textChangeListener);
+		}
 	}
 	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id)
+	protected void configureMenu(Menu menu, MenuInflater inflater){}
+
+	public T getItem(int position)
 	{
-		String modelId = myAdapter.getItem(position).getModelId();
-		onItemClick(modelId);
+		return adapter.getItem(position);
 	}
-	
-	protected abstract void onItemClick(String modelId);
 }

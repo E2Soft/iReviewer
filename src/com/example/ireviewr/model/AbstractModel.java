@@ -12,6 +12,9 @@ import com.activeandroid.query.Select;
 
 public abstract class AbstractModel extends Model 
 {
+	/**
+	 * Univerzalno jedinstveni id.
+	 */
 	@Column(name = "modelId", 
 			index=true, 
 			notNull=true, 
@@ -19,15 +22,26 @@ public abstract class AbstractModel extends Model
 			onUniqueConflict=ConflictAction.REPLACE)
 	private String modelId = null;
 	
+	/**
+	 * Datum/vreme kada je poslednji put modifikovan. Ne azurira se automatski.
+	 */
 	@Column(name = "dateModified", notNull=true)
 	private Date dateModified;
 
+	/**
+	 * Kad se kreira nov entitet od strane lokalne aplikacije.
+	 */
 	public AbstractModel() 
 	{
 		this.modelId = UUID.randomUUID().toString(); // ako je nov objekat generisi random id
 		this.dateModified = new Date(); // dateModified je sad kad je kreiran
 	}
 	
+	/**
+	 * Kad se kreira postojeci entitet koji je preuzet sa servera.
+	 * @param modelId
+	 * @param dateModified
+	 */
 	public AbstractModel(String modelId, Date dateModified) 
 	{
 		this.modelId = modelId;
@@ -51,7 +65,12 @@ public abstract class AbstractModel extends Model
 		return new Select().from(modelClass).where("modelId = ?", modelId).executeSingle();
 	}
 	
-	public Long saveOrThrow()
+	/**
+	 * Snima entitet u bazu.
+	 * @return id entiteta
+	 * @throws SQLiteConstraintException ako entitet nije snimljen
+	 */
+	public Long saveOrThrow() throws SQLiteConstraintException
 	{
 		Long newId = save();
 		if(newId == -1)
@@ -62,5 +81,15 @@ public abstract class AbstractModel extends Model
 		{
 			return newId;
 		}
+	}
+	
+	/**
+	 * Brise entitet iz baze i dodaje DeletedEntry radi sinhronizacije sa serverom.
+	 * Koristiti umetso obicne delete() metode.
+	 */
+	public void deleteSynced()
+	{
+		delete();
+		new DeletedEntry(getClass().getSimpleName(), modelId, new Date()).save();
 	}
 }
