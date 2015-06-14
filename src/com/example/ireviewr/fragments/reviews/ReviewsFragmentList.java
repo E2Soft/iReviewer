@@ -118,7 +118,7 @@ public class ReviewsFragmentList extends ListFragment {
 		bundle.putString("TEXT", item.getmSubtitle());
 		bundle.putInt("ICON", item.getmIcon());*/
 		
-		Fragment fragment = ReviewTabFragment.newInstance("test_id");
+		Fragment fragment = new ReviewTabFragment("test_id");
 		//fragment.setArguments(bundle);
 		
 		getActivity().getSupportFragmentManager()

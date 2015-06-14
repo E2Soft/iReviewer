@@ -70,6 +70,19 @@ public class Group extends AbstractModel
 		new GroupToUser(toAdd, this).save();
 	}
 	
+	public void removeUser(User toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		GroupToUser m2m = new Select().from(GroupToUser.class)
+				.where("user = ? and userGroup = ?", toRemove.getId(), getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
 	public List<Review> getReviews()
 	{
 		List<GroupToReview> manyToMany = getMany(GroupToReview.class, "userGroup");

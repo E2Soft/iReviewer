@@ -18,9 +18,9 @@ public abstract class AbstractReviewsListFragment extends AbstractDetailListFrag
 	public AbstractReviewsListFragment()
 	{}
 	
-	public AbstractReviewsListFragment(String itemId, int menuIcon)
+	public AbstractReviewsListFragment(String itemId, int menuLayout)
 	{
-		super(R.id.GROUP_REVIEW_LOADER, menuIcon);
+		super(R.id.GROUP_REVIEW_LOADER, menuLayout);
 		getArguments().putString(RELATED_ID, itemId);
 	}
 
@@ -33,7 +33,7 @@ public abstract class AbstractReviewsListFragment extends AbstractDetailListFrag
 	@Override
 	protected void onItemClick(Review item)
 	{
-		Fragment fragment = ReviewTabFragment.newInstance(item.getModelId());
+		Fragment fragment = new ReviewTabFragment(item.getModelId());
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()
 												.replace(R.id.mainContent, fragment).

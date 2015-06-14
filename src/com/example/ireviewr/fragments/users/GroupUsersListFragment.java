@@ -2,130 +2,109 @@ package com.example.ireviewr.fragments.users;
 
 import java.util.List;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.UserAdapter;
+import com.example.ireviewr.adapters.AbstractArrayAdapter;
+import com.example.ireviewr.adapters.UsersAdapter;
+import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
+import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
-import com.example.ireviewr.tools.Mokap;
-import com.example.ireviewr.tools.ReviewerTools;
+import com.example.ireviewr.tools.CurrentUser;
 
-public class GroupUsersListFragment extends ListFragment
+public class GroupUsersListFragment extends AbstractDetailListFragment<User>
 {
-	private UserAdapter myAdapter;
+	public static final String RELATED_ID = "RELATED_ID";
 	
-	public static String DATA = "DATA";
-	public static String NAME = "NAME";
-	public static String LAST_MODIFIED = "LAST MODIFIED";
+	public GroupUsersListFragment()
+	{}
 	
-	public static GroupUsersListFragment newInstance(String itemId)
+	public GroupUsersListFragment(String itemId)
 	{
-		GroupUsersListFragment fragment = new GroupUsersListFragment();
-	    return fragment;
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View view = inflater.inflate(R.layout.users_fragment, container, false);
-		
-		myAdapter = new UserAdapter(getActivity());
-		
-		getActivity().getSupportLoaderManager().initLoader(R.id.GROUP_USER_LOADER, null, 
-				new ModelLoaderCallbacks<User>(getActivity(), 
-				User.class, 
-				myAdapter)
-				{
-					@Override
-					protected List<User> getData()
-					{
-						return Mokap.getUserModelList();
-					}
-				});
-		
-		setListAdapter(myAdapter);
-		
-		return view;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
+		super(R.id.GROUP_USER_LOADER, R.menu.standard_list_menu);
+		getArguments().putString(RELATED_ID, itemId);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		
-		//dodati meni
-		inflater.inflate(R.menu.activity_itemdetail, menu);
-		SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-		
-		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                // this is your adapter that will be filtered
-                myAdapter.getFilter().filter(newText.toString());
-                //System.out.println("on text chnge text: "+newText);
-                return true;
-            }
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                // this is your adapter that will be filtered
-                //myAdapter.getFilter().filter(query.toString());
-                //System.out.println("on query submit: "+query);
-                return false;
-            }
-        };
-        searchView.setOnQueryTextListener(textChangeListener);
+	protected AbstractArrayAdapter<User> createAdapter()
+	{
+		return new UsersAdapter(getActivity());
+	}
+
+	@Override
+	protected void onItemClick(User item)
+	{
+		Fragment fragment = new UserDetailFragment(item);
+		getActivity().getSupportFragmentManager()
+												.beginTransaction()
+												.replace(R.id.mainContent, fragment).
+												addToBackStack(null).commit();
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
+	public void onResume()
+	{
+		super.onResume();
+		// kad se pokrene sa novim povezanim id da se reloaduje
+		reloadData();
+	}
+
+	@Override
+	protected ModelLoaderCallbacks<User> createLoaderCallbacks()
+	{
+		return new ModelLoaderCallbacks<User>(getActivity(), User.class, adapter)
+		{
+			@Override
+			protected List<User> getData()
+			{
+				return getGroup().getUsers();
+			}
+		};
+	}
+	
+	@Override
+	protected void configureMenu(Menu menu, MenuInflater inflater)
+	{
+		String currentUserId = CurrentUser.getId(getActivity());
+		if(getGroup().isCreatedBy(currentUserId))
+		{
+			menu.findItem(R.id.menu_action)
+			.setIcon(R.drawable.ic_action_edit)
+			.setTitle(R.string.edit_item);
+		}
+		else
+		{
+			menu.removeItem(R.id.menu_action);
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		// handle item selection
 		switch (item.getItemId()) {
-			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add User item pressed", Toast.LENGTH_LONG).show();
+			case R.id.menu_action:
+				onMenuAction();
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
 		}
 	}
 	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		
-		User item = myAdapter.getItem(position);
-		
-		Bundle bundle = new Bundle();
-		bundle.putString(NAME, item.getName());
-		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(item.getDateModified()));
-		
-		Fragment fragment = new UserDetailFragment();
-		fragment.setArguments(bundle);
-		
-		getActivity().getSupportFragmentManager().beginTransaction().
-					replace(R.id.mainContent, fragment).addToBackStack(null).commit();
+	private void onMenuAction()
+	{
+		getActivity().getSupportFragmentManager().beginTransaction()
+		.replace(R.id.mainContent, new GroupUsersCheckListFragment(getArguments().getString(RELATED_ID)))
+		.addToBackStack(null)
+		.commit();
+	}
+	
+	private Group getGroup()
+	{
+		return Group.getByModelId(Group.class, getArguments().getString(RELATED_ID));
 	}
 }

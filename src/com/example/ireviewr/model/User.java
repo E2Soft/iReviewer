@@ -89,4 +89,14 @@ public class User extends AbstractModel
 	{
 		return new Select().from(User.class).where("email = ?", email).executeSingle();
 	}
+
+	public boolean isInGroup(String groupId)
+	{
+		// ako postoji veza izmedju ovog reviewa i grupe sa modelId = groupId
+		return new Select()
+			.from(GroupToUser.class).as("GRP_TO_USR")
+			.join(Group.class).as("GRP")
+			.on("GRP._id = GRP_TO_USR.userGroup")
+			.where("GRP_TO_USR.user = ? and GRP.modelId = ?", getId(), groupId).executeSingle() != null;
+	}
 }

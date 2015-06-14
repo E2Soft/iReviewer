@@ -37,7 +37,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 			}
 			case 2:
 			{
-				return GroupUsersListFragment.newInstance(itemId);
+				return new GroupUsersListFragment(itemId);
 			}
 			default:
 			{

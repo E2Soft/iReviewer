@@ -301,5 +301,6 @@ public class SplashScreenActivity extends Activity
 		
 		group.addReview(rev1);
 		group.addReview(rev2);
+		group.addUser(testUser2);
 	}
 }

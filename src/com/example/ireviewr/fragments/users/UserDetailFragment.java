@@ -12,12 +12,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.ReviewerTools;
 
-public class UserDetailFragment extends Fragment {
+public class UserDetailFragment extends Fragment
+{
+	public static final String NAME = "NAME";
+	public static final String LAST_MODIFIED = "LAST MODIFIED";
+	public static final String ID = "ID";
+	
+	public UserDetailFragment()
+	{}
+	
+	public UserDetailFragment(User user)
+	{
+		setArguments(new Bundle());
+		dataToArguments(user);
+	}
+	
+	private void dataToArguments(User user)
+	{
+		Bundle bundle = getArguments();
+		bundle.putString(NAME, user.getName());
+		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(user.getDateModified()));
+		bundle.putString(ID, user.getModelId());
+	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -53,22 +76,27 @@ public class UserDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View view = inflater.inflate(R.layout.user_detail_fragment, container, false);
-		Bundle bundle = getArguments();
 		
-		TextView gTitle = (TextView)view.findViewById(R.id.user_title);
-		gTitle.setText(bundle.getString(GroupUsersListFragment.NAME));
-		
-		TextView gText = (TextView)view.findViewById(R.id.user_lastModified);
-		gText.setText(bundle.getString(GroupUsersListFragment.LAST_MODIFIED));
+		populateView(view);
 		
 		return view;
 	}
 	
+	private void populateView(View view)
+	{
+		Bundle bundle = getArguments();
+		
+		TextView gTitle = (TextView)view.findViewById(R.id.user_title);
+		gTitle.setText(bundle.getString(NAME));
+		
+		TextView gText = (TextView)view.findViewById(R.id.user_lastModified);
+		gText.setText(bundle.getString(LAST_MODIFIED));
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
 	}
-	
 }
