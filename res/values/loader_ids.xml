@@ -4,6 +4,7 @@
     <item type="id" name="GROUP_REVIEW_LOADER"/>
     <item type="id" name="GROUP_REVIEW_CHECK_LOADER"/>
     <item type="id" name="COMMENT_LOADER"/>
-    <item type="id" name="USER_LOADER"/>
+    <item type="id" name="GROUP_USER_LOADER"/>
+    <item type="id" name="GROUP_USER_CHECK_LOADER"/>
     <item type="id" name="IMAGE_LOADER"/>
 </resources>

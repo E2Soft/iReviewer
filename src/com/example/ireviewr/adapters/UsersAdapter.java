@@ -8,9 +8,9 @@ import com.example.ireviewr.R;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.ReviewerTools;
 
-public class UserAdapter extends AbstractArrayAdapter<User>
+public class UsersAdapter extends AbstractArrayAdapter<User>
 {
-	public UserAdapter(Context context)
+	public UsersAdapter(Context context)
 	{
 		super(context, R.layout.user_item);
 	}

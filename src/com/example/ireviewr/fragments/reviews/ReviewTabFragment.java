@@ -17,14 +17,14 @@ public class ReviewTabFragment extends Fragment {
 	
 	private static String ID = "ID";
 	
-	public static ReviewTabFragment newInstance(String id) {
-		ReviewTabFragment fragment = new ReviewTabFragment();
-		
+	public ReviewTabFragment()
+	{}
+	
+	public ReviewTabFragment(String id)
+	{
 		Bundle bundle = new Bundle();
 		bundle.putString(ID, id);
-		fragment.setArguments(bundle);
-		
-	    return fragment;
+		setArguments(bundle);
 	}
 	
 	@Override

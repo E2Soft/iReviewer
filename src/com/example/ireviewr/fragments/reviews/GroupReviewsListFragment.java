@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import com.example.ireviewr.R;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.model.GroupToReview;
 import com.example.ireviewr.model.Review;
+import com.example.ireviewr.tools.CurrentUser;
 
 /**
  * Svi reviewovi u datoj grupi.
@@ -24,15 +26,16 @@ public class GroupReviewsListFragment extends AbstractReviewsListFragment
 		super(itemId, R.menu.standard_list_menu);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ModelLoaderCallbacks<Review> createLoaderCallbacks()
 	{
-		return new ModelLoaderCallbacks<Review>(getActivity(), Review.class, adapter)
+		return new ModelLoaderCallbacks<Review>(getActivity(), Review.class, adapter, GroupToReview.class)
 		{
 			@Override
 			protected List<Review> getData()
 			{
-				return Group.getByModelId(Group.class, getArguments().getString(RELATED_ID)).getReviews();
+				return getGroup().getReviews();
 			}
 		};
 	}
@@ -40,9 +43,17 @@ public class GroupReviewsListFragment extends AbstractReviewsListFragment
 	@Override
 	protected void configureMenu(Menu menu, MenuInflater inflater)
 	{
-		menu.findItem(R.id.menu_action)
-		.setIcon(R.drawable.ic_action_edit)
-		.setTitle(R.string.edit_item);
+		String currentUserId = CurrentUser.getId(getActivity());
+		if(getGroup().isCreatedBy(currentUserId))
+		{
+			menu.findItem(R.id.menu_action)
+			.setIcon(R.drawable.ic_action_edit)
+			.setTitle(R.string.edit_item);
+		}
+		else
+		{
+			menu.removeItem(R.id.menu_action);
+		}
 	}
 	
 	@Override
@@ -64,5 +75,10 @@ public class GroupReviewsListFragment extends AbstractReviewsListFragment
 		.replace(R.id.mainContent, new GroupReviewsCheckListFragment(getArguments().getString(RELATED_ID)))
 		.addToBackStack(null)
 		.commit();
+	}
+	
+	private Group getGroup()
+	{
+		return Group.getByModelId(Group.class, getArguments().getString(RELATED_ID));
 	}
 }
