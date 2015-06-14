@@ -57,6 +57,9 @@
     <string name="new_group">New Group</string>
     <string name="edit_group">Edit Group</string>
     <string name="new_group_hint">Enter new group name here..</string>
+    <string name="join_group">Join group</string>
+    <string name="leave_group">Leave group</string>
+    
     <string name="user_count">User count</string>
     <string name="review_count">Review count</string>
     <string name="create">Create</string>
@@ -68,4 +71,6 @@
     <string name="splash_screen">Splash Screen</string>
     
     <string name="user_created">Created by</string>
+    
+     <string name="are_you_sure">Are you sure?</string>
 </resources>

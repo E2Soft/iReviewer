@@ -1,5 +1,7 @@
 package com.example.ireviewr.loaders;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
@@ -8,7 +10,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 
 import com.activeandroid.Model;
-import com.activeandroid.loaders.ModelLoader;
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
@@ -29,6 +30,7 @@ public class ModelLoaderCallbacks<T extends Model> implements LoaderCallbacks<Li
 	protected AbstractArrayAdapter<T> adapter;
 	private boolean updateOnRelChange = false; // radi se update kada se povezane tabele updateuju
 	protected From query = null; // active-android sql upit npr.: new Select().from(MojModel.class).where("n=?",5)
+	private List<Class<? extends Model>> observedTables;
 	
 	public ModelLoaderCallbacks(Context context, Class<T> modelClass, AbstractArrayAdapter<T> adapter)
 	{
@@ -58,10 +60,17 @@ public class ModelLoaderCallbacks<T extends Model> implements LoaderCallbacks<Li
 		this.updateOnRelChange = updateOnRelChange;
 	}
 	
+	public ModelLoaderCallbacks(Context context, Class<T> modelClass,
+			AbstractArrayAdapter<T> adapter, Class<? extends Model>... observedTables)
+	{
+		this(context, modelClass, adapter);
+		this.observedTables = new ArrayList<Class<? extends Model>>(Arrays.asList(observedTables));
+	}
+	
 	@Override
 	public Loader<List<T>> onCreateLoader(int id, Bundle args)
 	{
-		return new ModelLoader<T>(context, modelClass, updateOnRelChange)
+		ModelLoader<T> loader = new ModelLoader<T>(context, modelClass, updateOnRelChange)
 		{
 			@Override
 			public List<T> loadInBackground()
@@ -69,6 +78,13 @@ public class ModelLoaderCallbacks<T extends Model> implements LoaderCallbacks<Li
 				return getData();
 			}
 		};
+		
+		if(observedTables != null)
+		{
+			loader.addObservedTables(observedTables);
+		}
+		
+		return loader;
 	}
 
 	@Override

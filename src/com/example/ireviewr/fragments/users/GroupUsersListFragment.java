@@ -13,6 +13,7 @@ import com.example.ireviewr.adapters.UsersAdapter;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.model.GroupToUser;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 
@@ -53,10 +54,11 @@ public class GroupUsersListFragment extends AbstractDetailListFragment<User>
 		reloadData();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ModelLoaderCallbacks<User> createLoaderCallbacks()
 	{
-		return new ModelLoaderCallbacks<User>(getActivity(), User.class, adapter)
+		return new ModelLoaderCallbacks<User>(getActivity(), User.class, adapter, GroupToUser.class)
 		{
 			@Override
 			protected List<User> getData()

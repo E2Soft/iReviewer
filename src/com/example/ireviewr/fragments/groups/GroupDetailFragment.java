@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.sqlite.SQLiteConstraintException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.loaders.ModelObserver;
 import com.example.ireviewr.model.Group;
+import com.example.ireviewr.model.GroupToReview;
+import com.example.ireviewr.model.GroupToUser;
+import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.ReviewerTools;
 
@@ -30,6 +35,8 @@ public class GroupDetailFragment extends Fragment
 	public static final String REVIEW_COUNT = "REVIEW_COUNT";
 	public static final String USER_CREATED = "USER_CREATED";
 	public static final String ID = "ID";
+	
+	private ModelObserver modelObserver;
 	
 	public GroupDetailFragment()
 	{}
@@ -60,6 +67,59 @@ public class GroupDetailFragment extends Fragment
 		setHasOptionsMenu(true);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
+		
+		modelObserver = new ModelObserver(getActivity(), GroupToUser.class, GroupToReview.class, Group.class)
+		{
+			@Override
+			public void onChange(boolean selfChange, Uri uri)
+			{
+				refreshView(getGroup());
+			}
+		};
+	}
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		modelObserver.unRegister();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		super.onCreateOptionsMenu(menu, inflater);
+		User currentUser = CurrentUser.getModel(getActivity());
+		String currentUserId = currentUser.getModelId();
+		
+		//dodati meni
+		inflater.inflate(R.menu.group_detail_menu, menu);
+		
+		MenuItem joinGroupItem = menu.findItem(R.id.join_group);
+		if(currentUser.isInGroup(getArguments().getString(ID)))
+		{
+			joinGroupItem.setIcon(R.drawable.ic_people_white_36dp);
+			joinGroupItem.setTitle(R.string.leave_group);
+		}
+		else
+		{
+			joinGroupItem.setIcon(R.drawable.ic_people_outline_white_36dp);
+			joinGroupItem.setTitle(R.string.join_group);
+		}
+		
+		if(!getGroup().isCreatedBy(currentUserId)) // ako nije kreirao trenutni user
+		{
+			menu.removeItem(R.id.edit_item);
+			menu.removeItem(R.id.delete_item);
+		}
+	}
+	
+	
 	@SuppressLint("InflateParams")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -70,16 +130,24 @@ public class GroupDetailFragment extends Fragment
 				showEditDialog();
 				return true;
 			case R.id.delete_item:
-				// obrisi grupu
-				getGroup().deleteSynced();
-				
-				// obrisi ovaj fragment
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.remove(this)
-				.commit();
-				getActivity().getSupportFragmentManager().popBackStack();
-				
+				showDeleteDialog();
 				return true;
+			case R.id.join_group:
+				User currentUser = CurrentUser.getModel(getActivity());
+				Group group = getGroup();
+				
+				if(currentUser.isInGroup(getArguments().getString(ID)))
+				{
+					group.removeUser(currentUser);
+					item.setIcon(R.drawable.ic_people_outline_white_36dp);
+					item.setTitle(R.string.join_group);
+				}
+				else
+				{
+					group.addUser(currentUser);
+					item.setIcon(R.drawable.ic_people_white_36dp);
+					item.setTitle(R.string.leave_group);
+				}
 		    default:
 		    	return super.onOptionsItemSelected(item);
 		}
@@ -105,7 +173,6 @@ public class GroupDetailFragment extends Fragment
 				try
 				{
 					group.saveOrThrow();
-					refreshView(group);
 				}
 				catch(SQLiteConstraintException ex)
 				{
@@ -123,18 +190,35 @@ public class GroupDetailFragment extends Fragment
 		})
 		.show();
 	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	
+	private void showDeleteDialog()
 	{
-		super.onCreateOptionsMenu(menu, inflater);
-		String currentUserId = CurrentUser.getId(getActivity());
-		
-		if(getGroup().isCreatedBy(currentUserId)) // samo ako je kreirao trenutni user
+		new AlertDialog.Builder(getActivity())
+		.setTitle(R.string.remove_item)
+		.setMessage(R.string.are_you_sure)
+		.setPositiveButton(R.string.remove_item, new OnClickListener()
 		{
-			//dodati meni
-			inflater.inflate(R.menu.fragment_detail_menu, menu);
-		}
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				// obrisi grupu
+				getGroup().deleteSynced();
+				
+				// obrisi ovaj fragment
+				getActivity().getSupportFragmentManager().beginTransaction()
+				.remove(GroupDetailFragment.this)
+				.commit();
+				getActivity().getSupportFragmentManager().popBackStack();
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int id)
+			{
+				dialog.cancel();
+			}
+		})
+		.show();
 	}
 	
 	@Override
@@ -170,20 +254,12 @@ public class GroupDetailFragment extends Fragment
 	
 	private void refreshView(Group group)
 	{
-		dataToArguments(group);
-		populateView(getView());
+		if(group != null) dataToArguments(group);
+		if(getView() != null) populateView(getView());
 	}
 	
 	private Group getGroup()
 	{
 		return Group.getByModelId(Group.class, getArguments().getString(ID));
-	}
-	
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		// da bi se osvezilo kad se promeni user ili review count
-		refreshView(getGroup());
 	}
 }

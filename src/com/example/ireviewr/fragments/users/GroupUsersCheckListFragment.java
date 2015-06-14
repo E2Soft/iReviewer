@@ -21,7 +21,7 @@ public class GroupUsersCheckListFragment extends AbstractCheckListFragment<User>
 	
 	public GroupUsersCheckListFragment(String itemId)
 	{
-		super(R.id.GROUP_REVIEW_CHECK_LOADER, R.menu.standard_list_menu);
+		super(R.id.GROUP_USER_CHECK_LOADER, R.menu.standard_list_menu);
 		getArguments().putString(RELATED_ID, itemId);
 	}
 
@@ -56,6 +56,7 @@ public class GroupUsersCheckListFragment extends AbstractCheckListFragment<User>
 	public void onResume()
 	{
 		super.onResume();
+		// kad se pokrene sa novim povezanim id da se reloaduje
 		reloadData();
 	}
 	

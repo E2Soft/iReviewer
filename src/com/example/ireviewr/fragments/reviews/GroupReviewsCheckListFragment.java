@@ -76,6 +76,7 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 	public void onResume()
 	{
 		super.onResume();
+		// kad se pokrene sa novim povezanim id da se reloaduje
 		reloadData();
 	}
 	
