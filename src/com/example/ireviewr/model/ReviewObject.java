@@ -154,4 +154,16 @@ public class ReviewObject extends AbstractModel
 		
 		return query.execute();
 	}
+
+	public float getAverageRating()
+	{
+		float average = 0;
+		List<Review> reviews = getReviews();
+		for(Review review : reviews)
+		{
+			average += review.getRating();
+		}
+		average = average / reviews.size();
+		return average;
+	}
 }

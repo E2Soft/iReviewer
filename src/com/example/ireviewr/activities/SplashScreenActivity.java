@@ -278,7 +278,7 @@ public class SplashScreenActivity extends Activity
         	}
         }
         
-        ReviewObject ro2 = new ReviewObject("ro2", "dro2", 2, 2, testUser);
+        ReviewObject ro2 = new ReviewObject("ro2", "dro2asdsdfas dafsfs dfasds fsdasfsgvdf sfvdsvsd", 2, 2, testUser);
         ro2.save();
         ro2.addTag(tag1);
         

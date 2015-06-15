@@ -72,5 +72,7 @@
     
     <string name="user_created">Created by</string>
     
-     <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_sure">Are you sure?</string>
+     
+    <string name="places">Places</string>
 </resources>

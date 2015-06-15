@@ -36,10 +36,6 @@ public class ReviewsAdapter extends AbstractArrayAdapter<Review>
 		{
 			ReviewerTools.setImageFromPath(image, mainImage.getPath());
 		}
-		else
-		{
-			ReviewerTools.setImageFromPath(image, null);
-		}
 	}
 	
 	@Override

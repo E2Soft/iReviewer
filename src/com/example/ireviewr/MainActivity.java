@@ -44,11 +44,10 @@ import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.MyMapFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
-import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.sync.SyncReceiver;
 import com.example.ireviewr.sync.auto.SyncService;
-import com.example.ireviewr.tools.Mokap;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -149,7 +148,7 @@ public class MainActivity extends FragmentActivity{
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
     	mNavItems.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
         mNavItems.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_group));
-        mNavItems.add(new NavItem("Places", "Meetup destination", R.drawable.ic_action_place));
+        mNavItems.add(new NavItem(getString(R.string.places), "Meetup destination", R.drawable.ic_action_place));
         mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
         mNavItems.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
         mNavItems.add(new NavItem("Sync data", "Sync data from repo", R.drawable.ic_action_refresh));
@@ -215,7 +214,7 @@ public class MainActivity extends FragmentActivity{
         	replace(R.id.mainContent, new GroupsListFragment()).addToBackStack(null).commit();
         }else if(position == 2){
         	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, ReviewsFragmentList.newInstance(Mokap.getList())).addToBackStack(null).commit();
+        	replace(R.id.mainContent, new ReviewObjectsListFragment()).addToBackStack(null).commit();
         }else if(position == 3){
         	fragmentManager.beginTransaction().
         	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();

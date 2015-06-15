@@ -3,10 +3,12 @@ package com.example.ireviewr.tools;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+
 import com.example.ireviewr.R;
 
 import android.content.Context;
@@ -27,6 +29,11 @@ public class ReviewerTools {
 	
 	public static void setImageFromPath(ImageView imageView, String path)
 	{
+		setImageFromPath(imageView, path, null);
+	}
+	
+	public static void setImageFromPath(ImageView imageView, String path, Integer defaultImage)
+	{
 		if(path != null)
 		{
 			File imgFile = new  File(path);
@@ -38,7 +45,14 @@ public class ReviewerTools {
 			}
 		}
 		
-		imageView.setImageResource(R.drawable.ic_action_picture);
+		if(defaultImage != null)
+		{
+			imageView.setImageResource(defaultImage);
+		}
+		else
+		{
+			imageView.setImageResource(R.drawable.ic_action_picture);
+		}
 	}
 
 	public static int TYPE_WIFI = 1;
@@ -71,5 +85,17 @@ public class ReviewerTools {
 			status = "Not connected to Internet";
 		}
 		return status;
+	}
+	
+	public static String getShortString(String longString, int maxLength)
+	{
+		if(longString.length() <= maxLength)
+		{
+			return longString;
+		}
+		else
+		{
+			return longString.substring(0, maxLength-3)+"...";
+		}
 	}
 }
