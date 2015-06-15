@@ -117,7 +117,7 @@ public class CreateReviewFragment extends Fragment {
 			Bundle savedInstanceState) {
 		container.removeAllViews();
 		
-		View view = inflater.inflate(R.layout.frag_1, container, false);
+		View view = inflater.inflate(R.layout.create_review, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.review_image);
 		TextView textName = (TextView)view.findViewById(R.id.review_name_edit);

@@ -133,7 +133,7 @@ public class CreateReviewObjectFragment extends Fragment implements LocationList
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View view = inflater.inflate(R.layout.frag_4, container, false);
+		View view = inflater.inflate(R.layout.create_rev_object, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
 		TextView textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
