@@ -1,6 +1,7 @@
 package com.example.ireviewr.fragments.groups;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -38,13 +39,12 @@ public class GroupDetailFragment extends Fragment
 	
 	private ModelObserver modelObserver;
 	
-	public GroupDetailFragment()
-	{}
-	
-	public GroupDetailFragment(Group group)
+	public static GroupDetailFragment newInstance(Group group)
 	{
-		setArguments(new Bundle());
-		dataToArguments(group);
+		GroupDetailFragment newFrag = new GroupDetailFragment();
+		newFrag.setArguments(new Bundle());
+		newFrag.dataToArguments(group);
+		return newFrag;
 	}
 	
 	private void dataToArguments(Group group)
@@ -69,11 +69,11 @@ public class GroupDetailFragment extends Fragment
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState)
+	public void onAttach(Activity activity)
 	{
-		super.onActivityCreated(savedInstanceState);
+		super.onAttach(activity);
 		
-		modelObserver = new ModelObserver(getActivity(), GroupToUser.class, GroupToReview.class, Group.class)
+		modelObserver = new ModelObserver(activity, GroupToUser.class, GroupToReview.class, Group.class)
 		{
 			@Override
 			public void onChange(boolean selfChange, Uri uri)
@@ -122,8 +122,8 @@ public class GroupDetailFragment extends Fragment
 	
 	@SuppressLint("InflateParams")
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.edit_item:

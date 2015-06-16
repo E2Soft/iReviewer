@@ -71,15 +71,7 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 			}
 		};
 	}
-	
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		// kad se pokrene sa novim povezanim id da se reloaduje
-		reloadData();
-	}
-	
+
 	@Override
 	protected void configureMenu(Menu menu, MenuInflater inflater)
 	{

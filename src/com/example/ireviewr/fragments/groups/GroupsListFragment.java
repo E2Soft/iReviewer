@@ -96,7 +96,7 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 	@Override
 	protected void onItemClick(Group item)
 	{
-		Fragment fragment = new GroupTabsFragment(item.getModelId());
+		Fragment fragment = GroupTabsFragment.newInstance(item.getModelId());
 		getActivity().getSupportFragmentManager()
 												.beginTransaction()
 												.replace(R.id.mainContent, fragment)

@@ -39,12 +39,4 @@ public abstract class AbstractReviewsListFragment extends AbstractDetailListFrag
 												.replace(R.id.mainContent, fragment).
 												addToBackStack(null).commit();
 	}
-	
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		// kad se pokrene sa novim povezanim id da se reloaduje
-		reloadData();
-	}
 }

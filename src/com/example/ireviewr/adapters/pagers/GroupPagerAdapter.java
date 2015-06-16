@@ -29,7 +29,7 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 			case 0:
 			{
 				Group group = Group.getByModelId(Group.class, itemId);
-				return new GroupDetailFragment(group);
+				return GroupDetailFragment.newInstance(group);
 			}
 			case 1:
 			{

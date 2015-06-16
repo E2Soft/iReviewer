@@ -53,14 +53,6 @@ public class GroupUsersCheckListFragment extends AbstractCheckListFragment<User>
 	}
 	
 	@Override
-	public void onResume()
-	{
-		super.onResume();
-		// kad se pokrene sa novim povezanim id da se reloaduje
-		reloadData();
-	}
-	
-	@Override
 	protected void configureMenu(Menu menu, MenuInflater inflater)
 	{
 		menu.findItem(R.id.menu_action)

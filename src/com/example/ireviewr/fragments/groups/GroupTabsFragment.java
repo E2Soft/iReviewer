@@ -17,14 +17,13 @@ public class GroupTabsFragment extends Fragment {
 	
 	public static final String ID = "ID";
 	
-	public GroupTabsFragment()
-	{}
-	
-	public GroupTabsFragment(String id)
+	public static GroupTabsFragment newInstance(String id)
 	{
+		GroupTabsFragment newFrag = new GroupTabsFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString(ID, id);
-		setArguments(bundle);
+		newFrag.setArguments(bundle);
+		return newFrag;
 	}
 	
 	@Override
