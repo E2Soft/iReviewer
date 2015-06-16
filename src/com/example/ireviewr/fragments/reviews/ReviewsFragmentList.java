@@ -3,7 +3,6 @@ package com.example.ireviewr.fragments.reviews;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +17,7 @@ import android.widget.SearchView;
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.MyListAdapter;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class ReviewsFragmentList extends ListFragment {
 	
@@ -66,12 +66,7 @@ public class ReviewsFragmentList extends ListFragment {
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.add_item:
-				
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.replace(R.id.mainContent, new CreateReviewFragment())
-				.addToBackStack(null)
-				.commit();
-				
+				FragmentTransition.to(new CreateReviewFragment(), getActivity());
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -113,17 +108,6 @@ public class ReviewsFragmentList extends ListFragment {
 		
 		NavItem item = items.get(position);
 		
-		/*Bundle bundle = new Bundle();
-		bundle.putString("TITLE", item.getmTitle());
-		bundle.putString("TEXT", item.getmSubtitle());
-		bundle.putInt("ICON", item.getmIcon());*/
-		
-		Fragment fragment = new ReviewTabFragment("test_id");
-		//fragment.setArguments(bundle);
-		
-		getActivity().getSupportFragmentManager()
-									.beginTransaction()
-									.replace(R.id.mainContent, fragment).
-									addToBackStack(null).commit();
+		FragmentTransition.to(new ReviewTabFragment("test_id"), getActivity());
 	}
 }

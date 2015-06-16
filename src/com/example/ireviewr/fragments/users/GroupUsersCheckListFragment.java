@@ -11,6 +11,7 @@ import com.example.ireviewr.fragments.AbstractCheckListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class GroupUsersCheckListFragment extends AbstractCheckListFragment<User>
 {
@@ -75,9 +76,6 @@ public class GroupUsersCheckListFragment extends AbstractCheckListFragment<User>
 	
 	private void onMenuAction()
 	{
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.remove(this)
-		.commit();
-		getActivity().getSupportFragmentManager().popBackStack();
+		FragmentTransition.remove(this, getActivity());
 	}
 }

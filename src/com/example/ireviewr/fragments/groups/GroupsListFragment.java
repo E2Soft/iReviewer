@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class GroupsListFragment extends AbstractDetailListFragment<Group>
 {
@@ -96,11 +96,7 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 	@Override
 	protected void onItemClick(Group item)
 	{
-		Fragment fragment = GroupTabsFragment.newInstance(item.getModelId());
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment)
-												.addToBackStack(null).commit();
+		FragmentTransition.to(GroupTabsFragment.newInstance(item.getModelId()), getActivity());
 	}
 	
 	@Override

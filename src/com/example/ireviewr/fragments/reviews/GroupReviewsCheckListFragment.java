@@ -14,6 +14,7 @@ import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 /**
  * Check lista reviewova koje je kreirao korisnik, cekirani se nalaze u grupi.
@@ -95,9 +96,6 @@ public class GroupReviewsCheckListFragment extends AbstractCheckListFragment<Rev
 	
 	private void onMenuAction()
 	{
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.remove(this)
-		.commit();
-		getActivity().getSupportFragmentManager().popBackStack();
+		FragmentTransition.remove(this, getActivity());
 	}
 }

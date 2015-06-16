@@ -27,7 +27,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -48,6 +47,7 @@ import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.sync.SyncReceiver;
 import com.example.ireviewr.sync.auto.SyncService;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -206,21 +206,16 @@ public class MainActivity extends FragmentActivity{
     
     
     private void selectItemFromDrawer(int position) {
-    	FragmentManager fragmentManager = getSupportFragmentManager();
     	if(position == 0){
-    		fragmentManager.beginTransaction().replace(R.id.mainContent, MyMapFragment.newInstance()).commit();
+    		FragmentTransition.to(MyMapFragment.newInstance(), this, false);
     	}else if(position == 1){
-    		fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new GroupsListFragment()).addToBackStack(null).commit();
+    		FragmentTransition.to(new GroupsListFragment(), this);
         }else if(position == 2){
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new ReviewObjectsListFragment()).addToBackStack(null).commit();
+        	FragmentTransition.to(new ReviewObjectsListFragment(), this);
         }else if(position == 3){
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();
-        }else if(position == 4){	
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new AboutFragment()).addToBackStack(null).commit();
+        	FragmentTransition.to(new PreferencesFragment(), this);
+        }else if(position == 4){
+        	FragmentTransition.to(new AboutFragment(), this);
         }else if(position == 5){
         	Toast.makeText(MainActivity.this, "Call sync", Toast.LENGTH_LONG).show();
         }else{

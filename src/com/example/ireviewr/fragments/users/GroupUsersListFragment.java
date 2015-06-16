@@ -2,7 +2,6 @@ package com.example.ireviewr.fragments.users;
 
 import java.util.List;
 
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +15,7 @@ import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.GroupToUser;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class GroupUsersListFragment extends AbstractDetailListFragment<User>
 {
@@ -39,11 +39,7 @@ public class GroupUsersListFragment extends AbstractDetailListFragment<User>
 	@Override
 	protected void onItemClick(User item)
 	{
-		Fragment fragment = new UserDetailFragment(item);
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment).
-												addToBackStack(null).commit();
+		FragmentTransition.to(new UserDetailFragment(item), getActivity());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,10 +87,7 @@ public class GroupUsersListFragment extends AbstractDetailListFragment<User>
 	
 	private void onMenuAction()
 	{
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, new GroupUsersCheckListFragment(getArguments().getString(RELATED_ID)))
-		.addToBackStack(null)
-		.commit();
+		FragmentTransition.to(new GroupUsersCheckListFragment(getArguments().getString(RELATED_ID)), getActivity());
 	}
 	
 	private Group getGroup()

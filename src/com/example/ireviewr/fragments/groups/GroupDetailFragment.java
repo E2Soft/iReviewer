@@ -26,6 +26,7 @@ import com.example.ireviewr.model.GroupToReview;
 import com.example.ireviewr.model.GroupToUser;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupDetailFragment extends Fragment
@@ -205,10 +206,7 @@ public class GroupDetailFragment extends Fragment
 				getGroup().deleteSynced();
 				
 				// obrisi ovaj fragment
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.remove(GroupDetailFragment.this)
-				.commit();
-				getActivity().getSupportFragmentManager().popBackStack();
+				FragmentTransition.remove(GroupDetailFragment.this, getActivity());
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()

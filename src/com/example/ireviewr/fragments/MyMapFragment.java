@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.ireviewr.R;
 import com.example.ireviewr.dialogs.LocationDialog;
 import com.example.ireviewr.fragments.reviewobjects.CreateReviewObjectFragment;
+import com.example.ireviewr.tools.FragmentTransition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -90,10 +91,7 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.home_add_item:
-				getActivity().getSupportFragmentManager().beginTransaction()
-				.replace(R.id.mainContent, new CreateReviewObjectFragment())
-				.addToBackStack(null).commit();
-				
+				FragmentTransition.to(new CreateReviewObjectFragment(), getActivity());
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);

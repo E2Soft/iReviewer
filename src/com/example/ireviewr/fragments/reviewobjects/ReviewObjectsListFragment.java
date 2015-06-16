@@ -3,12 +3,14 @@ package com.example.ireviewr.fragments.reviewobjects;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.ReviewObjectAdapter;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class ReviewObjectsListFragment extends AbstractDetailListFragment<ReviewObject>
 {
@@ -53,9 +55,7 @@ public class ReviewObjectsListFragment extends AbstractDetailListFragment<Review
 	
 	private void onMenuAction()
 	{
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, new CreateReviewObjectFragment())
-		.addToBackStack(null).commit();
+		FragmentTransition.to(new CreateReviewObjectFragment(), getActivity());
 	}
 
 	@Override

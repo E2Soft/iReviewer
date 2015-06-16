@@ -1,12 +1,11 @@
 package com.example.ireviewr.fragments.reviews;
 
-import android.support.v4.app.Fragment;
-
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.ReviewsAdapter;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.model.Review;
+import com.example.ireviewr.tools.FragmentTransition;
 
 /**
  * Lista reviewova sa detaljima. Na klik otvara detalje za review.
@@ -33,10 +32,6 @@ public abstract class AbstractReviewsListFragment extends AbstractDetailListFrag
 	@Override
 	protected void onItemClick(Review item)
 	{
-		Fragment fragment = new ReviewTabFragment(item.getModelId());
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment).
-												addToBackStack(null).commit();
+		FragmentTransition.to(new ReviewTabFragment(item.getModelId()), getActivity());
 	}
 }
