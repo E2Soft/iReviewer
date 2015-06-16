@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -31,7 +33,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.ireviewr.R;
+import com.example.ireviewr.exceptions.ValidationException;
+import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.validators.TextValidator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -49,6 +57,8 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
+	TextView textName;
+	TextView textDesc;
 	private ImageView mImageView;
 	private MapView mapView;
 	
@@ -71,6 +81,8 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	String provider;
 	
 	private Marker placeMarker;
+	
+	TextValidator nameValidator;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,17 +133,52 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.save_item:
-				Toast.makeText(getActivity(), "Save ReviewObject item pressed", Toast.LENGTH_LONG).show();
+				save();
 				return true;
 			case R.id.cancel_item:
-				Toast.makeText(getActivity(), "Cancel ReviewObject item pressed", Toast.LENGTH_LONG).show();
-				
+				FragmentTransition.remove(this, getActivity());
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 	
+	private void save()
+	{
+		name = textName.getText().toString();
+		desc = textDesc.getText().toString();
+		
+		// validate
+		try
+		{
+			if(placeMarker == null)
+			{
+				Toast.makeText(getActivity(), "Please enter place location.", Toast.LENGTH_LONG).show();
+				return;
+			}
+			nameValidator.validate();
+		}
+		catch(ValidationException ex)
+		{
+			return;
+		}
+		
+		// save
+		try
+		{
+			new ReviewObject(name, desc, placeMarker.getPosition().longitude, 
+					placeMarker.getPosition().latitude, 
+					CurrentUser.getModel(getActivity()))
+					.saveOrThrow();
+			Toast.makeText(getActivity(), "Created", Toast.LENGTH_LONG).show();
+			FragmentTransition.remove(this, getActivity());
+		}
+		catch(SQLiteConstraintException ex)
+		{
+			Toast.makeText(getActivity(), "Error while saving.", Toast.LENGTH_LONG).show();
+		}
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -142,8 +189,8 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		View view = inflater.inflate(R.layout.create_rev_object, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
-		TextView textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
-		TextView textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
+		textName = (TextView)view.findViewById(R.id.reviewobject_name_edit);
+		textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
 		final TextView textTags = (TextView)view.findViewById(R.id.review_object_tags_list);
 		
 		Button choose_tags = (Button)view.findViewById(R.id.choose_object_tags);
@@ -154,6 +201,24 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 				addTagDialog(textTags);
 			}
 		});
+		
+		nameValidator = new TextValidator(textName)
+		{
+			@Override
+			public void validate(TextView textView, String text)
+			{
+				if(text == null || "".equals(text.trim()))
+				{
+					textView.setError("Name must not be empty!");
+					throw new ValidationException();
+				}
+				else
+				{
+					textView.setError(null);
+				}
+			}
+		};
+		textName.addTextChangedListener(nameValidator);
 		
 		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
