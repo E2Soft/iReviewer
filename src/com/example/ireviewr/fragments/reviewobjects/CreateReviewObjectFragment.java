@@ -28,17 +28,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.exceptions.ValidationException;
+import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.validators.TextValidator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,13 +67,9 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	private MapView mapView;
 	
 	private Bitmap bitmap;
-	private String name;
-	private String desc;
 	private ArrayList<String> tags;
 	
 	private static final String SAVED_PHOTO = "SAVED_IMAGE";
-	private static final String SAVED_NAME = "SAVED_NAME";
-	private static final String SAVED_DESC = "SAVED_DESC";
 	private static final String SAVED_LONGITUDE = "SAVED_LONGITUDE";
 	private static final String SAVED_LATITUDE = "SAVED_LATITUDE";
 	private static final String SAVED_TAGS = "SAVED_TAGS";
@@ -103,8 +103,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		super.onSaveInstanceState(outState);
 		
 		outState.putParcelable(SAVED_PHOTO, bitmap);
-		outState.putString(SAVED_NAME, name);
-		outState.putString(SAVED_DESC, desc);
 		if(placeMarker != null)
 		{
 			outState.putDouble(SAVED_LONGITUDE, placeMarker.getPosition().longitude);
@@ -145,15 +143,15 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	
 	private void save()
 	{
-		name = textName.getText().toString();
-		desc = textDesc.getText().toString();
+		String name = textName.getText().toString();
+		String desc = textDesc.getText().toString();
 		
 		// validate
 		try
 		{
 			if(placeMarker == null)
 			{
-				Toast.makeText(getActivity(), "Please enter place location.", Toast.LENGTH_LONG).show();
+				ShowDialog.error("Please enter place location.", getActivity());
 				return;
 			}
 			nameValidator.validate();
@@ -166,16 +164,36 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		// save
 		try
 		{
-			new ReviewObject(name, desc, placeMarker.getPosition().longitude, 
+			ReviewObject newReviewObject = new ReviewObject(name, desc, placeMarker.getPosition().longitude, 
 					placeMarker.getPosition().latitude, 
-					CurrentUser.getModel(getActivity()))
-					.saveOrThrow();
-			Toast.makeText(getActivity(), "Created", Toast.LENGTH_LONG).show();
+					CurrentUser.getModel(getActivity()));
+			newReviewObject.saveOrThrow();
+			
+			for(String tagName : tags)
+			{
+				Tag tag = Tag.getByName(tagName);
+				if(tag == null)
+				{
+					tag = new Tag(tagName);
+					tag.saveOrThrow();
+				}
+				
+				newReviewObject.addTag(tag);
+			}
+			
+			if(bitmap != null)
+			{
+				// ime slike je <id_rev_objekta>_0, ostale slike su <id_rev_objekta>_<broj_slika + 1>
+				String imagePath = ImageUtils.save(bitmap, newReviewObject.getModelId()+"_0", getActivity());
+				new Image(imagePath, true, newReviewObject).saveOrThrow();
+			}
+			
+			Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
 			FragmentTransition.remove(this, getActivity());
 		}
 		catch(SQLiteConstraintException ex)
 		{
-			Toast.makeText(getActivity(), "Error while saving.", Toast.LENGTH_LONG).show();
+			ShowDialog.error("Error while saving.", getActivity());
 		}
 	}
 
@@ -193,12 +211,23 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
 		final TextView textTags = (TextView)view.findViewById(R.id.review_object_tags_list);
 		
-		Button choose_tags = (Button)view.findViewById(R.id.choose_object_tags);
+		ImageButton choose_tags = (ImageButton)view.findViewById(R.id.choose_object_tags);
 		choose_tags.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				addTagDialog(textTags);
+			}
+		});
+		
+		ImageButton remove_tags = (ImageButton)view.findViewById(R.id.remove_object_tags);
+		remove_tags.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(tags.size() > 0) 
+				{
+					tags.remove(tags.size()-1);
+					textTags.setText(getTagsString(tags));
+				}
 			}
 		});
 		
@@ -222,8 +251,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		
 		if (savedInstanceState != null) {
 			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
-			name = savedInstanceState.getString(SAVED_NAME);
-			desc = savedInstanceState.getString(SAVED_DESC);
 			longitude = savedInstanceState.getDouble(SAVED_LONGITUDE);
 			latitude = savedInstanceState.getDouble(SAVED_LATITUDE);
 			tags = savedInstanceState.getStringArrayList(SAVED_TAGS);
@@ -242,15 +269,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			mImageView.setImageBitmap(bitmap);
 		}
 		
-		if(name != null){
-			textName.setText(name);
-		}
-		
-		if(desc != null){
-			textDesc.setText(desc);
-		}
-		
-		Button chooseImage = (Button)view.findViewById(R.id.reviewobject_image_choose);
+		ImageButton chooseImage = (ImageButton)view.findViewById(R.id.reviewobject_image_choose);
 		chooseImage.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -443,7 +462,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 				}
 				else
 				{
-					Toast.makeText(getActivity(), "Already contains this tag.", Toast.LENGTH_LONG).show();
+					ShowDialog.error("Already contains this tag.", getActivity());
 				}
 			}
 		})

@@ -1,10 +1,13 @@
 package com.example.ireviewr.fragments.groups;
 
+import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.loaders.ModelObserver;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.GroupToReview;
@@ -171,14 +175,20 @@ public class GroupDetailFragment extends Fragment
 				//create object
 				Group group = getGroup();
 				group.setName(text);
+				group.setDateModified(new Date());
 				try
 				{
 					group.saveOrThrow();
+					Toast.makeText(getActivity(), R.string.edited, Toast.LENGTH_SHORT).show();
 				}
 				catch(SQLiteConstraintException ex)
 				{
-					Toast.makeText(getActivity(), "A group with name: "+text+" already exists.", Toast.LENGTH_LONG).show();
-					showEditDialog();
+					ShowDialog.error("A group with name: "+text+" already exists.", getActivity())
+					.setOnDismissListener(new OnDismissListener() {
+						public void onDismiss(DialogInterface dialog){
+							showEditDialog();
+						}
+					});
 				}
 			}
 		})
@@ -204,6 +214,8 @@ public class GroupDetailFragment extends Fragment
 			{
 				// obrisi grupu
 				getGroup().deleteSynced();
+				
+				Toast.makeText(getActivity(), R.string.deleted, Toast.LENGTH_SHORT).show();
 				
 				// obrisi ovaj fragment
 				FragmentTransition.remove(GroupDetailFragment.this, getActivity());

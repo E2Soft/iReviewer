@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
+
 
 @Table(name = "ReviewObject", id="_id")
 public class ReviewObject extends AbstractModel 

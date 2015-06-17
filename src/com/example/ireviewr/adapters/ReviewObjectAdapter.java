@@ -32,10 +32,8 @@ public class ReviewObjectAdapter extends AbstractArrayAdapter<ReviewObject>
 		
 		ImageView image = (ImageView)view.findViewById(R.id.revob_item_icon);
 		Image mainImage = item.getMainImage();
-		if(mainImage != null)
-		{
-			ReviewerTools.setImageFromPath(image, mainImage.getPath());
-		}
+		String imagePath = (mainImage != null) ? mainImage.getPath() : null;
+		ReviewerTools.setImageFromPath(image, imagePath, R.drawable.ic_action_place);
 	}
 	
 	@Override

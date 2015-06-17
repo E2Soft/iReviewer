@@ -1,5 +1,7 @@
 package com.example.ireviewr.validators;
 
+import com.example.ireviewr.exceptions.ValidationException;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.TextView;
@@ -23,7 +25,12 @@ public abstract class TextValidator implements TextWatcher
     @Override
     final public void afterTextChanged(Editable s)
     {
-    	validate();
+    	try
+    	{
+    		validate();
+    	}
+    	catch(ValidationException ex)
+    	{} // ignorisemo exception
     }
 
     @Override

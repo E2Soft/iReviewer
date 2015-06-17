@@ -17,7 +17,6 @@
     <string name="position">Location</string>
     
     <string name="create_review">Create review</string>
-    <string name="created">Created</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -75,4 +74,11 @@
     <string name="are_you_sure">Are you sure?</string>
      
     <string name="places">Places</string>
+    
+    <string name="edited">Edited</string>
+    <string name="created">Created</string>
+    <string name="deleted">Deleted</string>
+    
+    <string name="error">Error</string>
+    
 </resources>

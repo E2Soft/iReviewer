@@ -62,12 +62,12 @@
 	        android:layout_below="@id/reviewobject_description"
 	        android:layout_margin="5dp"/>
 	   	
-	   	<Button 
+	   	<ImageButton 
 	        android:id="@+id/reviewobject_image_choose"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:drawableLeft="@drawable/ic_action_new_picture"
-	        android:drawableStart="@drawable/ic_action_new_picture"
+	        android:src="@drawable/ic_action_new_picture"
+	        android:contentDescription="@string/add_item"
 	        android:layout_toRightOf="@id/reviewobject_image_name"
 	        android:layout_toEndOf="@id/reviewobject_image_name"
 	        android:layout_below="@id/reviewobject_desc"
@@ -85,39 +85,49 @@
 	        android:scaleType="center"
 	        android:layout_margin="5dp"/>
 	   	
-	   	<TextView
-	        android:id="@+id/review_object_tags"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/review_tags" 
-	        android:layout_alignBaseline="@+id/choose_object_tags"
-	   	    android:layout_alignBottom="@+id/choose_object_tags"
-	   	    android:layout_alignParentLeft="true"
-	   	    android:layout_alignParentStart="true"
+	   	<RelativeLayout 
+	   	    android:id="@+id/revob_tags_layout"
 	   	    android:layout_below="@id/reviewobject_image"
-	        android:layout_margin="5dp"/>
+	   	    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content">
 	   	
-	   	<Button 
-	        android:id="@+id/choose_object_tags"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:drawableLeft="@drawable/ic_action_labels"
-	        android:drawableStart="@drawable/ic_action_labels"
-	        android:layout_toRightOf="@id/review_object_tags"
-	        android:layout_toEndOf="@id/review_object_tags"
-	        android:layout_below="@id/reviewobject_image"
-	        android:layout_margin="5dp"/>
-	   	
-	   	<TextView 
-	        android:id="@+id/review_object_tags_list"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/review_tags_list"
-	        android:layout_toRightOf="@id/choose_object_tags"
-	        android:layout_toEndOf="@id/choose_object_tags"
-	        android:layout_alignBaseline="@id/choose_object_tags"
-	        android:layout_below="@id/review_object_tags" 
-	        android:layout_margin="5dp"/>
+		   	<TextView
+		        android:id="@+id/review_object_tags"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/review_tags" 
+		   	    android:layout_alignParentLeft="true"
+		   	    android:layout_alignParentStart="true"
+		        android:layout_margin="5dp"/>
+		   	
+		   	<ImageButton 
+		        android:id="@+id/choose_object_tags"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/ic_action_labels"
+		        android:contentDescription="@string/add_item"
+		        android:layout_toRightOf="@id/review_object_tags"
+		        android:layout_toEndOf="@id/review_object_tags"/>
+		   	
+		   	<ImageButton 
+		        android:id="@+id/remove_object_tags"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/ic_stat_content_backspace"
+		        android:contentDescription="@string/remove_item"
+		        android:layout_toRightOf="@id/choose_object_tags"
+		        android:layout_toEndOf="@id/choose_object_tags"/>
+		   	
+		   	<TextView 
+		        android:id="@+id/review_object_tags_list"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:hint="@string/review_tags_list"
+		        android:layout_toRightOf="@id/remove_object_tags"
+		        android:layout_toEndOf="@id/remove_object_tags"
+		        android:layout_alignBaseline="@id/review_object_tags"
+		        android:layout_margin="5dp"/>
+		</RelativeLayout>
 	   	
 	   	<TextView
 	        android:id="@+id/reviewobject_map_label"
@@ -126,7 +136,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentStart="true"
 	        android:text="@string/position"
-	        android:layout_below="@id/review_object_tags_list"
+	        android:layout_below="@id/revob_tags_layout"
 	        android:layout_margin="5dp"/>
 
 	   	<com.example.ireviewr.views.ScrollableMapView
