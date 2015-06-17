@@ -3,6 +3,7 @@ package com.example.ireviewr.tools;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -97,5 +98,15 @@ public class ReviewerTools {
 		{
 			return longString.substring(0, maxLength-3)+"...";
 		}
+	}
+	
+	public static String getTagsString(List<String> tagList)
+	{
+		StringBuilder tagsString = new StringBuilder();
+		for(String tag : tagList)
+		{
+			tagsString.append(" #").append(tag);
+		}
+		return tagsString.toString();
 	}
 }

@@ -60,13 +60,8 @@ public class ReviewObjectsListFragment extends AbstractDetailListFragment<Review
 
 	@Override
 	protected void onItemClick(ReviewObject item)
-	{ // TODO
-		/*
-		Fragment fragment = new GroupTabsFragment(item.getModelId());
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment)
-												.addToBackStack(null).commit();*/
+	{
+		FragmentTransition.to(ReviewObjectTabsFragment.newInstance(item.getModelId()), getActivity());
 	}
 	
 	@Override

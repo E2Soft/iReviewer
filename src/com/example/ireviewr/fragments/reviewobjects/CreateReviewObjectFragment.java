@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -43,13 +42,13 @@ import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
+import com.example.ireviewr.tools.ReviewerTools;
 import com.example.ireviewr.validators.TextValidator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -226,7 +225,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 				if(tags.size() > 0) 
 				{
 					tags.remove(tags.size()-1);
-					textTags.setText(getTagsString(tags));
+					textTags.setText(ReviewerTools.getTagsString(tags));
 				}
 			}
 		});
@@ -262,7 +261,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		}
 		else
 		{
-			textTags.setText(getTagsString(tags));
+			textTags.setText(ReviewerTools.getTagsString(tags));
 		}
 		
 		if(bitmap != null){
@@ -298,8 +297,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		// iz nekog razloga nece da se updateuje pozicija markera ako mapa nema setovan ovaj listener
 		map.setOnMarkerDragListener(new EmptyOnMarkerDragListener());
 		
-		MapsInitializer.initialize(getActivity());
-		
 		if(latitude != NULL_COORDINATE && longitude != NULL_COORDINATE) // ako postoje sacuvane koordinate
 		{
 			setMarker(new LatLng(latitude, longitude)); // podesi marker na njih
@@ -311,16 +308,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		}
 		
 		return view;
-	}
-
-	private String getTagsString(List<String> tagList)
-	{
-		StringBuilder tagsString = new StringBuilder();
-		for(String tag : tagList)
-		{
-			tagsString.append(" #").append(tag);
-		}
-		return tagsString.toString();
 	}
 	
 	@Override
@@ -458,7 +445,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 				if(!tags.contains(newTag))
 				{
 					tags.add(newTag);
-					tagContent.setText(getTagsString(tags));
+					tagContent.setText(ReviewerTools.getTagsString(tags));
 				}
 				else
 				{

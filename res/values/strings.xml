@@ -43,6 +43,12 @@
     <string name="review_desc">Enter description</string>
     <string name="review_image">Image</string>
     
+    <string name="review_object_details">Place details</string>
+    <string name="review_object_name">Name</string>
+    <string name="review_object_rating">Rating</string>
+    <string name="review_object_tags">Tags</string>
+    <string name="review_object_description">Description</string>
+    
     <string name="save_item">Save</string>
     <string name="cancel_item">Cancel</string>
     

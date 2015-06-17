@@ -5,17 +5,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.example.ireviewr.fragments.groups.GroupDetailFragment;
-import com.example.ireviewr.fragments.reviews.GroupReviewsListFragment;
-import com.example.ireviewr.fragments.users.GroupUsersListFragment;
-import com.example.ireviewr.model.Group;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectDetailFragment;
+import com.example.ireviewr.model.ReviewObject;
 
-public class GroupPagerAdapter extends FragmentPagerAdapter {
+public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] names ={"Details","Reviews", "Users"};
+	private String[] names ={"Details","Reviews", "Gallery"};
 	private String itemId;
 	
-	public GroupPagerAdapter(String itemId, FragmentManager fm)
+	public ReviewObjectPagerAdapter(String itemId, FragmentManager fm)
 	{
 		super(fm);
 		this.itemId = itemId;
@@ -28,16 +26,16 @@ public class GroupPagerAdapter extends FragmentPagerAdapter {
 		{
 			case 0:
 			{
-				Group group = Group.getByModelId(Group.class, itemId);
-				return GroupDetailFragment.newInstance(group);
+				ReviewObject revob = ReviewObject.getByModelId(ReviewObject.class, itemId);
+				return ReviewObjectDetailFragment.newInstance(revob);
 			}
 			case 1:
 			{
-				return new GroupReviewsListFragment(itemId);
+				return new Fragment();//return new ReviewObjectReviewsListFragment(itemId);
 			}
 			case 2:
 			{
-				return new GroupUsersListFragment(itemId);
+				return new Fragment();//return new ReviewObjectGalleryFragment(itemId);
 			}
 			default:
 			{
