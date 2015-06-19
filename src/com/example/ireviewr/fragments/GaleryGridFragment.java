@@ -19,6 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import com.example.ireviewr.R;
@@ -149,9 +151,18 @@ public abstract class GaleryGridFragment extends Fragment
 		
 		GridView gridview = (GridView)view.findViewById(R.id.gridview);
 		gridview.setAdapter(myAdapter);
+		gridview.setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				GaleryGridFragment.this.onItemClick(parent, view, position, id);
+			}
+		});
 		
 		return view;
 	}
 	
 	protected abstract ModelLoaderCallbacks<Image> getModelLoaderCallbacks(GaleryAdapter myAdapter);
+	protected abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
 }

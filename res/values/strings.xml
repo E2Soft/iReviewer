@@ -87,4 +87,7 @@
     
     <string name="error">Error</string>
     
+    <string name="image">Image</string>
+    <string name="set_as_main">Set as main</string>
+    
 </resources>

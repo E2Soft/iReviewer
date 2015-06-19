@@ -3,6 +3,8 @@ package com.example.ireviewr.fragments.reviewobjects;
 import java.util.List;
 
 import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GaleryAdapter;
@@ -10,6 +12,7 @@ import com.example.ireviewr.fragments.GaleryGridFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
 
 public class ReviewObjectGalleryFragment extends GaleryGridFragment
@@ -49,5 +52,11 @@ public class ReviewObjectGalleryFragment extends GaleryGridFragment
 	private ReviewObject getRevob()
 	{
 		return ReviewObject.getByModelId(ReviewObject.class, getArguments().getString(RELATED_ID));
+	}
+
+	@Override
+	protected void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		FragmentTransition.to(new ReviewObjectImagePagerFragment(getArguments().getString(RELATED_ID), position), getActivity());
 	}
 }
