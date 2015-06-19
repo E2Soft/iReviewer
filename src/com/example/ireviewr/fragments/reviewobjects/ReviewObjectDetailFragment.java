@@ -32,6 +32,7 @@ import com.example.ireviewr.model.TagToReviewObject;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -247,7 +248,7 @@ public class ReviewObjectDetailFragment extends Fragment
 		description.setText(bundle.getString(DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.revob_image_content);
-		ReviewerTools.setImageFromPath(image, bundle.getString(IMAGE_PATH));
+		ImageUtils.setImageFromPath(image, bundle.getString(IMAGE_PATH), 128, 128);
 		
 		LatLng location = new LatLng(bundle.getDouble(LATITUDE), bundle.getDouble(LONGITUDE));
 		

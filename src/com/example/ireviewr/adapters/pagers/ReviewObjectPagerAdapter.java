@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectDetailFragment;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectGalleryFragment;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectReviewsListFragment;
 import com.example.ireviewr.model.ReviewObject;
 
 public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
@@ -31,11 +33,11 @@ public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 			}
 			case 1:
 			{
-				return new Fragment();//return new ReviewObjectReviewsListFragment(itemId);
+				return new ReviewObjectReviewsListFragment(itemId);
 			}
 			case 2:
 			{
-				return new Fragment();//return new ReviewObjectGalleryFragment(itemId);
+				return new ReviewObjectGalleryFragment(itemId);
 			}
 			default:
 			{

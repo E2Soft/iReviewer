@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.ReviewObject;
+import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewObjectAdapter extends AbstractArrayAdapter<ReviewObject>
@@ -33,7 +34,7 @@ public class ReviewObjectAdapter extends AbstractArrayAdapter<ReviewObject>
 		ImageView image = (ImageView)view.findViewById(R.id.revob_item_icon);
 		Image mainImage = item.getMainImage();
 		String imagePath = (mainImage != null) ? mainImage.getPath() : null;
-		ReviewerTools.setImageFromPath(image, imagePath, R.drawable.ic_action_place);
+		ImageUtils.setImageFromPath(image, imagePath, 40, 40, R.drawable.ic_action_place);
 	}
 	
 	@Override

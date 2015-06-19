@@ -1,8 +1,15 @@
 package com.example.ireviewr.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -13,69 +20,52 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.GaleryAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Image;
 
-public class GaleryGridFragment extends Fragment {
-
-	private CharSequence[] itemNames = { "Take Photo", "Choose from Library", "Cancel" };
-	private int REQUEST_CAMERA = 100;
-	private int SELECT_PHOTO = 200;
+public abstract class GaleryGridFragment extends Fragment
+{
+	private static final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
+	private static final int REQUEST_CAMERA = 1;
+	private static final int SELECT_PHOTO = 2;
+	protected static final String LOADER_ID = "LOADER_ID";
 	private GaleryAdapter myAdapter;
 	
-	public static GaleryGridFragment newInstance(String itemId) {
-		GaleryGridFragment fragment = new GaleryGridFragment();
-	    return fragment;
+	public GaleryGridFragment()
+	{}
+	
+	public GaleryGridFragment(int loaderId)
+	{
+		Bundle bundle = new Bundle();
+		bundle.putInt(LOADER_ID, loaderId);
+		setArguments(bundle);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setHasOptionsMenu(true);
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		//dodati meni
-		inflater.inflate(R.menu.activity_itemdetail, menu);
-		SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-		
-		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                // this is your adapter that will be filtered
-                myAdapter.getFilter().filter(newText.toString());
-                //System.out.println("on text chnge text: "+newText);
-                return true;
-            }
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                // this is your adapter that will be filtered
-                //myAdapter.getFilter().filter(query.toString());
-                //System.out.println("on query submit: "+query);
-                return false;
-            }
-        };
-        searchView.setOnQueryTextListener(textChangeListener);
+		inflater.inflate(R.menu.galery, menu);
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.add_item:
-				Toast.makeText(getActivity(), "Add Galery item", Toast.LENGTH_SHORT).show();
+				selectImage();
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -83,30 +73,69 @@ public class GaleryGridFragment extends Fragment {
 	}
 	
 	//Choose image from camera or galery
-		private void selectImage() {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Add Photo");
-			builder.setItems(itemNames, new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int position) {
-					if (itemNames[position].equals("Take Photo")) {
-						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-						startActivityForResult(intent, REQUEST_CAMERA);
-					}else if (itemNames[position].equals("Choose from Library")) {
-						Intent intent = new Intent(Intent.ACTION_PICK,
-													MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
-						startActivityForResult(Intent.createChooser(intent, "Select photo"),
-												SELECT_PHOTO);
-					}else if (itemNames[position].equals("Cancel")) {
-						dialog.cancel();
-					}
+	private void selectImage() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Add Photo");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int position) {
+				if (items[position].equals("Take Photo")) {
+					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					getParentFragment().startActivityForResult(intent, REQUEST_CAMERA);
+				}else if (items[position].equals("Choose from Library")) {
+					Intent intent = new Intent(Intent.ACTION_PICK,
+							MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					intent.setType("image/*");
+					getParentFragment().startActivityForResult(Intent.createChooser(intent, "Select photo"),
+							SELECT_PHOTO);
+				}else if (items[position].equals("Cancel")) {
+					dialog.cancel();
 				}
-				
-			});
-			builder.show();
+			}
+			
+		});
+		builder.show();
+	}
+	
+	private Bitmap setUpImage(Intent data){
+		InputStream stream = null;
+		try {
+			stream = getActivity().getContentResolver().openInputStream(data.getData());
+			Bitmap bitmap = Bitmap.createBitmap(BitmapFactory.decodeStream(stream));
+			return bitmap;
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally{
+			if (stream != null){
+				try {
+					stream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		return null;
+	}
+	
+	private Bitmap takePhoto(Bundle extras){
+		return (Bitmap) extras.get("data");
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (resultCode == Activity.RESULT_OK) {
+			if(requestCode == REQUEST_CAMERA){
+				addImage(takePhoto(data.getExtras()));
+			}else if(requestCode == SELECT_PHOTO){
+				addImage(setUpImage(data));
+			}
+		}
+	}
+	
+	protected abstract void addImage(Bitmap bitmap);
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,10 +145,7 @@ public class GaleryGridFragment extends Fragment {
 		
 		myAdapter = new GaleryAdapter(getActivity());
 		
-		getActivity().getSupportLoaderManager().initLoader(R.id.IMAGE_LOADER, null, 
-				new ModelLoaderCallbacks<Image>(getActivity(), 
-				Image.class, 
-				myAdapter));
+		getActivity().getSupportLoaderManager().restartLoader(getArguments().getInt(LOADER_ID), null, getModelLoaderCallbacks(myAdapter));
 		
 		GridView gridview = (GridView)view.findViewById(R.id.gridview);
 		gridview.setAdapter(myAdapter);
@@ -127,10 +153,5 @@ public class GaleryGridFragment extends Fragment {
 		return view;
 	}
 	
-	@Override
-	public void onResume() {
-		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.galery);
-		setHasOptionsMenu(true);
-	}
+	protected abstract ModelLoaderCallbacks<Image> getModelLoaderCallbacks(GaleryAdapter myAdapter);
 }

@@ -68,7 +68,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	private Bitmap bitmap;
 	private ArrayList<String> tags;
 	
-	private static final String SAVED_PHOTO = "SAVED_IMAGE";
+	private static final String SAVED_PHOTO = "SAVED_PHOTO";
 	private static final String SAVED_LONGITUDE = "SAVED_LONGITUDE";
 	private static final String SAVED_LATITUDE = "SAVED_LATITUDE";
 	private static final String SAVED_TAGS = "SAVED_TAGS";
@@ -182,7 +182,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			
 			if(bitmap != null)
 			{
-				// ime slike je <id_rev_objekta>_0, ostale slike su <id_rev_objekta>_<broj_slika + 1>
+				// ime slike je <id_rev_objekta>_0, ostale slike su <id_rev_objekta>_<broj_slika>
 				String imagePath = ImageUtils.save(bitmap, newReviewObject.getModelId()+"_0", getActivity());
 				new Image(imagePath, true, newReviewObject).saveOrThrow();
 			}

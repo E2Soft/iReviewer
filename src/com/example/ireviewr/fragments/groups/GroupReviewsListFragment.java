@@ -1,4 +1,4 @@
-package com.example.ireviewr.fragments.reviews;
+package com.example.ireviewr.fragments.groups;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.fragments.reviews.AbstractReviewsListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.GroupToReview;

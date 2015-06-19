@@ -1,17 +1,10 @@
 package com.example.ireviewr.tools;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
-
-import com.example.ireviewr.R;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,34 +19,6 @@ public class ReviewerTools {
 		SimpleDateFormat formater = new SimpleDateFormat(PATTERN);
 
 		return formater.format(date);
-	}
-	
-	public static void setImageFromPath(ImageView imageView, String path)
-	{
-		setImageFromPath(imageView, path, null);
-	}
-	
-	public static void setImageFromPath(ImageView imageView, String path, Integer defaultImage)
-	{
-		if(path != null)
-		{
-			File imgFile = new  File(path);
-			if(imgFile.exists())
-			{
-			    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-			    imageView.setImageBitmap(myBitmap);
-			    return ;
-			}
-		}
-		
-		if(defaultImage != null)
-		{
-			imageView.setImageResource(defaultImage);
-		}
-		else
-		{
-			imageView.setImageResource(R.drawable.ic_action_picture);
-		}
 	}
 
 	public static int TYPE_WIFI = 1;

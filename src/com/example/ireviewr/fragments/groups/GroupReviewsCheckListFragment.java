@@ -1,4 +1,4 @@
-package com.example.ireviewr.fragments.reviews;
+package com.example.ireviewr.fragments.groups;
 
 import java.util.List;
 
