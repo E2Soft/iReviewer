@@ -176,7 +176,7 @@ public class ReviewObjectDetailFragment extends Fragment
 	
 	private void showEditDialog()
 	{
-		FragmentTransition.to(CreateReviewObjectFragment.newInstance(getArguments().getString(ID)), getActivity());
+		FragmentTransition.to(ReviewObjectFormFragment.newInstance(getArguments().getString(ID)), getActivity());
 	}
 	
 	private void showDeleteDialog()

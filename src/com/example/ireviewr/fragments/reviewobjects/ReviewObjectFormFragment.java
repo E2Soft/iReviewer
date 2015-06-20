@@ -57,7 +57,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CreateReviewObjectFragment extends Fragment //implements LocationListener, OnMapReadyCallback
+public class ReviewObjectFormFragment extends Fragment //implements LocationListener, OnMapReadyCallback
 {
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
@@ -100,18 +100,18 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	/**
 	 * Za create.
 	 */
-	public static CreateReviewObjectFragment newInstance()
+	public static ReviewObjectFormFragment newInstance()
 	{
-		return new CreateReviewObjectFragment();
+		return new ReviewObjectFormFragment();
 	}
 	
 	/**
 	 * Za update.
 	 * @param modelId postojeceg ReviewObjecta
 	 */
-	public static CreateReviewObjectFragment newInstance(String modelId)
+	public static ReviewObjectFormFragment newInstance(String modelId)
 	{
-		CreateReviewObjectFragment newFrag = new CreateReviewObjectFragment();
+		ReviewObjectFormFragment newFrag = new ReviewObjectFormFragment();
 		Bundle bundle = new Bundle();
 		
 		ReviewObject revob = ReviewObject.getByModelId(ReviewObject.class, modelId);
@@ -168,7 +168,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		outState.putStringArrayList(TAGS, tags);
 		outState.putBoolean(EDITED_IMAGE, editedImage);
 	}
-	
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
