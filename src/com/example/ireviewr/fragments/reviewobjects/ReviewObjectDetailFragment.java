@@ -105,7 +105,7 @@ public class ReviewObjectDetailFragment extends Fragment
 	{
 		super.onAttach(activity);
 		
-		modelObserver = new ModelObserver(activity, ReviewObject.class, Review.class, TagToReviewObject.class)
+		modelObserver = new ModelObserver(activity, ReviewObject.class, Review.class, TagToReviewObject.class, Image.class)
 		{
 			@Override
 			public void onChange(boolean selfChange, Uri uri)

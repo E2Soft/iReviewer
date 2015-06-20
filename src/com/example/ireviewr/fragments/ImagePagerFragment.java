@@ -1,5 +1,6 @@
 package com.example.ireviewr.fragments;
 
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.ImagePagerAdapter;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public abstract class ImagePagerFragment extends Fragment
 {
@@ -34,12 +36,21 @@ public abstract class ImagePagerFragment extends Fragment
 	{
 		View v = inflater.inflate(R.layout.image_detail_pager, container, false);
 		imagePagerAdapter = getImagePagerAdapter();
+		
+		imagePagerAdapter.registerDataSetObserver(new DataSetObserver()
+		{
+			@Override
+			public void onChanged()
+			{
+				if(imagePagerAdapter.getCount() == 0) // kad nema vise slika obrisi fragment
+				{
+					FragmentTransition.remove(ImagePagerFragment.this, getActivity());
+				}
+			}
+		});
         
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
         mViewPager.setAdapter(imagePagerAdapter);
-        
-        //Laja buraz resio :D
-        mViewPager.setOffscreenPageLimit(imagePagerAdapter.getCount()-1);
         
         mViewPager.setCurrentItem(initialPosition);
         

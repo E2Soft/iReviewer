@@ -1,10 +1,8 @@
 package com.example.ireviewr.adapters.pagers;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.example.ireviewr.fragments.reviewobjects.ReviewObjectImageDetailFragment;
 import com.example.ireviewr.model.ReviewObject;
 
 public class ReviewObjectImagePagerAdapter extends ImagePagerAdapter
@@ -23,11 +21,5 @@ public class ReviewObjectImagePagerAdapter extends ImagePagerAdapter
 	private ReviewObject getRevob()
 	{
 		return ReviewObject.getByModelId(ReviewObject.class, relatedId);
-	}
-	
-	@Override
-	public Fragment getItem(int position)
-	{
-		return new ReviewObjectImageDetailFragment(images.get(position));
 	}
 }

@@ -45,6 +45,12 @@ public class ImageUtils
 		return mypath.getAbsolutePath();
 	}
 	
+	public static boolean delete(String path)
+	{
+		File file = new File(path);
+		return file.delete();
+	}
+	
 	public static Bitmap loadImageFromStorage(String path)
 	{
 		try
