@@ -2,7 +2,7 @@ package com.example.ireviewr.adapters.pagers;
 
 import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.PreferencesFragment;
-import com.example.ireviewr.fragments.reviewobjects.CreateReviewObjectFragment;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectFormFragment;
 import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
 
 import android.content.Context;
@@ -30,7 +30,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 		}else if(position == 2){
 			fragment = new PreferencesFragment();
 		}else if(position == 3){
-			fragment = new CreateReviewObjectFragment();
+			fragment = new ReviewObjectFormFragment();
 		}
 		
 		return fragment;

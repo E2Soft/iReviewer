@@ -51,7 +51,8 @@ public abstract class AbstractListFragment<T extends AbstractModel> extends List
 		
 		adapter = createAdapter();
 		
-		getActivity().getSupportLoaderManager().initLoader(getLoaderId(), null, createLoaderCallbacks());
+		// restartuj ili ako ne postoji pokreni nov loader
+		getActivity().getSupportLoaderManager().restartLoader(getLoaderId(), null, createLoaderCallbacks());
 		
 		setListAdapter(adapter);
 		

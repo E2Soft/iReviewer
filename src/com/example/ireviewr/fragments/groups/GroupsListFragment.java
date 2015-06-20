@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,11 +14,13 @@ import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.dialogs.DefaultCancelListener;
+import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class GroupsListFragment extends AbstractDetailListFragment<Group>
 {
@@ -82,10 +83,11 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 					try
 					{
 						new Group(text, testUser).saveOrThrow();
+						Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
 					}
 					catch(SQLiteConstraintException ex)
 					{
-						Toast.makeText(getActivity(), "A group with name: "+text+" already exists.", Toast.LENGTH_LONG).show();
+						ShowDialog.error("A group with name: "+text+" already exists.", getActivity());
 					}
 				}
 			})
@@ -96,11 +98,7 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 	@Override
 	protected void onItemClick(Group item)
 	{
-		Fragment fragment = new GroupTabsFragment(item.getModelId());
-		getActivity().getSupportFragmentManager()
-												.beginTransaction()
-												.replace(R.id.mainContent, fragment)
-												.addToBackStack(null).commit();
+		FragmentTransition.to(GroupTabsFragment.newInstance(item.getModelId()), getActivity());
 	}
 	
 	@Override

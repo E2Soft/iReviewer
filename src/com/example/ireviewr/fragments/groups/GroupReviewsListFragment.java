@@ -1,4 +1,4 @@
-package com.example.ireviewr.fragments.reviews;
+package com.example.ireviewr.fragments.groups;
 
 import java.util.List;
 
@@ -7,11 +7,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.fragments.reviews.AbstractReviewsListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.GroupToReview;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 /**
  * Svi reviewovi u datoj grupi.
@@ -71,10 +73,7 @@ public class GroupReviewsListFragment extends AbstractReviewsListFragment
 
 	private void onMenuAction()
 	{
-		getActivity().getSupportFragmentManager().beginTransaction()
-		.replace(R.id.mainContent, new GroupReviewsCheckListFragment(getArguments().getString(RELATED_ID)))
-		.addToBackStack(null)
-		.commit();
+		FragmentTransition.to(new GroupReviewsCheckListFragment(getArguments().getString(RELATED_ID)), getActivity());
 	}
 	
 	private Group getGroup()

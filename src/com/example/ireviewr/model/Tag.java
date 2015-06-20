@@ -3,8 +3,10 @@ package com.example.ireviewr.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 @Table(name = "Tag", id="_id")
 public class Tag extends AbstractModel
@@ -54,4 +56,9 @@ public class Tag extends AbstractModel
 		}
         return ret;
     }
+
+	public static Tag getByName(String name)
+	{
+		return new Select().from(Tag.class).where("name = ?", name).executeSingle();
+	}
 }

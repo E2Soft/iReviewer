@@ -5,15 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
 import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
+
 
 @Table(name = "ReviewObject", id="_id")
 public class ReviewObject extends AbstractModel 
 {
-	@Column(name = "name", notNull=true, unique=true)
+	@Column(name = "name", notNull=true)
 	private String name;
 	
 	@Column(name = "description")
@@ -122,6 +123,19 @@ public class ReviewObject extends AbstractModel
 		new TagToReviewObject(this, toAdd).save();
 	}
 	
+	public void removeTag(Tag toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReviewObject m2m = new Select().from(TagToReviewObject.class)
+				.where("reviewObject = ? and tag = ?", getId(), toRemove.getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
 	public List<Image> getImages()
 	{
         return getMany(Image.class, "reviewObject");
@@ -153,5 +167,17 @@ public class ReviewObject extends AbstractModel
 		}
 		
 		return query.execute();
+	}
+
+	public float getAverageRating()
+	{
+		float average = 0;
+		List<Review> reviews = getReviews();
+		for(Review review : reviews)
+		{
+			average += review.getRating();
+		}
+		average = average / reviews.size();
+		return average;
 	}
 }

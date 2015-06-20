@@ -7,19 +7,11 @@
  
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal" 
-        android:padding="5dp"/>
-     
-    <TextView
-        android:id="@+id/text1"
+        android:contentDescription="@string/review_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:gravity="center_vertical"
-        android:paddingTop="6dip"
-        android:singleLine="true"
-        android:padding="5dp" />    
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_horizontal" 
+        android:padding="5dp"/> 
  
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.example.ireviewr.fragments.GaleryGridFragment;
 import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
@@ -75,7 +74,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			}
 			case 2:
 			{
-				return GaleryGridFragment.newInstance(itemId);
+				return new Fragment();//ReviewGaleryFragment(itemId); // TODO
 			}
 			case 3:
 			{

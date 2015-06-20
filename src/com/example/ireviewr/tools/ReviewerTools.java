@@ -1,14 +1,10 @@
 package com.example.ireviewr.tools;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
-import com.example.ireviewr.R;
+import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -23,22 +19,6 @@ public class ReviewerTools {
 		SimpleDateFormat formater = new SimpleDateFormat(PATTERN);
 
 		return formater.format(date);
-	}
-	
-	public static void setImageFromPath(ImageView imageView, String path)
-	{
-		if(path != null)
-		{
-			File imgFile = new  File(path);
-			if(imgFile.exists())
-			{
-			    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-			    imageView.setImageBitmap(myBitmap);
-			    return ;
-			}
-		}
-		
-		imageView.setImageResource(R.drawable.ic_action_picture);
 	}
 
 	public static int TYPE_WIFI = 1;
@@ -71,5 +51,27 @@ public class ReviewerTools {
 			status = "Not connected to Internet";
 		}
 		return status;
+	}
+	
+	public static String getShortString(String longString, int maxLength)
+	{
+		if(longString.length() <= maxLength)
+		{
+			return longString;
+		}
+		else
+		{
+			return longString.substring(0, maxLength-3)+"...";
+		}
+	}
+	
+	public static String getTagsString(List<String> tagList)
+	{
+		StringBuilder tagsString = new StringBuilder();
+		for(String tag : tagList)
+		{
+			tagsString.append(" #").append(tag);
+		}
+		return tagsString.toString();
 	}
 }

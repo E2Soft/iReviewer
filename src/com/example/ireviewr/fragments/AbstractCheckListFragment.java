@@ -20,6 +20,7 @@ public abstract class AbstractCheckListFragment<T extends AbstractModel> extends
 		super(loaderId, menuLayout);
 	}
 	
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{

@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.pagers.ReviewsPagerAdapter;
-import com.example.ireviewr.tools.ReviewerTools;
+import com.example.ireviewr.tools.ImageUtils;
 
 public class ReviewDetailFragment extends Fragment {
 
@@ -75,7 +75,7 @@ public class ReviewDetailFragment extends Fragment {
 		description.setText(bundle.getString(ReviewsPagerAdapter.DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.review_image_content);
-		ReviewerTools.setImageFromPath(image,bundle.getString(ReviewsPagerAdapter.IMAGE));
+		ImageUtils.setImageFromPath(image, bundle.getString(ReviewsPagerAdapter.IMAGE), 128, 128);
 		
 		return view;
 	}

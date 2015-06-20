@@ -17,23 +17,13 @@ public class GroupTabsFragment extends Fragment {
 	
 	public static final String ID = "ID";
 	
-	public GroupTabsFragment()
-	{}
-	
-	public GroupTabsFragment(String id)
+	public static GroupTabsFragment newInstance(String id)
 	{
+		GroupTabsFragment newFrag = new GroupTabsFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString(ID, id);
-		setArguments(bundle);
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
+		newFrag.setArguments(bundle);
+		return newFrag;
 	}
 	
 	@Override
