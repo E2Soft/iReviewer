@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -60,31 +62,81 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 	private CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 	private int REQUEST_CAMERA = 1;
 	private int SELECT_PHOTO = 2;
-	TextView textName;
-	TextView textDesc;
+	
+	// key names
+	private static final String ID = "ID";
+	private static final String NAME = "NAME";
+	private static final String DESCRIPTION = "DESCRIPTION";
+	private static final String IMAGE = "IMAGE";
+	private static final String IMAGE_PATH = "IMAGE_PATH";
+	private static final String LONGITUDE = "LONGITUDE";
+	private static final String LATITUDE = "LATITUDE";
+	private static final String TAGS = "TAGS";
+	private static final String EDITED_IMAGE = "EDITED_IMAGE";
+	
+	// views
+	private TextView textName;
+	private TextView textDesc;
 	private ImageView mImageView;
 	private MapView mapView;
 	
+	// data
 	private Bitmap bitmap;
 	private ArrayList<String> tags;
-	
-	private static final String SAVED_PHOTO = "SAVED_PHOTO";
-	private static final String SAVED_LONGITUDE = "SAVED_LONGITUDE";
-	private static final String SAVED_LATITUDE = "SAVED_LATITUDE";
-	private static final String SAVED_TAGS = "SAVED_TAGS";
+	private String id;
+	private boolean editedImage = false;
+	private Marker placeMarker;
 	
 	private static final double NULL_COORDINATE = 500; // nemoguca vrednost za long i lat
 	
+	// map
 	private GoogleMap map;
 	private LocationManager locationManager;
-	String provider;
+	private String provider;
 	
-	private Marker placeMarker;
+	// validators
+	private TextValidator nameValidator;
 	
-	TextValidator nameValidator;
+	/**
+	 * Za create.
+	 */
+	public static CreateReviewObjectFragment newInstance()
+	{
+		return new CreateReviewObjectFragment();
+	}
+	
+	/**
+	 * Za update.
+	 * @param modelId postojeceg ReviewObjecta
+	 */
+	public static CreateReviewObjectFragment newInstance(String modelId)
+	{
+		CreateReviewObjectFragment newFrag = new CreateReviewObjectFragment();
+		Bundle bundle = new Bundle();
+		
+		ReviewObject revob = ReviewObject.getByModelId(ReviewObject.class, modelId);
+		
+		bundle.putString(ID, modelId);
+		bundle.putString(NAME, revob.getName());
+		bundle.putString(DESCRIPTION, revob.getDescription());
+		Image image = revob.getMainImage();
+		if(image != null) bundle.putString(IMAGE_PATH, image.getPath());
+		bundle.putDouble(LONGITUDE, revob.getLocationLong());
+		bundle.putDouble(LATITUDE, revob.getLocationLat());
+		ArrayList<String> tagnames = new ArrayList<String>();
+		for(Tag tag : revob.getTags())
+		{
+			tagnames.add(tag.getName());
+		}
+		bundle.putStringArrayList(TAGS, tagnames);
+		
+		newFrag.setArguments(bundle);
+		return newFrag;
+	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		//postaviti da fragment ima meni
@@ -92,27 +144,29 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		
 		// Get LocationManager object from System Service LOCATION_SERVICE
 		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-		
 		provider = locationManager.getBestProvider(new Criteria(), true);
 	}
 	
-	//to save image taken by user when orientation change
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState)
+	{
 		super.onSaveInstanceState(outState);
 		
-		outState.putParcelable(SAVED_PHOTO, bitmap);
+		outState.putString(ID, id);
+		
+		outState.putParcelable(IMAGE, bitmap);
 		if(placeMarker != null)
 		{
-			outState.putDouble(SAVED_LONGITUDE, placeMarker.getPosition().longitude);
-			outState.putDouble(SAVED_LATITUDE,  placeMarker.getPosition().latitude);
+			outState.putDouble(LONGITUDE, placeMarker.getPosition().longitude);
+			outState.putDouble(LATITUDE,  placeMarker.getPosition().latitude);
 		}
 		else
 		{
-			outState.putDouble(SAVED_LONGITUDE, NULL_COORDINATE);
-			outState.putDouble(SAVED_LATITUDE,  NULL_COORDINATE);
+			outState.putDouble(LONGITUDE, NULL_COORDINATE);
+			outState.putDouble(LATITUDE,  NULL_COORDINATE);
 		}
-		outState.putStringArrayList(SAVED_TAGS, tags);
+		outState.putStringArrayList(TAGS, tags);
+		outState.putBoolean(EDITED_IMAGE, editedImage);
 	}
 	
 	
@@ -139,62 +193,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 				return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	private void save()
-	{
-		String name = textName.getText().toString();
-		String desc = textDesc.getText().toString();
-		
-		// validate
-		try
-		{
-			if(placeMarker == null)
-			{
-				ShowDialog.error("Please enter place location.", getActivity());
-				return;
-			}
-			nameValidator.validate();
-		}
-		catch(ValidationException ex)
-		{
-			return;
-		}
-		
-		// save
-		try
-		{
-			ReviewObject newReviewObject = new ReviewObject(name, desc, placeMarker.getPosition().longitude, 
-					placeMarker.getPosition().latitude, 
-					CurrentUser.getModel(getActivity()));
-			newReviewObject.saveOrThrow();
-			
-			for(String tagName : tags)
-			{
-				Tag tag = Tag.getByName(tagName);
-				if(tag == null)
-				{
-					tag = new Tag(tagName);
-					tag.saveOrThrow();
-				}
-				
-				newReviewObject.addTag(tag);
-			}
-			
-			if(bitmap != null)
-			{
-				// ime slike je <id_rev_objekta>_0, ostale slike su <id_rev_objekta>_<broj_slika>
-				String imagePath = ImageUtils.save(bitmap, newReviewObject.getModelId()+"_0", getActivity());
-				new Image(imagePath, true, newReviewObject).saveOrThrow();
-			}
-			
-			Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
-			FragmentTransition.remove(this, getActivity());
-		}
-		catch(SQLiteConstraintException ex)
-		{
-			ShowDialog.error("Error while saving.", getActivity());
-		}
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -202,7 +200,10 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		
 		double longitude = NULL_COORDINATE;
 		double latitude = NULL_COORDINATE;
+		String name = null;
+		String description = null;
 		
+		// get views
 		View view = inflater.inflate(R.layout.create_rev_object, container, false);
 		
 		mImageView = (ImageView)view.findViewById(R.id.reviewobject_image);
@@ -210,6 +211,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		textDesc = (TextView)view.findViewById(R.id.reviewobject_desc);
 		final TextView textTags = (TextView)view.findViewById(R.id.review_object_tags_list);
 		
+		// set listeners
 		ImageButton choose_tags = (ImageButton)view.findViewById(R.id.choose_object_tags);
 		choose_tags.setOnClickListener(new OnClickListener() {
 			@Override
@@ -218,8 +220,8 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			}
 		});
 		
-		ImageButton remove_tags = (ImageButton)view.findViewById(R.id.remove_object_tags);
-		remove_tags.setOnClickListener(new OnClickListener() {
+		ImageButton removeTags = (ImageButton)view.findViewById(R.id.remove_object_tags);
+		removeTags.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(tags.size() > 0) 
@@ -230,6 +232,16 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			}
 		});
 		
+		ImageButton chooseImage = (ImageButton)view.findViewById(R.id.reviewobject_image_choose);
+		chooseImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				selectImage();
+			}
+		});
+		
+		// set validators
 		nameValidator = new TextValidator(textName)
 		{
 			@Override
@@ -248,11 +260,41 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		};
 		textName.addTextChangedListener(nameValidator);
 		
-		if (savedInstanceState != null) {
-			bitmap = (Bitmap) savedInstanceState.getParcelable(SAVED_PHOTO);
-			longitude = savedInstanceState.getDouble(SAVED_LONGITUDE);
-			latitude = savedInstanceState.getDouble(SAVED_LATITUDE);
-			tags = savedInstanceState.getStringArrayList(SAVED_TAGS);
+		// restore state
+		if (savedInstanceState != null)
+		{
+			id = savedInstanceState.getString(ID);
+			bitmap = (Bitmap) savedInstanceState.getParcelable(IMAGE);
+			longitude = savedInstanceState.getDouble(LONGITUDE);
+			latitude = savedInstanceState.getDouble(LATITUDE);
+			tags = savedInstanceState.getStringArrayList(TAGS);
+			editedImage = savedInstanceState.getBoolean(EDITED_IMAGE);
+		}
+		else
+		{
+			Bundle arguments = getArguments();
+			if(arguments != null)
+			{
+				id = arguments.getString(ID);
+				name = arguments.getString(NAME);
+				description = arguments.getString(DESCRIPTION);
+				String imagePath = arguments.getString(IMAGE_PATH);
+				if(imagePath != null) bitmap = ImageUtils.loadImageFromStorage(imagePath);
+				longitude = arguments.getDouble(LONGITUDE);
+				latitude = arguments.getDouble(LATITUDE);
+				tags = arguments.getStringArrayList(TAGS);
+			}
+		}
+		
+		// populate view
+		if(name != null)
+		{
+			textName.setText(name);
+		}
+		
+		if(description != null)
+		{
+			textDesc.setText(description);
 		}
 		
 		if(tags == null)
@@ -267,15 +309,6 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		if(bitmap != null){
 			mImageView.setImageBitmap(bitmap);
 		}
-		
-		ImageButton chooseImage = (ImageButton)view.findViewById(R.id.reviewobject_image_choose);
-		chooseImage.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				selectImage();
-			}
-		});
 		
 		// Gets the MapView from the XML layout and creates it
 		mapView = (MapView) view.findViewById(R.id.mapview);
@@ -310,22 +343,111 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		return view;
 	}
 	
-	@Override
-	public void onResume() {
-		mapView.onResume();
-		super.onResume();
-	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroy();
-		mapView.onDestroy();
-	}
-	
-	@Override
-	public void onLowMemory() {
-		super.onLowMemory();
-		mapView.onLowMemory();
+	// save/update to database
+	private void save()
+	{
+		String name = textName.getText().toString();
+		String desc = textDesc.getText().toString();
+		
+		// validate
+		try
+		{
+			if(placeMarker == null)
+			{
+				ShowDialog.error("Please enter place location.", getActivity());
+				return;
+			}
+			nameValidator.validate();
+		}
+		catch(ValidationException ex)
+		{
+			return;
+		}
+		
+		// save
+		try
+		{
+			ReviewObject newReviewObject;
+			if(id != null) // update
+			{
+				newReviewObject = ReviewObject.getByModelId(ReviewObject.class, id);
+				newReviewObject.setName(name);
+				newReviewObject.setDescription(desc);
+				newReviewObject.setLocation(placeMarker.getPosition().longitude, placeMarker.getPosition().latitude);
+				newReviewObject.setDateModified(new Date());
+			}
+			else // create new
+			{
+				newReviewObject = new ReviewObject(name, desc, placeMarker.getPosition().longitude, 
+						placeMarker.getPosition().latitude, 
+						CurrentUser.getModel(getActivity()));
+			}
+			
+			newReviewObject.saveOrThrow(); // persist
+			
+			List<Tag> existingTagModels = newReviewObject.getTags();
+			List<String> existingTagNames = new ArrayList<String>();
+			
+			// obrisi sve tagove koji su izbaceni
+			for(Tag tag : existingTagModels)
+			{
+				
+				if(!tags.contains(tag.getName())) // sve koji nisu vise u tags listi
+				{
+					newReviewObject.removeTag(tag); // obrisi
+				}
+				else
+				{
+					existingTagNames.add(tag.getName()); // dodaj u listu postojecih imena za kasnije
+				}
+			}
+			
+			// dodaj sve tagove koji su dodati
+			for(String tagName : tags)
+			{
+				if(!existingTagNames.contains(tagName)) // ako nije vec dodat
+				{
+					Tag tag = Tag.getByName(tagName);
+					if(tag == null) // ako vec ne postji tag
+					{
+						tag = new Tag(tagName);
+						tag.saveOrThrow(); // dodaj nov
+					}
+					
+					newReviewObject.addTag(tag); // dodaj tag u newReviewObject
+				}
+			}
+			
+			if(bitmap != null && editedImage) // ako postoji slika i izmenjena je
+			{
+				Image oldMainImage = newReviewObject.getMainImage();
+				if(oldMainImage != null) // ako postoji stara slika podesi je da nije main
+				{
+					oldMainImage.setMain(false);
+					oldMainImage.save();
+				}
+				
+				// ime slike je <id_rev_objekta>_<broj_slika>
+				String imagePath = ImageUtils.save(bitmap, newReviewObject.getModelId()+"_"+newReviewObject.getImages().size(), 
+						getActivity());
+				new Image(imagePath, true, newReviewObject).saveOrThrow();
+			}
+			
+			if(id == null)
+			{
+				Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				Toast.makeText(getActivity(), R.string.edited, Toast.LENGTH_SHORT).show();
+			}
+			
+			FragmentTransition.remove(this, getActivity());
+		}
+		catch(SQLiteConstraintException ex)
+		{
+			ShowDialog.error("Error while saving.", getActivity());
+		}
 	}
 	
 	private void selectImage() {
@@ -363,9 +485,8 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			
 			stream = getActivity().getContentResolver().openInputStream(data.getData());
 			
-			bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(stream), 
-					mImageView.getWidth(), mImageView.getHeight(), 
-					true);
+			bitmap = BitmapFactory.decodeStream(stream);
+			editedImage = true;
 			
 			mImageView.setImageBitmap(bitmap);
 			
@@ -390,6 +511,7 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 		}
 		
 		bitmap = (Bitmap) extras.get("data");
+		editedImage = true;
 		mImageView.setImageBitmap(bitmap);
 	}
 	
@@ -461,6 +583,24 @@ public class CreateReviewObjectFragment extends Fragment //implements LocationLi
 			}
 		})
 		.show();
+	}
+	
+	@Override
+	public void onResume() {
+		mapView.onResume();
+		super.onResume();
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroy();
+		mapView.onDestroy();
+	}
+	
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		mapView.onLowMemory();
 	}
 	
 	// iz nekog razloga nece da se updateuje pozicija markera ako mapa nema setovan ovaj listener

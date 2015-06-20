@@ -55,7 +55,7 @@ public class ReviewObjectsListFragment extends AbstractDetailListFragment<Review
 	
 	private void onMenuAction()
 	{
-		FragmentTransition.to(new CreateReviewObjectFragment(), getActivity());
+		FragmentTransition.to(CreateReviewObjectFragment.newInstance(), getActivity());
 	}
 
 	@Override

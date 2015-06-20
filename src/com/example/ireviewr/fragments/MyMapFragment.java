@@ -91,7 +91,7 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.home_add_item:
-				FragmentTransition.to(new CreateReviewObjectFragment(), getActivity());
+				FragmentTransition.to(CreateReviewObjectFragment.newInstance(), getActivity());
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);

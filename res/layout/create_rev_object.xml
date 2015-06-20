@@ -82,7 +82,7 @@
 	        android:src="@drawable/ic_action_picture"
 	        android:layout_height="48dp"
 	        android:layout_width="48dp"
-	        android:scaleType="center"
+	        android:scaleType="centerInside"
 	        android:layout_margin="5dp"/>
 	   	
 	   	<RelativeLayout 

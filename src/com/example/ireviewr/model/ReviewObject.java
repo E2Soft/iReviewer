@@ -123,6 +123,19 @@ public class ReviewObject extends AbstractModel
 		new TagToReviewObject(this, toAdd).save();
 	}
 	
+	public void removeTag(Tag toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReviewObject m2m = new Select().from(TagToReviewObject.class)
+				.where("reviewObject = ? and tag = ?", getId(), toRemove.getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
 	public List<Image> getImages()
 	{
         return getMany(Image.class, "reviewObject");
