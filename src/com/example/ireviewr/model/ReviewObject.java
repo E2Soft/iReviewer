@@ -99,6 +99,24 @@ public class ReviewObject extends AbstractModel
         return getMany(Review.class, "reviewObject");
     }
 	
+	public List<Review> getReviewsByTags(List<Tag> tags)
+	{
+		From query = new Select()
+		.from(Review.class).as("r");
+		
+		int i=0;
+		for(Tag tag : tags)
+		{
+			query = query.join(TagToReview.class).as("t"+i)
+					.on("r._id = t"+i+".review and t"+i+".tag = ?", tag.getId());
+			i++;
+		}
+		
+		query.where("r.reviewObject = ?", getId());
+		
+		return query.execute();
+    }
+	
 	public void addReview(Image toAdd)
 	{
 		ValidationUtils.checkSaved(toAdd, this);
