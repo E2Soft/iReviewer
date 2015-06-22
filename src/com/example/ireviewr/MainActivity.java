@@ -23,8 +23,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
@@ -38,16 +40,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ireviewr.activities.ReviewerPreferenceActivity;
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.MyMapFragment;
-import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.sync.SyncReceiver;
 import com.example.ireviewr.sync.auto.SyncService;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -61,9 +64,17 @@ public class MainActivity extends FragmentActivity{
     //Sync stuff
     private PendingIntent pendingIntent;
 	private AlarmManager manager;
+	private SharedPreferences sharedPreferences;
 	
 	private SyncReceiver sync;
 	public static String SYNC_DATA = "SYNC_DATA";
+	
+	private String synctime;
+	private boolean allowSync;
+	private String lookupRadius;
+	
+	private boolean allowReviewNotif;
+	private boolean allowCommentedNotif;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +137,22 @@ public class MainActivity extends FragmentActivity{
         pendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
         
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        consultPreferences();
+    }
+
+    private void consultPreferences(){
+    	synctime = sharedPreferences.getString(getString(R.string.pref_sync_list), "1");//1min
+    	allowSync = sharedPreferences.getBoolean(getString(R.string.pref_sync), false);
+    	
+    	lookupRadius = sharedPreferences.getString(getString(R.string.pref_radius), "1");//1km
+    	
+    	allowCommentedNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_comment_key), false);
+    	allowReviewNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_review_key), false);
+    	
+    	Toast.makeText(MainActivity.this, allowSync+" "+lookupRadius+" "+synctime, Toast.LENGTH_LONG).show();
     }
     
     @Override
@@ -138,9 +165,11 @@ public class MainActivity extends FragmentActivity{
     		setUpReceiver();
 		}
     	
-    	int interval = 10000; // 10 seconds
-    	manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    	if(allowSync){
+	    	int interval = ReviewerTools.calculateTimeTillNextSync(Integer.parseInt(synctime));
+	    	manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+	        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    	}
     	
     	registerReceiver(sync, new IntentFilter(SYNC_DATA));
     }
@@ -213,7 +242,10 @@ public class MainActivity extends FragmentActivity{
         }else if(position == 2){
         	FragmentTransition.to(new ReviewObjectsListFragment(), this);
         }else if(position == 3){
-        	FragmentTransition.to(new PreferencesFragment(), this);
+        	/*fragmentManager.beginTransaction().
+        	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();*/
+        	Intent preference = new Intent(MainActivity.this,ReviewerPreferenceActivity.class);
+        	startActivity(preference);
         }else if(position == 4){
         	FragmentTransition.to(new AboutFragment(), this);
         }else if(position == 5){
