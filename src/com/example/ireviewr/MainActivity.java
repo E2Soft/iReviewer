@@ -40,10 +40,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ireviewr.activities.ReviewerPreferenceActivity;
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.MyMapFragment;
-import com.example.ireviewr.fragments.PreferencesFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
@@ -242,7 +242,10 @@ public class MainActivity extends FragmentActivity{
         }else if(position == 2){
         	FragmentTransition.to(new ReviewObjectsListFragment(), this);
         }else if(position == 3){
-        	FragmentTransition.to(new PreferencesFragment(), this);
+        	/*fragmentManager.beginTransaction().
+        	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();*/
+        	Intent preference = new Intent(MainActivity.this,ReviewerPreferenceActivity.class);
+        	startActivity(preference);
         }else if(position == 4){
         	FragmentTransition.to(new AboutFragment(), this);
         }else if(position == 5){
