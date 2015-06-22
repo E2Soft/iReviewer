@@ -79,6 +79,10 @@ public class ReviewerTools {
 		return tagsString.toString();
 	}
 	
+	public static int calculateTimeTillNextSync(int minutes){
+		return 1000 * 60 * minutes;
+	}
+	
 	public static String fromBitmapToString(Bitmap bitmap){
 		
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
