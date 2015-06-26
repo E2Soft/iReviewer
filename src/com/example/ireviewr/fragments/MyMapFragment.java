@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.dialogs.LocationDialog;
@@ -65,10 +66,15 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		getActivity().getActionBar().setTitle(R.string.home);
 	    setHasOptionsMenu(true);
 	    
+	  Toast.makeText(getActivity(), "onResume()", Toast.LENGTH_SHORT).show();
+	    
 	    if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
 				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			
-	    	//Toast.makeText(getActivity(), "hasService", Toast.LENGTH_SHORT).show();
+	    	
+	    	if(mMapFragment != null){
+	    		mMapFragment.getMapAsync(this);
+	    		locationManager.requestLocationUpdates(provider,0,0,this);
+	    	}
 	    }else{
 	    	//Toast.makeText(getActivity(), "noService", Toast.LENGTH_SHORT).show();
 	    	
@@ -106,8 +112,6 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
         mMapFragment = SupportMapFragment.newInstance();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.map_container, mMapFragment).commit();
-        
-        mMapFragment.getMapAsync(this);
         
 		return view;
 
@@ -187,9 +191,6 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		if (location != null) {
 			addMarker(location);
 		}
-		
-		locationManager.requestLocationUpdates(provider,0,0,this);
-		
 	}
 	
 }

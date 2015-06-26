@@ -68,6 +68,7 @@ public class MainActivity extends FragmentActivity{
 	
 	private SyncReceiver sync;
 	public static String SYNC_DATA = "SYNC_DATA";
+	public static String SYNC_TIME = "SYNC_TIME";
 	
 	private String synctime;
 	private boolean allowSync;

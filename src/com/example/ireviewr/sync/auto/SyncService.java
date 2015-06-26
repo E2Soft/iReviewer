@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import com.example.ireviewr.MainActivity;
+import com.example.ireviewr.sync.tasks.TestTask;
 import com.example.ireviewr.tools.ReviewerTools;
 
 public class SyncService extends Service {
@@ -24,7 +25,7 @@ public class SyncService extends Service {
 		//ima konekcije ka netu skini sta je potrebno i sinhronizuj bazu
 		//TODO:Metodu dodati koja ce to raditi
 		if(status == ReviewerTools.TYPE_WIFI){
-			
+			new TestTask(getApplicationContext()).execute();
 		}
 		
 		sendBroadcast(ints);

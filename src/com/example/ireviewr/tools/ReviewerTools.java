@@ -2,6 +2,7 @@ package com.example.ireviewr.tools;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -99,5 +100,18 @@ public class ReviewerTools {
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		
 		return decodedByte;
+	}
+	
+	public static String prepareDateToString(){
+		Calendar cal = Calendar.getInstance();
+		int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int min = cal.get(Calendar.MINUTE);
+		int sec = cal.get(Calendar.SECOND);
+		
+		return year+"-"+(month+1)+"-"+dayOfMonth+"T"+hour+":"+min+":"+sec;
 	}
 }
