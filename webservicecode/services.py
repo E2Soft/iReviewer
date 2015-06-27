@@ -37,7 +37,7 @@ class ReviewerSyncApi(remote.Service):
 		my_items = []
 		
 		for comment in query:
-			my_items.append(CommentMessage(content=comment.content,created = comment.created,review_uuid=comment.review_uuid,
+			my_items.append(CommentMessage(content=comment.content,creator = comment.creator,review_uuid=comment.review_uuid,
 			uuid=comment.uuid,last_modified=comment.last_modified))
 		
 		return CommentMessageCollection(items = my_items)

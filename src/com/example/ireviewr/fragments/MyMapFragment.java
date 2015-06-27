@@ -1,5 +1,6 @@
 package com.example.ireviewr.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -14,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.dialogs.LocationDialog;
@@ -36,7 +36,8 @@ public class MyMapFragment extends Fragment implements LocationListener,
 	private GoogleMap map;
 	private SupportMapFragment mMapFragment;
 	private LocationManager locationManager;
-	String provider;
+	private String provider;
+	private AlertDialog dialog;
 
 	private Marker home;
 
@@ -54,6 +55,19 @@ public class MyMapFragment extends Fragment implements LocationListener,
 		createMapFragmentAndInflate();
 	}
 
+	
+	private void showLocatonDialog(){
+		if(dialog == null){
+			dialog = new LocationDialog(getActivity()).prepareDialog();
+		}else{
+			if(dialog.isShowing()){
+				dialog.dismiss();
+			}
+		}
+		
+		dialog.show();
+	}
+	
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -64,7 +78,7 @@ public class MyMapFragment extends Fragment implements LocationListener,
 		getActivity().getActionBar().setTitle(R.string.home);
 		setHasOptionsMenu(true);
 
-		Toast.makeText(getActivity(), "onResume()", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getActivity(), "onResume()", Toast.LENGTH_SHORT).show();
 
 		createMapFragmentAndInflate();
 
@@ -73,6 +87,7 @@ public class MyMapFragment extends Fragment implements LocationListener,
 		
 		if (!gps && !wifi){
 			new LocationDialog(getActivity()).prepareDialog().show();
+			//showLocatonDialog();
 		} else {
 			// Toast.makeText(getActivity(), "noService",
 			// Toast.LENGTH_SHORT).show();
@@ -168,12 +183,7 @@ public class MyMapFragment extends Fragment implements LocationListener,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// Toast.makeText(getActivity(),
-		// "onLocationChanged()"+location.toString(),
-		// Toast.LENGTH_SHORT).show();
-
-		Toast.makeText(getActivity(), "onLocationChange()", Toast.LENGTH_SHORT)
-				.show();
+		//Toast.makeText(getActivity(), "onLocationChange()", Toast.LENGTH_SHORT).show();
 
 		addMarker(location);
 	}
@@ -198,12 +208,9 @@ public class MyMapFragment extends Fragment implements LocationListener,
 
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
-		// Toast.makeText(getActivity(), "onMapReady()",
-		// Toast.LENGTH_SHORT).show();
 		Location location = locationManager.getLastKnownLocation(provider);
 
-		Toast.makeText(getActivity(), "onMapReady()", Toast.LENGTH_SHORT)
-				.show();
+		//Toast.makeText(getActivity(), "onMapReady()", Toast.LENGTH_SHORT).show();
 
 		map = googleMap;
 

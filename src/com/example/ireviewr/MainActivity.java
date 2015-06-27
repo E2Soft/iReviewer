@@ -153,7 +153,7 @@ public class MainActivity extends FragmentActivity{
     	allowCommentedNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_comment_key), false);
     	allowReviewNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_review_key), false);
     	
-    	Toast.makeText(MainActivity.this, allowSync+" "+lookupRadius+" "+synctime, Toast.LENGTH_LONG).show();
+    	//Toast.makeText(MainActivity.this, allowSync+" "+lookupRadius+" "+synctime, Toast.LENGTH_LONG).show();
     }
     
     @Override
@@ -298,7 +298,7 @@ public class MainActivity extends FragmentActivity{
     protected void onPause() {
     	if (manager != null) {
 			manager.cancel(pendingIntent);
-	        Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+	        //Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
 		}
 
     	if(sync != null){
