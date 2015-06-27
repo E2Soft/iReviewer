@@ -6,9 +6,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.appspot.webservice.crud.Crud;
-import com.appspot.webservice.crud.model.MessagesReviewMessage;
-import com.appspot.webservice.crud.model.MessagesReviewMessageCollection;
+import com.appspot.elevated_surge_702.crud.Crud;
+import com.appspot.elevated_surge_702.crud.model.MessagesReviewMessage;
+import com.appspot.elevated_surge_702.crud.model.MessagesReviewMessageCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -23,7 +23,7 @@ public class TestTask extends AsyncTask<Void, Void, MessagesReviewMessageCollect
 	protected MessagesReviewMessageCollection doInBackground(Void... params) {
 		
 		Crud.Builder builder = new Crud.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-		builder.setRootUrl("http://192.168.1.6:8080/_ah/api/");//ovo nije potrebno ako se servis izvrsava u produkciji.Dodati adresu koju ima masina
+		//builder.setRootUrl("http://192.168.1.6:8080/_ah/api/");//ovo nije potrebno ako se servis izvrsava u produkciji.Dodati adresu koju ima masina
 		
 		Crud api = builder.build();
 
