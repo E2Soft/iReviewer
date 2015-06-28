@@ -99,7 +99,7 @@ public class ReviewObject extends AbstractModel
         return getMany(Review.class, "reviewObject");
     }
 	
-	public void addReview(Image toAdd)
+	public void addReview(Review toAdd)
 	{
 		ValidationUtils.checkSaved(toAdd, this);
 		toAdd.setReviewObject(this);
