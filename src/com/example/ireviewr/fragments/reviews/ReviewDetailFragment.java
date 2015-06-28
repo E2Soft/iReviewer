@@ -14,11 +14,44 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.pagers.ReviewsPagerAdapter;
+import com.example.ireviewr.model.Image;
+import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.ImageUtils;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class ReviewDetailFragment extends Fragment {
 
+	public static final String NAME ="NAME";
+	public static final String DESCRIPTION ="DESCRIPTION";
+	public static final String CREATED = "CREATED";
+	public static final String LAST_MODIFIED = "LAST MODIFIED";
+	public static final String IMAGE = "IMAGE";
+	public static final String RATING = "RATING";
+	public static final String ID = "ID";
+	
+	public static ReviewDetailFragment newInstance(Review review)
+	{
+		ReviewDetailFragment newFrag = new ReviewDetailFragment();
+		newFrag.setArguments(new Bundle());
+		newFrag.dataToArguments(review);
+		return newFrag;
+	}
+	
+	private void dataToArguments(Review review)
+	{
+		Bundle bundle = getArguments();
+		bundle.putString(NAME, review.getName());
+		bundle.putString(DESCRIPTION, review.getDescription());
+		bundle.putString(CREATED,ReviewerTools.preapreDate(review.getDateCreated()));
+		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getDateModified()));
+		Image mainImage = review.getMainImage();
+		if(mainImage != null)
+		{
+			bundle.putString(IMAGE, mainImage.getPath());
+		}
+		bundle.putDouble(RATING, review.getRating());
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,29 +88,34 @@ public class ReviewDetailFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View view = inflater.inflate(R.layout.review_detail, container, false);
+		View view = inflater.inflate(R.layout.review_detail, container, false);		
 		
+		populateView(view);
+		
+		return view;
+	}
+	
+	private void populateView(View view)
+	{
 		Bundle bundle = getArguments();
 		
 		TextView name = (TextView)view.findViewById(R.id.review_name_content);
-		name.setText(bundle.getString(ReviewsPagerAdapter.NAME));
+		name.setText(bundle.getString(NAME));
 		
 		TextView created = (TextView)view.findViewById(R.id.review_desc_contnt);
-		created.setText(bundle.getString(ReviewsPagerAdapter.CREATED));
+		created.setText(bundle.getString(CREATED));
 		
 		RatingBar rating = (RatingBar)view.findViewById(R.id.review_rating_content);
-		rating.setRating((float)bundle.getDouble(ReviewsPagerAdapter.RATING));
+		rating.setRating((float)bundle.getDouble(RATING));
 		
 		TextView modified = (TextView)view.findViewById(R.id.review_modified_contnt);
-		modified.setText(bundle.getString(ReviewsPagerAdapter.LAST_MODIFIED));
+		modified.setText(bundle.getString(LAST_MODIFIED));
 		
 		TextView description = (TextView)view.findViewById(R.id.review_description_contnt);
-		description.setText(bundle.getString(ReviewsPagerAdapter.DESCRIPTION));
+		description.setText(bundle.getString(DESCRIPTION));
 		
 		ImageView image = (ImageView)view.findViewById(R.id.review_image_content);
-		ImageUtils.setImageFromPath(image, bundle.getString(ReviewsPagerAdapter.IMAGE), 128, 128);
-		
-		return view;
+		ImageUtils.setImageFromPath(image, bundle.getString(IMAGE), 128, 128);
 	}
 	
 	@Override
@@ -86,4 +124,5 @@ public class ReviewDetailFragment extends Fragment {
 		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
 	}
+	
 }
