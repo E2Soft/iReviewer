@@ -86,8 +86,8 @@ public class MyMapFragment extends Fragment implements LocationListener,
 		boolean wifi = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		
 		if (!gps && !wifi){
-			new LocationDialog(getActivity()).prepareDialog().show();
-			//showLocatonDialog();
+			//new LocationDialog(getActivity()).prepareDialog().show();
+			showLocatonDialog();
 		} else {
 			// Toast.makeText(getActivity(), "noService",
 			// Toast.LENGTH_SHORT).show();

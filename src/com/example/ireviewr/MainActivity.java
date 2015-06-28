@@ -38,17 +38,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.activities.ReviewerPreferenceActivity;
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
 import com.example.ireviewr.fragments.MyMapFragment;
+import com.example.ireviewr.fragments.ProfileFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.sync.SyncReceiver;
 import com.example.ireviewr.sync.auto.SyncService;
+import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ReviewerTools;
 
@@ -76,7 +79,7 @@ public class MainActivity extends FragmentActivity{
 	
 	private boolean allowReviewNotif;
 	private boolean allowCommentedNotif;
-    
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,10 +159,19 @@ public class MainActivity extends FragmentActivity{
     	//Toast.makeText(MainActivity.this, allowSync+" "+lookupRadius+" "+synctime, Toast.LENGTH_LONG).show();
     }
     
+	private void setUpUserName(){
+		String usernameContent = CurrentUser.getName(this);
+		TextView userName = (TextView) findViewById(R.id.userName);
+		userName.setText(usernameContent);
+	}
+    
     @Override
     protected void onResume() {
     	// TODO Auto-generated method stub
     	super.onResume();
+    	
+    	//da postavi naziv korisnika
+    	setUpUserName();
     	
     	//Za slucaj da referenca nije postavljena da se izbegne problem sa androidom!
     	if (manager == null) {
@@ -243,8 +255,6 @@ public class MainActivity extends FragmentActivity{
         }else if(position == 2){
         	FragmentTransition.to(new ReviewObjectsListFragment(), this);
         }else if(position == 3){
-        	/*fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();*/
         	Intent preference = new Intent(MainActivity.this,ReviewerPreferenceActivity.class);
         	startActivity(preference);
         }else if(position == 4){
@@ -281,7 +291,8 @@ public class MainActivity extends FragmentActivity{
     }
 
     public void getProfile(View view){
-    	Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
+    	//Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
+    	FragmentTransition.to(new ProfileFragment(), this);
     }
     
     public static final class LOADER_ID // TODO prebaciti u res/values/ids.xml kao id mozda

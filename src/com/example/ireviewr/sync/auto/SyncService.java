@@ -3,7 +3,6 @@ package com.example.ireviewr.sync.auto;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.sync.tasks.TestTask;
@@ -15,7 +14,7 @@ public class SyncService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Toast.makeText(getApplicationContext(), "onStartCommand()", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getApplicationContext(), "onStartCommand()", Toast.LENGTH_SHORT).show();
 		
 		Intent ints = new Intent(MainActivity.SYNC_DATA);
 		int status = ReviewerTools.getConnectivityStatus(getApplicationContext());
