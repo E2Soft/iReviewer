@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -29,7 +30,9 @@ import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
+import com.example.ireviewr.sync.tasks.SyncTask;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.SyncUtils;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 
@@ -63,17 +66,35 @@ public class SplashScreenActivity extends Activity
 		{
 			initTestData();
 			
+			if(SyncUtils.getLastSyncronizationDate(SplashScreenActivity.this) == null) // ako jos nije sinhronizovan
+			{
+				new SyncTask(SplashScreenActivity.this)
+				{
+					protected void onPostExecute(Void result) // kad se sinhronizuje
+					{
+						continueLogin(); // nastavi login
+					};
+				}.execute(); // sinhronizuj sad i sacekaj da zavrsi
+			}
+			else // inace
+			{
+				continueLogin(); // samo nastavi login
+			}
+			
+			return null;
+		}
+		
+		private void continueLogin()
+		{
 			// sacekaj tako da splash bude vidljiv minimum SPLASH_TIME_OUT milisekundi
 			long timeLeft = SPLASH_TIME_OUT - (System.currentTimeMillis() - startTime);
 			if(timeLeft < 0) timeLeft = 0;
-			//SystemClock.sleep(timeLeft); TODO odkomentarisati ovo, zakomentarisano zbog testiranja
+			SystemClock.sleep(timeLeft); // TODO odkomentarisati ovo, zakomentarisano zbog testiranja
 			
 			// uloguj se
-			//login(); // TODO odkomentarisati ovaj, obrisati ovaj ispod
-			User test_user = new Select().from(User.class).where("name = ?", "test_user").executeSingle();
-			login(test_user); // dummy login za testiranje
-			
-			return null;
+			login(); // TODO odkomentarisati ovaj, obrisati ovaj ispod
+			//User test_user = new Select().from(User.class).where("name = ?", "test_user").executeSingle();
+			//login(test_user); // dummy login za testiranje
 		}
 	}
 	
@@ -82,7 +103,7 @@ public class SplashScreenActivity extends Activity
      */
 	private void login()
 	{
-		if(getPreferences(MODE_PRIVATE).getString(getString(R.string.current_user_id), null) == null)
+		if(!CurrentUser.exists(this))
 		{
 			register(); // ako nije logovan registruj ga
 		}

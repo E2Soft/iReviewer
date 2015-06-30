@@ -11,6 +11,11 @@ import com.example.ireviewr.model.User;
 
 public class CurrentUser
 {
+	public static boolean exists(Context context)
+	{
+		return getId(context) != null;
+	}
+	
 	public static String getName(Context context)
 	{
 		return getProfileData(context, R.string.current_user_name);

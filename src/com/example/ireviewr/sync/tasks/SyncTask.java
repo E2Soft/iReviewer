@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -78,12 +79,17 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
 		syncApi = SyncUtils.buildSyncApi();
 		dateOfSynchronization = new Date();
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 	
 	@Override
 	protected Void doInBackground(Void... params)
 	{
-		dateLastSynchronized = new Date(1); // TODO from params
+		dateLastSynchronized = SyncUtils.getLastSyncronizationDate(context);
+		if(dateLastSynchronized == null) // ako nije do sad sinhronizovan
+		{
+			dateLastSynchronized = new Date(0); // sinhronizuj sve od pocetka epohe
+		}
 		dateLastSynchronizedString = dateFormat.format(dateLastSynchronized);
 		
     	try
@@ -92,7 +98,8 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
     		upload();
     		deleteFromServer();
     		persist();
-    		// TODO set dateLastSynchronized in shared prefs
+    		
+    		SyncUtils.setLastSyncronizationDate(context, new Date());
 		}
 		catch(IOException e)
 		{
@@ -328,89 +335,45 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
 	
 	private void deleteFromServer() throws IOException
 	{
-		DeleteRequest deleteGroups = new DeleteRequest();
-		DeleteRequest deleteImages = new DeleteRequest();
-		DeleteRequest deleteUsers = new DeleteRequest();
-		DeleteRequest deleteReviews = new DeleteRequest();
-		DeleteRequest deleteRevobs = new DeleteRequest();
-		DeleteRequest deleteGroupToReviews = new DeleteRequest();
-		DeleteRequest deleteGroupToUsers = new DeleteRequest();
-		
 		for(DeletedEntry entry : DeletedEntry.getNewerThan(dateLastSynchronized))
 		{
 			if(Group.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteGroups.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.group().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(Image.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteImages.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.image().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(User.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteUsers.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.user().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(Review.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteReviews.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.review().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(ReviewObject.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteRevobs.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.revobject().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(GroupToReview.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteGroupToReviews.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.grouptoreview().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			else if(GroupToUser.class.getSimpleName().equals(entry.getTableName()))
 			{
-				deleteGroupToUsers.add(entry.getDeletedModelId(), dateOfSynchronization);
+				crudApi.grouptouser().delete().setUuid(entry.getDeletedModelId())
+					.setLastModified(dateFormat.format(dateOfSynchronization)).execute();
 			}
 			
 			entry.delete();
-		}
-		
-		crudApi.group().delete().setItemsUuid(deleteGroups.getModelIds())
-			.setItemsLastModified(deleteGroups.getDates()).execute();
-		crudApi.image().delete().setItemsUuid(deleteImages.getModelIds())
-			.setItemsLastModified(deleteImages.getDates()).execute();
-		crudApi.user().delete().setItemsUuid(deleteUsers.getModelIds())
-			.setItemsLastModified(deleteUsers.getDates()).execute();
-		crudApi.review().delete().setItemsUuid(deleteReviews.getModelIds())
-			.setItemsLastModified(deleteReviews.getDates()).execute();
-		crudApi.revobject().delete().setItemsUuid(deleteRevobs.getModelIds())
-			.setItemsLastModified(deleteRevobs.getDates()).execute();
-		crudApi.grouptoreview().delete().setItemsUuid(deleteGroupToReviews.getModelIds())
-			.setItemsLastModified(deleteGroupToReviews.getDates()).execute();
-		crudApi.grouptouser().delete().setItemsUuid(deleteGroupToUsers.getModelIds())
-			.setItemsLastModified(deleteGroupToUsers.getDates()).execute();
-	}
-	
-	class DeleteRequest
-	{
-		List<String> modelIds;
-		List<String> dates;
-		
-		public DeleteRequest()
-		{
-			modelIds = new ArrayList<String>();
-			dates = new ArrayList<String>();
-		}
-		
-		public void add(String modelId, Date date)
-		{
-			modelIds.add(modelId);
-			dates.add(dateFormat.format(date));
-		}
-
-		public List<String> getModelIds()
-		{
-			return modelIds;
-		}
-
-		public List<String> getDates()
-		{
-			return dates;
 		}
 	}
 	

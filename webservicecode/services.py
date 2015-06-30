@@ -9,7 +9,7 @@ import httplib
 from model import UserModel, CommentModel, ImageModel, ReviewModel, GroupModel, ReviewObjectModel, GroupToReviewModel, GroupToUserModel
 from messages import UserMessage, CommentMessage, ImageMessage, ReviewMessage, GroupMessage, ReviewObjectMessage, GroupToReviewMessage, GroupToUserMessage, StringMessage, DateMessage
 from messages import UserMessageCollection, CommentMessageCollection, ImageMessageCollection, ReviewMessageCollection, GroupMessageCollection, ReviewObjectMessageCollection, GroupToReviewMessageCollection, GroupToUserMessageCollection
-from messages import DeleteMessage, DeleteMessageCollection
+from messages import DeleteMessage
 
 from utils import string_to_datetime, date_to_utc
 
@@ -193,20 +193,10 @@ class ReviewerCRUDApi(remote.Service):
 		return message_types.VoidMessage()
 	
 	#Tested
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='user', http_method='DELETE', name='user.delete')
 	def user_delete(self, request):
-		
-		for item in request.items:
-			query = UserModel.query(UserModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				user = query.get()
-				user.delete = True
-				user.last_modified = string_to_datetime(item.last_modified)
-				
-				user.put()
-			
+		delete_model(UserModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()
 	
 	#Tested	
@@ -261,20 +251,10 @@ class ReviewerCRUDApi(remote.Service):
 		return message_types.VoidMessage()
 	
 	#Tested	
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='image', http_method='DELETE', name='image.delete')
 	def image_delete(self, request):
-		
-		for item in request.items:
-			query = ImageModel.query(ImageModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				imgage = query.get()
-				imgage.delete = True
-				imgage.last_modified = string_to_datetime(item.last_modified)
-				
-				imgage.put()
-		
+		delete_model(ImageModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()
 	
 	#Tested	
@@ -322,20 +302,10 @@ class ReviewerCRUDApi(remote.Service):
 		return message_types.VoidMessage()	
 	
 	#Tested	
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='review', http_method='DELETE', name='review.delete')
 	def review_delete(self, request):
-		
-		for item in request.items:
-			query = ReviewModel.query(ReviewModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				rev = query.get()
-				rev.deleted = True
-				rev.last_modified = string_to_datetime(item.last_modified)
-				
-				rev.put()
-		
+		delete_model(ReviewModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()	
 
 	#Tested
@@ -376,21 +346,13 @@ class ReviewerCRUDApi(remote.Service):
 				
 		return message_types.VoidMessage()
 	
+	DELETE_RESOURCE = endpoints.ResourceContainer(message_types.VoidMessage, items = messages.MessageField(DeleteMessage, 1, repeated=True))
+	
 	#Tested	
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='group', http_method='DELETE', name='group.delete')
 	def group_delete(self, request):
-		
-		for item in request.items:
-			query = GroupModel.query(GroupModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				group = query.get()
-				group.last_modified = string_to_datetime(item.last_modified)
-				group.deleted = True
-				
-				group.put()
-			
+		delete_model(GroupModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()	
 	
 	#Tested	
@@ -436,20 +398,10 @@ class ReviewerCRUDApi(remote.Service):
 				
 		return message_types.VoidMessage()
 		
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='revobject', http_method='DELETE', name='revobject.delete')
 	def revobject_delete(self, request):
-		
-		for item in request.items:
-			query = ReviewObjectModel.query(ReviewObjectModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				revobj = query.get()
-				revobj.deleted = True
-				revobj.last_modified = string_to_datetime(item.last_modified)
-				
-				revobj.put()
-			
+		delete_model(ReviewObjectModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()
 		
 	@endpoints.method(GroupToReviewMessageCollection, message_types.VoidMessage, 
@@ -475,20 +427,10 @@ class ReviewerCRUDApi(remote.Service):
 				
 		return message_types.VoidMessage()
 	
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='grouptoreview', http_method='DELETE', name='grouptoreview.delete')
 	def group_to_review_delete(self, request):
-		
-		for item in request.items:
-			query = GroupToReviewModel.query(GroupToReviewModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				groupToRev = query.get()
-				groupToRev.deleted = True
-				groupToRev.last_modified = string_to_datetime(item.last_modified)
-				
-				groupToRev.put()
-			
+		delete_model(GroupToReviewModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()
 		
 	@endpoints.method(GroupToUserMessageCollection, message_types.VoidMessage, 
@@ -514,18 +456,19 @@ class ReviewerCRUDApi(remote.Service):
 				
 		return message_types.VoidMessage()
 	
-	@endpoints.method(DeleteMessageCollection, message_types.VoidMessage, 
+	@endpoints.method(DeleteMessage, message_types.VoidMessage, 
 		path='grouptouser', http_method='DELETE', name='grouptouser.delete')
 	def group_to_user_delete(self, request):
-		
-		for item in request.items:
-			query = GroupToUserModel.query(GroupToUserModel.uuid == item.uuid)
-			
-			if query.count() != 0:
-				groupToUser = query.get()
-				groupToUser.deleted = True
-				groupToUser.last_modified = string_to_datetime(item.last_modified)
-				
-				groupToUser.put()
-			
+		delete_model(GroupToUserModel, request.uuid, string_to_datetime(request.last_modified))
 		return message_types.VoidMessage()
+		
+def delete_model(model_class, uuid, last_modified):
+	query = model_class.query(model_class.uuid == uuid)
+	
+	if query.count() != 0:
+		
+		model = query.get()
+		model.last_modified = last_modified
+		model.deleted = True
+		
+		model.put()
