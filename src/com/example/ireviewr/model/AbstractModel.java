@@ -1,6 +1,7 @@
 package com.example.ireviewr.model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import android.database.sqlite.SQLiteConstraintException;
@@ -91,5 +92,10 @@ public abstract class AbstractModel extends Model
 	{
 		delete();
 		new DeletedEntry(getClass().getSimpleName(), modelId, new Date()).save();
+	}
+	
+	public static <T extends AbstractModel> List<T> getNewerThan(Class<T> modelClass, Date date)
+	{
+		return new Select().from(modelClass).where("dateModified > ?", date.getTime()).execute();
 	}
 }

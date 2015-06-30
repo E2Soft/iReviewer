@@ -1,10 +1,12 @@
 package com.example.ireviewr.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 @Table(name = "DeletedEntry", id="_id")
 public class DeletedEntry extends Model
@@ -55,5 +57,10 @@ public class DeletedEntry extends Model
 	public void setDateDeleted(Date dateDeleted)
 	{
 		this.dateDeleted = dateDeleted;
+	}
+	
+	public static List<DeletedEntry> getNewerThan(Date date)
+	{
+		return new Select().from(DeletedEntry.class).where("dateDeleted > ?", date.getTime()).execute();
 	}
 }

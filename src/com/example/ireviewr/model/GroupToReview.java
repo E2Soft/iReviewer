@@ -1,5 +1,7 @@
 package com.example.ireviewr.model;
 
+import java.util.Date;
+
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
 import com.activeandroid.annotation.Table;
@@ -17,6 +19,13 @@ public class GroupToReview extends AbstractModel
 
 	public GroupToReview(Review review, Group userGroup)
 	{
+		this.review = review;
+		this.userGroup = userGroup;
+	}
+
+	public GroupToReview(String modelId, Date dateModified, Review review, Group userGroup)
+	{
+		super(modelId, dateModified);
 		this.review = review;
 		this.userGroup = userGroup;
 	}

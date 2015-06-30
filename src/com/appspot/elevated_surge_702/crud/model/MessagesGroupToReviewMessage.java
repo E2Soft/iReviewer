@@ -19,7 +19,7 @@
 package com.appspot.elevated_surge_702.crud.model;
 
 /**
- * Model definition for MessagesUserMessage.
+ * Model definition for MessagesGroupToReviewMessage.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the crud. For a detailed explanation see:
@@ -29,7 +29,7 @@ package com.appspot.elevated_surge_702.crud.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class MessagesUserMessage extends com.google.api.client.json.GenericJson {
+public final class MessagesGroupToReviewMessage extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
@@ -41,7 +41,7 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.lang.String email;
+  private java.lang.String group;
 
   /**
    * The value may be {@code null}.
@@ -52,8 +52,8 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * The value may be {@code null}.
    */
-  @com.google.api.client.util.Key("user_name")
-  private java.lang.String userName;
+  @com.google.api.client.util.Key
+  private java.lang.String review;
 
   /**
    * The value may be {@code null}.
@@ -71,7 +71,7 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * @param deleted deleted or {@code null} for none
    */
-  public MessagesUserMessage setDeleted(java.lang.Boolean deleted) {
+  public MessagesGroupToReviewMessage setDeleted(java.lang.Boolean deleted) {
     this.deleted = deleted;
     return this;
   }
@@ -79,15 +79,15 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getEmail() {
-    return email;
+  public java.lang.String getGroup() {
+    return group;
   }
 
   /**
-   * @param email email or {@code null} for none
+   * @param group group or {@code null} for none
    */
-  public MessagesUserMessage setEmail(java.lang.String email) {
-    this.email = email;
+  public MessagesGroupToReviewMessage setGroup(java.lang.String group) {
+    this.group = group;
     return this;
   }
 
@@ -101,7 +101,7 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * @param lastModified lastModified or {@code null} for none
    */
-  public MessagesUserMessage setLastModified(com.google.api.client.util.DateTime lastModified) {
+  public MessagesGroupToReviewMessage setLastModified(com.google.api.client.util.DateTime lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -109,15 +109,15 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getUserName() {
-    return userName;
+  public java.lang.String getReview() {
+    return review;
   }
 
   /**
-   * @param userName userName or {@code null} for none
+   * @param review review or {@code null} for none
    */
-  public MessagesUserMessage setUserName(java.lang.String userName) {
-    this.userName = userName;
+  public MessagesGroupToReviewMessage setReview(java.lang.String review) {
+    this.review = review;
     return this;
   }
 
@@ -131,19 +131,19 @@ public final class MessagesUserMessage extends com.google.api.client.json.Generi
   /**
    * @param uuid uuid or {@code null} for none
    */
-  public MessagesUserMessage setUuid(java.lang.String uuid) {
+  public MessagesGroupToReviewMessage setUuid(java.lang.String uuid) {
     this.uuid = uuid;
     return this;
   }
 
   @Override
-  public MessagesUserMessage set(String fieldName, Object value) {
-    return (MessagesUserMessage) super.set(fieldName, value);
+  public MessagesGroupToReviewMessage set(String fieldName, Object value) {
+    return (MessagesGroupToReviewMessage) super.set(fieldName, value);
   }
 
   @Override
-  public MessagesUserMessage clone() {
-    return (MessagesUserMessage) super.clone();
+  public MessagesGroupToReviewMessage clone() {
+    return (MessagesGroupToReviewMessage) super.clone();
   }
 
 }

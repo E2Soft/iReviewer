@@ -19,7 +19,7 @@
 package com.appspot.elevated_surge_702.crud.model;
 
 /**
- * Model definition for MessagesUserMessageCollection.
+ * Model definition for MessagesGroupToReviewMessageCollection.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the crud. For a detailed explanation see:
@@ -29,43 +29,37 @@ package com.appspot.elevated_surge_702.crud.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class MessagesUserMessageCollection extends com.google.api.client.json.GenericJson {
+public final class MessagesGroupToReviewMessageCollection extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.util.List<MessagesUserMessage> items;
-
-  static {
-    // hack to force ProGuard to consider MessagesUserMessage used, since otherwise it would be stripped out
-    // see http://code.google.com/p/google-api-java-client/issues/detail?id=528
-    com.google.api.client.util.Data.nullOf(MessagesUserMessage.class);
-  }
+  private java.util.List<MessagesGroupToReviewMessage> items;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.util.List<MessagesUserMessage> getItems() {
+  public java.util.List<MessagesGroupToReviewMessage> getItems() {
     return items;
   }
 
   /**
    * @param items items or {@code null} for none
    */
-  public MessagesUserMessageCollection setItems(java.util.List<MessagesUserMessage> items) {
+  public MessagesGroupToReviewMessageCollection setItems(java.util.List<MessagesGroupToReviewMessage> items) {
     this.items = items;
     return this;
   }
 
   @Override
-  public MessagesUserMessageCollection set(String fieldName, Object value) {
-    return (MessagesUserMessageCollection) super.set(fieldName, value);
+  public MessagesGroupToReviewMessageCollection set(String fieldName, Object value) {
+    return (MessagesGroupToReviewMessageCollection) super.set(fieldName, value);
   }
 
   @Override
-  public MessagesUserMessageCollection clone() {
-    return (MessagesUserMessageCollection) super.clone();
+  public MessagesGroupToReviewMessageCollection clone() {
+    return (MessagesGroupToReviewMessageCollection) super.clone();
   }
 
 }

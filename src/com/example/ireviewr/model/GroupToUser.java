@@ -1,5 +1,7 @@
 package com.example.ireviewr.model;
 
+import java.util.Date;
+
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
@@ -19,6 +21,13 @@ public class GroupToUser extends AbstractModel
 	{
 		this.user = user;
 		this.userGroup = userGroup;
+	}
+
+	public GroupToUser(String uuid, Date convertToDate, User user, Group group)
+	{
+		super(uuid, convertToDate);
+		this.user = user;
+		this.userGroup = group;
 	}
 
 	public User getUser() {

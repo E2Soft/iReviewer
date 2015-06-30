@@ -21,11 +21,18 @@ public class ImageUtils
 	public static String save(Bitmap bitmapImage, String name, Context context)
 	{
 		ContextWrapper cw = new ContextWrapper(context);
-		
 		File directory = cw.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE);
+		String path = new File(directory, name + ".png").getAbsolutePath();
 		
+		saveTo(bitmapImage, path, context);
+		
+		return path;
+	}
+	
+	public static void saveTo(Bitmap bitmapImage, String path, Context context)
+	{
 		// Create imageDir
-		File mypath = new File(directory, name + ".png");
+		File mypath = new File(path);
 		
 		FileOutputStream fos = null;
 		try
@@ -41,8 +48,6 @@ public class ImageUtils
 		{
 			e.printStackTrace();
 		}
-		
-		return mypath.getAbsolutePath();
 	}
 	
 	public static boolean delete(String path)

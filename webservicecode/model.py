@@ -21,6 +21,7 @@ class ImageModel(ndb.Model):
 	uuid = ndb.StringProperty(required=True)
 	review_uuid = ndb.StringProperty(required=True)
 	revobj_uuid = ndb.StringProperty(required=True)
+	is_main = ndb.BooleanProperty(required=True)
 	last_modified = ndb.DateTimeProperty()
 	deleted = ndb.BooleanProperty(required=True)
 
@@ -31,6 +32,7 @@ class ReviewModel(ndb.Model):
 	tags = ndb.StringProperty(repeated=True)
 	reviewobj_uuid = ndb.StringProperty(required=True)
 	last_modified = ndb.DateTimeProperty()
+	date_created = ndb.DateTimeProperty()
 	creator = ndb.StringProperty(required=True)
 	uuid = ndb.StringProperty(required=True)
 	deleted = ndb.BooleanProperty(required=True)
@@ -38,11 +40,7 @@ class ReviewModel(ndb.Model):
 class GroupModel(ndb.Model):
 	name = ndb.StringProperty(required=True)
 	owner = ndb.StringProperty(required=True)
-	users = ndb.StringProperty(repeated=True)
-	reviews = ndb.StringProperty(repeated=True)
 	last_modified = ndb.DateTimeProperty()
-	reviews_changed = ndb.DateTimeProperty()
-	users_changed = ndb.DateTimeProperty()
 	uuid = ndb.StringProperty(required=True)
 	deleted = ndb.BooleanProperty(required=True)
 
@@ -57,3 +55,16 @@ class ReviewObjectModel(ndb.Model):
 	uuid = ndb.StringProperty(required=True)
 	deleted = ndb.BooleanProperty(required=True)
 	
+class GroupToReviewModel(ndb.Model):
+	uuid = ndb.StringProperty(required=True)
+	deleted = ndb.BooleanProperty(required=True)
+	last_modified = ndb.DateTimeProperty()
+	group = ndb.StringProperty()
+	review = ndb.StringProperty()
+	
+class GroupToUserModel(ndb.Model):
+	uuid = ndb.StringProperty(required=True)
+	deleted = ndb.BooleanProperty(required=True)
+	last_modified = ndb.DateTimeProperty()
+	group = ndb.StringProperty()
+	user = ndb.StringProperty()

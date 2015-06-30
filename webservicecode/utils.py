@@ -20,11 +20,8 @@ def gereate_now_to_string():
 	
 	#2015-5-3T2:4:6
 	return '{}-{}-{}T{}:{}:{}'.format(year,month,day,hour,minute,second)
-
-def string_to_datetime():
-	return datetime.datetime.strptime(gereate_now_to_string(), date_time_format)
 	
-def resource_to_datetime(value):
+def string_to_datetime(value):
 	return datetime.datetime.strptime(value, date_time_format)
 	
 def calculate_distance(lat1, lon1, lat2, lon2 ):
@@ -40,18 +37,5 @@ def calculate_distance(lat1, lon1, lat2, lon2 ):
 		
 	return d
 	
-class ConflictException(endpoints.ServiceException):
-  """Conflict exception that is mapped to a 409 response."""
-  http_status = httplib.CONFLICT
-	
-UUID_RESOURCE = endpoints.ResourceContainer(
-		message_types.VoidMessage,
-		uuid=messages.StringField(1, variant=messages.Variant.STRING))
-		
-DATE_RESOURCE = endpoints.ResourceContainer(
-		message_types.VoidMessage,
-		last_modified=messages.StringField(1, variant=messages.Variant.STRING))
-		
-UUID_RESOURCE_LIST = endpoints.ResourceContainer(
-		message_types.VoidMessage,
-		items=messages.StringField(1, variant=messages.Variant.STRING, repeated=True))
+def date_to_utc(date):
+	return date.replace(tzinfo=None) - date.utcoffset()

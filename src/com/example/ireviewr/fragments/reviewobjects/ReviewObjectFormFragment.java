@@ -390,7 +390,6 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 			// obrisi sve tagove koji su izbaceni
 			for(Tag tag : existingTagModels)
 			{
-				
 				if(!tags.contains(tag.getName())) // sve koji nisu vise u tags listi
 				{
 					newReviewObject.removeTag(tag); // obrisi

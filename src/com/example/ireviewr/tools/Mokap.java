@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Comment;
-import com.example.ireviewr.model.GaleryItem;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.Tag;
@@ -72,11 +71,6 @@ public class Mokap {
 		return items;
 	}
     
-	public static ArrayList<GaleryItem> gatGaleryList(){
-		ArrayList<GaleryItem> items = new ArrayList<GaleryItem>();
-		
-		return items;
-	}
 	/*
 	public static ArrayList<UserItem> getUserList(){
 		ArrayList<UserItem> items = new ArrayList<UserItem>();
