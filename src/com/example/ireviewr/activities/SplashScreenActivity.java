@@ -30,6 +30,7 @@ import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
+import com.example.ireviewr.sync.tasks.RegisterTask;
 import com.example.ireviewr.sync.tasks.SyncTask;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.SyncUtils;
@@ -74,7 +75,8 @@ public class SplashScreenActivity extends Activity
 					{
 						continueLogin(); // nastavi login
 					};
-				}.execute(); // sinhronizuj sad i sacekaj da zavrsi
+				}
+				.execute(); // sinhronizuj sad i sacekaj da zavrsi
 			}
 			else // inace
 			{
@@ -203,7 +205,8 @@ public class SplashScreenActivity extends Activity
 					// TODO validirati username
 					register(email, newUserName); // registruj korisnika sa email i username
 				}
-			}.setEmail(currentUserEmail))
+			}
+			.setEmail(currentUserEmail))
 			.show();
 	}
 
@@ -212,22 +215,58 @@ public class SplashScreenActivity extends Activity
 	 * @param currentUserEmail
 	 * @param newUserName
 	 */
-	private void register(String currentUserEmail, String newUserName)
+	private void register(final String currentUserEmail, String newUserName)
 	{
+		final User newUser = new User(newUserName, currentUserEmail);
+		
 		try
 		{
-			User newUser = new User(newUserName, currentUserEmail);
 			newUser.saveOrThrow(); // snimi novog usera u bazu
-			// TODO sync sa serverom i provera konflikata
-			login(newUser); // dodavanje je uspelo, uloguj novog korisnika
+			new RegisterTask() // sinhronizuj sa serverom
+			{
+				protected void onPostExecute(String result) 
+				{
+					if(OK.equals(result))
+					{
+						login(newUser); // dodavanje je uspelo, uloguj novog korisnika
+					}
+					else if(NAME_EXISTS.equals(result))
+					{
+						Toast.makeText(SplashScreenActivity.this, "Username already exists.", Toast.LENGTH_LONG).show();
+						register(currentUserEmail); // probaj opet da se registrujes
+					}
+					else if(EMAIL_EXISTS.equals(result))
+					{
+						Toast.makeText(SplashScreenActivity.this, "Email already exists. Try restarting the application or choosing another account.", Toast.LENGTH_LONG).show();
+						register(); // probaj opet da pitas za mail
+					}
+					else if(NO_CONNECTION.equals(result))
+					{
+						Toast.makeText(SplashScreenActivity.this, "Could not register at this moment, try again later.", Toast.LENGTH_LONG).show();
+						register(currentUserEmail); // probaj opet da se registrujes
+					}
+					else
+					{
+						Log.e("SYNC", "Internal error, unknown return code from RegisterTask.");
+					}
+					
+					if(!OK.equals(result)) // ako nije uspelo obrisi usera
+					{
+						newUser.delete();
+					}
+				}
+			}
+			.execute(newUser.getName(), newUser.getEmail(), newUser.getModelId());
 		}
 		catch(SQLiteConstraintException ex) // ako nije prosla registracija
 		{
+			newUser.delete();
 			Toast.makeText(this, "Username already exists.", Toast.LENGTH_LONG).show();
 			register(currentUserEmail); // probaj opet da se registrujes
 		}
 		catch(Exception ex) // ako nije prosla registracija
 		{
+			newUser.delete();
 			Toast.makeText(this, "Could not register at this moment, try again later.", Toast.LENGTH_LONG).show();
 			register(currentUserEmail); // probaj opet da se registrujes
 		}

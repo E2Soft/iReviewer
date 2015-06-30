@@ -103,7 +103,7 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
 		}
 		catch(IOException e)
 		{
-			Log.e("SYNC", e.getMessage());
+			Log.e("SYNC", "SyncTask", e);
 		}
 		return null;
 	}

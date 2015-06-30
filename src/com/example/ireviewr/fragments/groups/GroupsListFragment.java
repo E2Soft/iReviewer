@@ -3,7 +3,6 @@ package com.example.ireviewr.fragments.groups;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.database.sqlite.SQLiteConstraintException;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.GroupAdapter;
 import com.example.ireviewr.dialogs.DefaultCancelListener;
-import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Group;
@@ -80,15 +78,9 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 					String text = promptView.getText().toString();
 					//create object
 					User testUser = CurrentUser.getModel(GroupsListFragment.this.getActivity());
-					try
-					{
-						new Group(text, testUser).saveOrThrow();
-						Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
-					}
-					catch(SQLiteConstraintException ex)
-					{
-						ShowDialog.error("A group with name: "+text+" already exists.", getActivity());
-					}
+
+					new Group(text, testUser).save();
+					Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
 				}
 			})
 			.setNegativeButton(R.string.cancel, new DefaultCancelListener())

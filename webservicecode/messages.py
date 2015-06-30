@@ -77,9 +77,6 @@ class ReviewObjectMessageCollection(messages.Message):
 class DeleteMessage(messages.Message):
 	uuid = messages.StringField(1)
 	last_modified = messages.StringField(2)
-	
-class DeleteMessageCollection(messages.Message):
-	items = messages.MessageField(DeleteMessage, 1, repeated=True)
 
 class GroupToReviewMessage(messages.Message):
 	uuid = messages.StringField(1)
