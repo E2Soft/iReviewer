@@ -46,7 +46,7 @@ public class Review extends AbstractModel
 		this.reviewObject = reviewObject;
 	}
 
-	public Review(String name, String description, int rating, Date dateCreated, 
+	public Review(String name, String description, float rating, Date dateCreated, 
 			User userCreated, ReviewObject reviewObject) 
 	{
 		this.name = name;
