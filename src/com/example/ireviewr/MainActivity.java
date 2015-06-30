@@ -51,7 +51,6 @@ import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
 import com.example.ireviewr.sync.SyncReceiver;
 import com.example.ireviewr.sync.auto.SyncService;
-import com.example.ireviewr.sync.tasks.SyncTask;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ReviewerTools;
@@ -261,8 +260,7 @@ public class MainActivity extends FragmentActivity{
         }else if(position == 4){
         	FragmentTransition.to(new AboutFragment(), this);
         }else if(position == 5){
-        	Toast.makeText(MainActivity.this, "Call sync", Toast.LENGTH_LONG).show();
-        	new SyncTask(this).execute();
+        	startService(new Intent(this, SyncService.class));
         }else{
         	Toast.makeText(MainActivity.this, "Nesto van opsega!", Toast.LENGTH_LONG).show();
         }
