@@ -25,6 +25,8 @@ import com.example.ireviewr.model.GroupToReview;
 import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.TagToReview;
+import com.example.ireviewr.model.User;
+import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
@@ -74,11 +76,21 @@ public class ReviewDetailFragment extends Fragment {
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
+	{
 		super.onCreateOptionsMenu(menu, inflater);
+		
+/*		User currentUser = CurrentUser.getModel(getActivity());
+		String currentUserId = currentUser.getModelId();*/
 		
 		//dodati meni
 		inflater.inflate(R.menu.fragment_detail_menu, menu);
+		
+/*		if(!getReview().isCreatedBy(currentUserId))
+		{
+			menu.removeItem(R.id.edit_item);
+			menu.removeItem(R.id.delete_item);
+		}*/
 	}
 	
 	@Override
@@ -137,7 +149,7 @@ public class ReviewDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View view = inflater.inflate(R.layout.review_detail, container, false);		
-		
+
 		populateView(view);
 		
 		return view;
@@ -181,6 +193,13 @@ public class ReviewDetailFragment extends Fragment {
 				refreshView(getReview());
 			}
 		};
+	}	
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		modelObserver.unRegister();
 	}
 	
 	@Override
@@ -188,6 +207,16 @@ public class ReviewDetailFragment extends Fragment {
 		super.onResume();
 		getActivity().getActionBar().setTitle(R.string.detail);
 		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroy();
+	}
+	
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
 	}
 	
 	private Review getReview()

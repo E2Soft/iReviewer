@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -104,7 +105,7 @@ public class CreateReviewFragment extends Fragment {
 		bundle.putString(ID, modelId);
 		bundle.putString(NAME, review.getName());
 		bundle.putString(DESCRIPTION, review.getDescription());
-		bundle.putDouble(RATING, review.getRating());
+		bundle.putFloat(RATING, review.getRating());
 		bundle.putString(CREATED,ReviewerTools.preapreDate(review.getDateCreated()));
 		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getDateModified()));
 		
@@ -246,7 +247,11 @@ public class CreateReviewFragment extends Fragment {
 			textDesc.setText(desc);
 		}
 			
-		if(tags != null)
+		if(tags == null)
+		{
+			tags = new ArrayList<String>();
+		}
+		else
 		{
 			textTags.setText(ReviewerTools.getTagsString(tags));
 		}
@@ -272,7 +277,7 @@ public class CreateReviewFragment extends Fragment {
 			public void onClick(View v) {
 				addTagDialog(textTags);
 			}
-		});		
+		});
 
 		return view;
 	}
@@ -293,7 +298,7 @@ public class CreateReviewFragment extends Fragment {
 				newReview.setName(name);
 				newReview.setDescription(desc);
 				newReview.setRating(rating);
-				newReview.setDateModified(new Date()); // datum poslednje izmene
+				newReview.setDateModified(new Date());
 			}
 			else 
 			{
@@ -303,7 +308,7 @@ public class CreateReviewFragment extends Fragment {
 			newReview.saveOrThrow();
 			Log.d("EDIT", "edited review : "+newReview.getModelId()+" "+newReview.getName()+" "
 					+ ""+newReview.getRating()+" "+newReview.getDateModified()+" "+newReview.getDescription()+" "
-					+newReview.getUserCreated().getName()+" "+newReview.getReviewObject().getName()+""+newReview.getTags());	
+					+newReview.getUserCreated().getName()+" "+newReview.getReviewObject().getName());	
 			
 			List<Tag> existingTagModels = newReview.getTags();
 			List<String> existingTagNames = new ArrayList<String>();
@@ -313,7 +318,7 @@ public class CreateReviewFragment extends Fragment {
 				
 				if(!tags.contains(tag.getName())) 
 				{
-						//newReview.removeTag(tag); 
+					newReview.removeTag(tag); 
 				}
 				else
 				{
@@ -367,36 +372,39 @@ public class CreateReviewFragment extends Fragment {
 		}
 	}
 	
-	private void addTagDialog(final TextView tagContent){
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-		final View promptView = layoutInflater.inflate(R.layout.add_tag_layout, null);
-		alertDialogBuilder.setView(promptView);
-		
-		alertDialogBuilder.setCancelable(false)
-			.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener() {
+	private void addTagDialog(final TextView tagContent)
+	{
+		final EditText content = new EditText(getActivity());
+		new AlertDialog.Builder(getActivity())
+		.setView(content)
+		.setTitle(R.string.tag_name)
+		.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener()
+		{
+			@SuppressLint("DefaultLocale")
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				String newTag = content.getText().toString().toUpperCase();
 				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					EditText content = (EditText)promptView.findViewById(R.id.tag_content);
-					
-					String oldValue = tagContent.getText().toString();
-					String newValue = oldValue+" #"+content.getText().toString();
-					
-					tagContent.setText(newValue);
+				if(!tags.contains(newTag))
+				{
+					tags.add(newTag);
+					tagContent.setText(ReviewerTools.getTagsString(tags));
 				}
-			})
-			.setNegativeButton(R.string.cancel,
-					new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-			});
-		
-		
-		// create an alert dialog
-		AlertDialog alert = alertDialogBuilder.create();
-		alert.show();
+				else
+				{
+					ShowDialog.error("Already contains this tag.", getActivity());
+				}
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int id)
+			{
+				dialog.cancel();
+			}
+		})
+		.show();
 	}
 	
 	private void selectImage() {
@@ -447,12 +455,7 @@ public class CreateReviewFragment extends Fragment {
 			bitmap = BitmapFactory.decodeStream(stream);
 			editedImage = true;
 			
-			mImageView.setImageBitmap(bitmap);
-//	        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(stream), 
-//	        									mImageView.getWidth(), mImageView.getHeight(), 
-//	        									true);
-	        
-	        mImageView.setImageBitmap(bitmap);
+			mImageView.setImageBitmap(bitmap);	    
 	        
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
