@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
+import com.example.ireviewr.fragments.reviews.ReviewGalleryFragment;
 import com.example.ireviewr.model.Review;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter
@@ -49,7 +50,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			}
 			case 2:
 			{
-				return new Fragment();//ReviewGaleryFragment(itemId); // TODO
+				return new ReviewGalleryFragment(itemId);
 			}
 			case 3:
 			{
