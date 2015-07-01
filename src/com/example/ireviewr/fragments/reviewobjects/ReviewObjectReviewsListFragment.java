@@ -60,7 +60,7 @@ public class ReviewObjectReviewsListFragment extends AbstractReviewsListFragment
 
 	private void onMenuAction()
 	{
-		//FragmentTransition.to(CreateReviewFragment.newCreateInstance(getArguments().getString(RELATED_ID)), getActivity());
+		FragmentTransition.to(CreateReviewFragment.newCreateInstance(getArguments().getString(RELATED_ID)), getActivity());
 	}
 	
 	private ReviewObject getRevob()

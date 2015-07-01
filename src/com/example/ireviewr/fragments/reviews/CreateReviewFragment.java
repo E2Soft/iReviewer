@@ -73,6 +73,7 @@ public class CreateReviewFragment extends Fragment {
 	private RatingBar ratingBar;
 	
 	private String id;
+	private String revobId;
 	private Bitmap bitmap;
 	private boolean editedImage = false;
 	private String name;
@@ -93,7 +94,13 @@ public class CreateReviewFragment extends Fragment {
 	 */
 	public static CreateReviewFragment newCreateInstance(String revobId) 
 	{
-		return new CreateReviewFragment();	
+		CreateReviewFragment newFrag = new CreateReviewFragment();
+		Bundle bundle = new Bundle();
+		
+		bundle.putString(RELATED_ID, revobId);
+		
+		newFrag.setArguments(bundle);
+		return newFrag;	
 	}
 	
 	/**
@@ -169,6 +176,7 @@ public class CreateReviewFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 			
 		outState.putString(ID, id);
+		outState.putString(RELATED_ID, revobId);
 		
 		if(bitmap != null)
 		{
@@ -230,6 +238,7 @@ public class CreateReviewFragment extends Fragment {
 		if (savedInstanceState != null) 
 		{
 			id = savedInstanceState.getString(ID);
+			revobId = savedInstanceState.getString(RELATED_ID);
 			bitmap = (Bitmap) savedInstanceState.getParcelable(IMAGE);
 			name = savedInstanceState.getString(NAME);
 			desc = savedInstanceState.getString(DESCRIPTION);
@@ -242,6 +251,7 @@ public class CreateReviewFragment extends Fragment {
 			if(arguments != null)
 			{
 				id = arguments.getString(ID);
+				revobId = arguments.getString(RELATED_ID);
 				name = arguments.getString(NAME);
 				desc = arguments.getString(DESCRIPTION);
 				String imagePath = arguments.getString(IMAGE);
@@ -323,6 +333,7 @@ public class CreateReviewFragment extends Fragment {
 		try
 		{
 			Review newReview;
+			ReviewObject revob;
 				
 			if(id != null)
 			{
@@ -334,7 +345,9 @@ public class CreateReviewFragment extends Fragment {
 			}
 			else 
 			{
-				newReview = new Review(name, desc, rating, new Date(), CurrentUser.getModel(getActivity()), null);
+				revob = ReviewObject.getByModelId(ReviewObject.class, revobId);	
+				Log.d("revob", "revob :"+revob);
+				newReview = new Review(name, desc, rating, new Date(), CurrentUser.getModel(getActivity()), revob);
 			}
 	
 			newReview.saveOrThrow();
@@ -472,6 +485,16 @@ public class CreateReviewFragment extends Fragment {
 		
 		//postaviti da fragment ima meni
 		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroy();
+	}
+	
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
 	}
 	
 	private void setUpImage(Intent data){
