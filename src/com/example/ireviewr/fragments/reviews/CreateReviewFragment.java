@@ -39,13 +39,16 @@ import android.widget.Toast;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.dialogs.ShowDialog;
+import com.example.ireviewr.exceptions.ValidationException;
 import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.Review;
+import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
+import com.example.ireviewr.validators.TextValidator;
 
 public class CreateReviewFragment extends Fragment {
 	
@@ -76,6 +79,8 @@ public class CreateReviewFragment extends Fragment {
 	private String desc;
 	private Float rating;
 	private ArrayList<String> tags;
+	
+	private TextValidator nameValidator;
 		
 	public static CreateReviewFragment newInstance() 
 	{
@@ -204,6 +209,24 @@ public class CreateReviewFragment extends Fragment {
 		textTags = (TextView)view.findViewById(R.id.review_tags_list);
 	    ratingBar = (RatingBar)view.findViewById(R.id.review_rating_choose);
 		
+		nameValidator = new TextValidator(textName)
+		{
+			@Override
+			public void validate(TextView textView, String text)
+			{
+				if(text == null || "".equals(text.trim()))
+				{
+					textView.setError("Name must not be empty!");
+					throw new ValidationException();
+				}
+				else
+				{
+					textView.setError(null);
+				}
+			}
+		};
+		textName.addTextChangedListener(nameValidator);    
+	    
 		if (savedInstanceState != null) 
 		{
 			id = savedInstanceState.getString(ID);
@@ -288,6 +311,15 @@ public class CreateReviewFragment extends Fragment {
 		String desc = textDesc.getText().toString();
 		Float rating = ratingBar.getRating();
 			
+		try
+		{
+			nameValidator.validate();
+		}
+		catch(ValidationException ex)
+		{
+			return;
+		}
+		
 		try
 		{
 			Review newReview;

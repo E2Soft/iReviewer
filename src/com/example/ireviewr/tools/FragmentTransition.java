@@ -29,9 +29,9 @@ public class FragmentTransition
 	
 	public static void remove(Fragment fragment, FragmentActivity activity, boolean popBackstack)
 	{
-		activity.getSupportFragmentManager().beginTransaction()
+		/*activity.getSupportFragmentManager().beginTransaction()
 			.remove(fragment)
-			.commit();
+			.commit();*/
 		if(popBackstack) activity.getSupportFragmentManager().popBackStack();
 	}
 }
