@@ -1,11 +1,14 @@
 package com.example.ireviewr.tools;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import static java.lang.Math.sin;
@@ -13,6 +16,7 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.atan2;
 import static java.lang.Math.PI;
+import android.util.Base64;
 
 public class ReviewerTools {
 
@@ -93,5 +97,27 @@ public class ReviewerTools {
 		double d = R * c;
 		
 		return d;
+	}
+
+	public static int calculateTimeTillNextSync(int minutes){
+		return 1000 * 60 * minutes;
+	}
+	
+	public static String fromBitmapToString(Bitmap bitmap){
+		
+		ByteArrayOutputStream bao = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bao);
+		byte [] ba = bao.toByteArray();
+		String ba1=Base64.encodeToString(ba,Base64.DEFAULT);
+		
+		return ba1;
+	}
+	
+	public static Bitmap fromStringToBitmap(String encodedImage){
+		
+		byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		
+		return decodedByte;
 	}
 }
