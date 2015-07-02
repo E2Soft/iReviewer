@@ -6,10 +6,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,10 +21,11 @@ import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.validators.TextValidator;
 
 public class CommentsListFragment extends AbstractCommentsListFragment
 {	
-	
+	private TextValidator validator;
 	public CommentsListFragment()
 	{}
 	
@@ -72,21 +76,25 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 		
 		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 		final View promptView = layoutInflater.inflate(R.layout.comment_dialog, null);
-		new AlertDialog.Builder(getActivity())
-			.setView(promptView)		
+		
+		final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+		
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		
+		builder.setView(promptView)
 			.setCancelable(false)
 			.setPositiveButton(R.string.comment, new OnClickListener() 
 			{	
 				@Override
 				public void onClick(DialogInterface dialog, int which) 
 				{
-					//get data
-					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+					
+					String comm = editText.getText().toString();
 					
 					Review review = getReview();
 					
 					//create object
-					Comment newComment = new Comment(editText.getText().toString(), CurrentUser.getModel(getActivity()), review);
+					Comment newComment = new Comment(comm, CurrentUser.getModel(getActivity()), review);
 					
 					// save to database
 					newComment.saveOrThrow();
@@ -107,8 +115,41 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 				{
 					dialog.cancel();
 				}
-			})
-			.show();
+			});
+			
+			final AlertDialog dialog = builder.create();
+
+			editText.addTextChangedListener(new TextWatcher() 
+			{
+			    @Override
+			    public void onTextChanged(CharSequence s, int start, int before,int count) 
+			    {
+			    }
+
+			    @Override
+			    public void beforeTextChanged(CharSequence s, int start, int count,int after) 
+			    {
+			    }
+
+			    @Override
+			    public void afterTextChanged(Editable s) 
+			    {
+			        final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+			        
+			        if(editText.getText().length() == 0)
+			        {
+			            okButton.setEnabled(false);
+			        } 
+			        else 
+			        {
+			            okButton.setEnabled(true);
+			        }
+
+			    }
+			});
+			
+			dialog.show();
+			dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 	
 	@Override
