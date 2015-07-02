@@ -1,6 +1,9 @@
 package com.example.ireviewr.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -90,7 +93,7 @@ public class ImageDetailFragment extends Fragment
 		// handle item selection
 		switch (item.getItemId()) {
 			case R.id.delete_item:
-				delete();
+				showDeleteDialog();
 				return true;
 			case R.id.set_as_main:
 				setAsMain();
@@ -131,6 +134,29 @@ public class ImageDetailFragment extends Fragment
 		Image image = getImage();
 		image.deleteSynced();
 		ImageUtils.delete(image.getPath());
+	}
+	
+	private void showDeleteDialog()
+	{
+		new AlertDialog.Builder(getActivity())
+		.setTitle(R.string.remove_item)
+		.setMessage(R.string.are_you_sure)
+		.setPositiveButton(R.string.remove_item, new OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				delete();
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int id)
+			{
+				dialog.cancel();
+			}
+		})
+		.show();
 	}
 	
 	private Image getImage()
