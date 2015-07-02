@@ -37,6 +37,7 @@ public class ReviewDetailFragment extends Fragment {
 	public static final String NAME ="NAME";
 	public static final String DESCRIPTION ="DESCRIPTION";
 	public static final String CREATED = "CREATED";
+	public static final String CREATED_BY = "CREATED_BY";
 	public static final String LAST_MODIFIED = "LAST MODIFIED";
 	public static final String IMAGE = "IMAGE";
 	public static final String RATING = "RATING";
@@ -57,6 +58,7 @@ public class ReviewDetailFragment extends Fragment {
 		bundle.putString(NAME, review.getName());
 		bundle.putString(DESCRIPTION, review.getDescription());
 		bundle.putString(CREATED,ReviewerTools.preapreDate(review.getDateCreated()));
+		bundle.putString(CREATED_BY, review.getUserCreated().getName());
 		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(review.getDateModified()));
 		Image mainImage = review.getMainImage();
 		if(mainImage != null)
@@ -164,6 +166,9 @@ public class ReviewDetailFragment extends Fragment {
 		
 		TextView created = (TextView)view.findViewById(R.id.review_desc_contnt);
 		created.setText(bundle.getString(CREATED));
+		
+		TextView created_by = (TextView)view.findViewById(R.id.created_by_content);
+		created_by.setText(bundle.getString(CREATED_BY));
 		
 		RatingBar rating = (RatingBar)view.findViewById(R.id.review_rating_content);
 		rating.setRating(bundle.getFloat(RATING));
