@@ -33,6 +33,10 @@ public class ImageUtils
 	{
 		// Create imageDir
 		File mypath = new File(path);
+		if(mypath.getParentFile() != null)
+		{
+			mypath.getParentFile().mkdirs();
+		}
 		
 		FileOutputStream fos = null;
 		try

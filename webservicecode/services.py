@@ -50,7 +50,7 @@ class ReviewerSyncApi(remote.Service):
 		my_items = []
 		
 		for img in query:
-			my_items.append(ImageMessage(name=img.name,image=img.image,uuid=request.uuid,review_uuid=img.review_uuid,
+			my_items.append(ImageMessage(name=img.name,image=img.image,uuid=img.uuid,review_uuid=img.review_uuid,
 			revobj_uuid=img.revobj_uuid,is_main=img.is_main,last_modified=img.last_modified, deleted=img.deleted))
 		
 		return ImageMessageCollection(items = my_items)

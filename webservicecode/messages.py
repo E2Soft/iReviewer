@@ -28,8 +28,8 @@ class ImageMessage(messages.Message):
 	last_modified = message_types.DateTimeField(3)
 	is_main = messages.BooleanField(4)
 	uuid = messages.StringField(5, required=True)
-	review_uuid = messages.StringField(6,required=True)
-	revobj_uuid = messages.StringField(7,required=True)
+	review_uuid = messages.StringField(6)
+	revobj_uuid = messages.StringField(7)
 	deleted = messages.BooleanField(8)
 
 class ImageMessageCollection(messages.Message):
