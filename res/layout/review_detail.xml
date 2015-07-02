@@ -117,8 +117,36 @@
         android:layout_alignBaseline="@id/review_modified_label"
         android:layout_below="@id/review_rating_content" 
         android:layout_margin="5dp"/>
-    
-    <TextView android:id="@+id/review_description_label"
+
+    <TextView
+        android:id="@+id/created_by_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:text="@string/created_by"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/review_modified_label"
+        android:layout_margin="5dp"  />
+
+    <TextView
+        android:id="@+id/created_by_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textColor="#000"
+        android:layout_alignBaseline="@+id/created_by_label"
+        android:layout_toRightOf="@+id/created_by_label"
+        android:layout_toEndOf="@+id/created_by_label"
+        android:layout_below="@id/review_desc_contnt" 
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/review_description_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17sp"
@@ -128,12 +156,12 @@
         android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/review_modified_label"
+        android:layout_below="@id/created_by_label"
         android:layout_margin="5dp" />
-    
+
     <TextView
         android:id="@+id/review_description_contnt"
-        android:layout_width="match_parent"
+    	android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="15sp"
         android:gravity="center_vertical"
@@ -141,5 +169,4 @@
         android:layout_below="@id/review_description_label" 
         android:layout_margin="5dp"/>
     
-
 </RelativeLayout>
