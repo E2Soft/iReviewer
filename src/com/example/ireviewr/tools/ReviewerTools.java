@@ -2,6 +2,7 @@ package com.example.ireviewr.tools;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,11 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.atan2;
 import static java.lang.Math.PI;
 import android.util.Base64;
+
+import com.appspot.elevated_surge_702.crud.model.MessagesCommentMessage;
+import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.model.Review;
+import com.example.ireviewr.model.User;
 
 public class ReviewerTools {
 
@@ -119,5 +125,54 @@ public class ReviewerTools {
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		
 		return decodedByte;
+	}
+	
+	public static String prepareDateToString(){
+		Calendar cal = Calendar.getInstance();
+		int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int min = cal.get(Calendar.MINUTE);
+		int sec = cal.get(Calendar.SECOND);
+		
+		return year+"-"+(month+1)+"-"+dayOfMonth+"T"+hour+":"+min+":"+sec;
+	}
+	
+	public static int chackForNewCommentsOnMyReviews(List<MessagesCommentMessage> collection, Context context){
+		User user = CurrentUser.getModel(context);
+		int nums = 0;
+		
+		if(collection != null){
+			for (MessagesCommentMessage comment : collection) {
+				for(Review review : user.getReviews()){
+					if(comment.getUuid().equals(review.getModelId())){
+						nums++;
+					}
+				}
+			}
+		}
+		
+		return nums;
+	}
+	
+	public static int chackForNewCommentsOnMyComments(List<MessagesCommentMessage> collection, Context context){
+		User user = CurrentUser.getModel(context);
+		int nums = 0;
+		
+		if(collection != null){
+			for (MessagesCommentMessage comment : collection) {
+				for(Comment cmnt : user.getComments()){
+					if(cmnt.getReview() != null && (comment.getReviewUuid() != null || !comment.getReviewUuid().equals(""))){
+						if(cmnt.getReview().getModelId().equals(comment.getReviewUuid())){
+							nums++;
+						}
+					}
+				}
+			}
+		}
+		
+		return nums;
 	}
 }

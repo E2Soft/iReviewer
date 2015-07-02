@@ -12,7 +12,7 @@ import com.activeandroid.query.Select;
 @Table(name = "UserGroup", id="_id")
 public class Group extends AbstractModel 
 {
-	@Column(name = "name", notNull=true, unique=true)
+	@Column(name = "name", notNull=true)
 	private String name;
 	
 	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
