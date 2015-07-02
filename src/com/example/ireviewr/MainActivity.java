@@ -72,6 +72,7 @@ public class MainActivity extends FragmentActivity{
 	private SyncReceiver sync;
 	public static String SYNC_DATA = "SYNC_DATA";
 	public static String SYNC_TIME = "SYNC_TIME";
+	public static String NEW_COMMENTS = "NEW_COMMENTS";
 	
 	private String synctime;
 	private boolean allowSync;
@@ -184,7 +185,11 @@ public class MainActivity extends FragmentActivity{
 	        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     	}
     	
-    	registerReceiver(sync, new IntentFilter(SYNC_DATA));
+    	IntentFilter filter = new IntentFilter();
+    	filter.addAction(NEW_COMMENTS);
+    	filter.addAction(SYNC_DATA);
+    	
+    	registerReceiver(sync, filter);
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
