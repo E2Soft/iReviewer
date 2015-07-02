@@ -25,15 +25,4 @@
         android:layout_toEndOf="@+id/tag_item_icon"
         android:layout_margin="5dp"/>
 
-    <TextView
-        android:id="@+id/tag_date_created"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_below="@id/tag_name"
-        android:layout_toRightOf="@+id/tag_item_icon"
-        android:layout_toEndOf="@+id/tag_item_icon" 
-        android:layout_margin="5dp"/>
-
 </RelativeLayout>

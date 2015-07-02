@@ -17,21 +17,14 @@ public class FragmentTransition
 	{
 		FragmentTransaction transaction = activity.getSupportFragmentManager()
 			.beginTransaction()
+			.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
 			.replace(R.id.mainContent, newFragment);
 		if(addToBackstack) transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	
-	public static void remove(Fragment fragment, FragmentActivity activity)
+	public static void remove(Fragment fragment, FragmentActivity activity) // TODO izbaciti fragment parametar
 	{
-		remove(fragment, activity, true);
-	}
-	
-	public static void remove(Fragment fragment, FragmentActivity activity, boolean popBackstack)
-	{
-		/*activity.getSupportFragmentManager().beginTransaction()
-			.remove(fragment)
-			.commit();*/
-		if(popBackstack) activity.getSupportFragmentManager().popBackStack();
+		activity.getSupportFragmentManager().popBackStack();
 	}
 }

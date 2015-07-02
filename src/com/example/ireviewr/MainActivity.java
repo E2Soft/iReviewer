@@ -283,16 +283,6 @@ public class MainActivity extends FragmentActivity{
     	Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
     }
     
-    public static final class LOADER_ID // TODO prebaciti u res/values/ids.xml kao id mozda
-    {
-    	public static final int GROUP 	= 0;
-    	public static final int TAG		= 1;
-    	public static final int REVIEW	= 2;
-		public static final int	COMMENT	= 3;
-		public static final int	USER	= 4;
-		public static final int	IMAGE	= 5;
-    };
-    
     @Override
     protected void onPause() {
     	if (manager != null) {

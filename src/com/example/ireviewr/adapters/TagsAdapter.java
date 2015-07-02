@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Tag;
-import com.example.ireviewr.tools.ReviewerTools;
 
 public class TagsAdapter extends AbstractArrayAdapter<Tag>
 {
@@ -20,9 +19,6 @@ public class TagsAdapter extends AbstractArrayAdapter<Tag>
 	{
 		TextView textViewTitle = (TextView)view.findViewById(R.id.tag_name);
 		textViewTitle.setText(item.getName());
-		
-		TextView textViewDesc = (TextView)view.findViewById(R.id.tag_date_created);
-		textViewDesc.setText(ReviewerTools.preapreDate(item.getDateModified()));
 	}
 	
 	@Override
