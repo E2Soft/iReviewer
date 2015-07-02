@@ -14,6 +14,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
 
+import com.appspot.elevated_surge_702.crud.model.MessagesCommentMessage;
+import com.example.ireviewr.model.Comment;
+import com.example.ireviewr.model.Review;
+import com.example.ireviewr.model.User;
+
 public class ReviewerTools {
 
 	public static String PATTERN = "dd.MM.yyyy";
@@ -113,5 +118,41 @@ public class ReviewerTools {
 		int sec = cal.get(Calendar.SECOND);
 		
 		return year+"-"+(month+1)+"-"+dayOfMonth+"T"+hour+":"+min+":"+sec;
+	}
+	
+	public static int chackForNewCommentsOnMyReviews(List<MessagesCommentMessage> collection, Context context){
+		User user = CurrentUser.getModel(context);
+		int nums = 0;
+		
+		if(collection != null){
+			for (MessagesCommentMessage comment : collection) {
+				for(Review review : user.getReviews()){
+					if(comment.getUuid().equals(review.getModelId())){
+						nums++;
+					}
+				}
+			}
+		}
+		
+		return nums;
+	}
+	
+	public static int chackForNewCommentsOnMyComments(List<MessagesCommentMessage> collection, Context context){
+		User user = CurrentUser.getModel(context);
+		int nums = 0;
+		
+		if(collection != null){
+			for (MessagesCommentMessage comment : collection) {
+				for(Comment cmnt : user.getComments()){
+					if(cmnt.getReview() != null && (comment.getReviewUuid() != null || !comment.getReviewUuid().equals(""))){
+						if(cmnt.getReview().getModelId().equals(comment.getReviewUuid())){
+							nums++;
+						}
+					}
+				}
+			}
+		}
+		
+		return nums;
 	}
 }

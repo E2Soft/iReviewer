@@ -8,9 +8,16 @@ import java.util.List;
 import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.appspot.elevated_surge_702.crud.Crud;
@@ -30,6 +37,8 @@ import com.appspot.elevated_surge_702.crud.model.MessagesReviewObjectMessage;
 import com.appspot.elevated_surge_702.crud.model.MessagesReviewObjectMessageCollection;
 import com.appspot.elevated_surge_702.crud.model.MessagesUserMessage;
 import com.appspot.elevated_surge_702.sync.Sync;
+import com.example.ireviewr.R;
+import com.example.ireviewr.activities.ReviewerPreferenceActivity;
 import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.DeletedEntry;
 import com.example.ireviewr.model.Group;
@@ -748,5 +757,52 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
 	private Date convertToDate(DateTime dateTime)
 	{
 		return new Date(dateTime.getValue());
+	}
+	
+	@Override
+	protected void onPostExecute(Void result) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		boolean allowCommentedNotif = sharedPreferences.getBoolean(context.getString(R.string.notif_on_my_comment_key), false);
+    	boolean allowReviewNotif = sharedPreferences.getBoolean(context.getString(R.string.notif_on_my_review_key), false);
+    	boolean allowSyncNotif = sharedPreferences.getBoolean(context.getString(R.string.notif_on_sync_key), false);
+    	
+    	int myReviewComment = 0;
+    	int commentsICommented = 0;
+    	
+    	if (allowReviewNotif) {
+    		myReviewComment = ReviewerTools.chackForNewCommentsOnMyReviews(serverComments, context);
+		}
+    	
+    	if (allowCommentedNotif) {
+    		commentsICommented = ReviewerTools.chackForNewCommentsOnMyComments(serverComments, context);
+		}
+    	
+    	if(allowSyncNotif){
+    		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+    		NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+    		
+    		Intent settingsIntent = new Intent(context, ReviewerPreferenceActivity.class);
+			PendingIntent pIntentSettings = PendingIntent.getActivity(context, 0, settingsIntent, 0);
+    		
+    		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_chat);
+			mBuilder.setSmallIcon(R.drawable.ic_action_refresh_w);
+			mBuilder.setContentTitle("New comments");
+			mBuilder.setContentText("New");
+			mBuilder.addAction(R.drawable.ic_action_settings, context.getString(R.string.turn_notif_on), pIntentSettings);
+			
+    		/* Add Big View Specific Configuration */
+    		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+    		
+    		inboxStyle.addLine("New comments on my reviews: "+myReviewComment);
+    		inboxStyle.addLine("New comments on my comments: "+commentsICommented);
+    		
+    		mBuilder.setStyle(inboxStyle);
+			
+			mBuilder.setLargeIcon(bm);
+			// notificationID allows you to update the notification later on.
+			mNotificationManager.notify(2, mBuilder.build());
+    	}
 	}
 }
