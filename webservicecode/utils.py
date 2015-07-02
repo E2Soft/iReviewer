@@ -38,4 +38,7 @@ def calculate_distance(lat1, lon1, lat2, lon2 ):
 	return d
 	
 def date_to_utc(date):
-	return date.replace(tzinfo=None) - date.utcoffset()
+	if date.utcoffset():
+		return date.replace(tzinfo=None) - date.utcoffset()
+	else:
+		return date.replace(tzinfo=None)
