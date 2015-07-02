@@ -155,7 +155,7 @@ public class ReviewObject extends AbstractModel
 		return filterByUser(resultSet, user);
 	}
 	
-	public void addReview(Image toAdd)
+	public void addReview(Review toAdd)
 	{
 		ValidationUtils.checkSaved(toAdd, this);
 		toAdd.setReviewObject(this);

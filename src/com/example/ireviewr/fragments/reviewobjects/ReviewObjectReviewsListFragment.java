@@ -2,18 +2,22 @@ package com.example.ireviewr.fragments.reviewobjects;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import com.example.ireviewr.R;
 import com.example.ireviewr.activities.TagFilterActivity;
 import com.example.ireviewr.fragments.reviews.AbstractReviewsListFragment;
+import com.example.ireviewr.fragments.reviews.CreateReviewFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
 
 public class ReviewObjectReviewsListFragment extends AbstractReviewsListFragment
 {
@@ -86,7 +90,7 @@ public class ReviewObjectReviewsListFragment extends AbstractReviewsListFragment
 
 	private void onMenuAction()
 	{
-		// FragmentTransition.to(new CreateReviewFragment(getArguments().getString(RELATED_ID)), getActivity());
+		FragmentTransition.to(CreateReviewFragment.newCreateInstance(getArguments().getString(RELATED_ID)), getActivity());
 	}
 	
 	private void showTagFilterDialog()

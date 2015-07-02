@@ -46,7 +46,7 @@ public class Review extends AbstractModel
 		this.reviewObject = reviewObject;
 	}
 
-	public Review(String name, String description, int rating, Date dateCreated, 
+	public Review(String name, String description, float rating, Date dateCreated, 
 			User userCreated, ReviewObject reviewObject) 
 	{
 		this.name = name;
@@ -148,6 +148,19 @@ public class Review extends AbstractModel
 	{
 		ValidationUtils.checkSaved(toAdd, this);
 		new TagToReview(this, toAdd).save();
+	}
+	
+	public void removeTag(Tag toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReview m2m = new Select().from(TagToReview.class)
+				.where("review = ? and tag = ?", getId(), toRemove.getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
 	}
 	
 	public List<Image> getImages()
