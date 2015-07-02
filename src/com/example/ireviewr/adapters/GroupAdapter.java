@@ -3,9 +3,9 @@ package com.example.ireviewr.adapters;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+
 import com.example.ireviewr.R;
 import com.example.ireviewr.model.Group;
-import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupAdapter extends AbstractArrayAdapter<Group>
 {
@@ -19,9 +19,6 @@ public class GroupAdapter extends AbstractArrayAdapter<Group>
 	{
 		TextView title = (TextView)view.findViewById(R.id.group_name);
 		title.setText(item.getName());
-		
-		TextView dateCreated = (TextView)view.findViewById(R.id.group_date_created);
-		dateCreated.setText(ReviewerTools.preapreDate(item.getDateModified()));
 		
 		TextView numberOfUsers = (TextView)view.findViewById(R.id.group_users);
 		numberOfUsers.setText("Users:"+item.getUsers().size());
