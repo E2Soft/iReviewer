@@ -54,7 +54,8 @@ public class ReviewObjectTabsFragment extends Fragment
 	@Override
 	// da bi se pozvao onActivityResult u fragmentima u ugnjezdenim tabovima
 	// http://stackoverflow.com/questions/13580075/onactivityresult-not-called-in-new-nested-fragment-api
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
         super.onActivityResult(requestCode, resultCode, data);
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         if (fragments != null) {

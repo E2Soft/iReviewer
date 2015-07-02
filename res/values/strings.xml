@@ -114,4 +114,6 @@
     <string name="turn_wifi_on">Turn wifi on</string>
     <string name="turn_notif_on">Stop notification</string>
     
+    <string name="tag_filter">Tag filter</string>
+    
 </resources>

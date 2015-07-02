@@ -31,12 +31,10 @@ import com.example.ireviewr.model.GroupToUser;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
-import com.example.ireviewr.tools.ReviewerTools;
 
 public class GroupDetailFragment extends Fragment
 {
 	public static final String NAME = "NAME";
-	public static final String LAST_MODIFIED = "LAST MODIFIED";
 	public static final String USER_COUNT = "USER_COUNT";
 	public static final String REVIEW_COUNT = "REVIEW_COUNT";
 	public static final String USER_CREATED = "USER_CREATED";
@@ -56,7 +54,6 @@ public class GroupDetailFragment extends Fragment
 	{
 		Bundle bundle = getArguments();
 		bundle.putString(NAME, group.getName());
-		bundle.putString(LAST_MODIFIED, ReviewerTools.preapreDate(group.getDateModified()));
 		bundle.putInt(USER_COUNT, group.getUsers().size());
 		bundle.putInt(REVIEW_COUNT, group.getReviews().size());
 		bundle.putString(USER_CREATED, group.getUserCreated().getName());
@@ -248,9 +245,6 @@ public class GroupDetailFragment extends Fragment
 		
 		TextView gTitle = (TextView)view.findViewById(R.id.group_title);
 		gTitle.setText(bundle.getString(NAME));
-		
-		TextView gText = (TextView)view.findViewById(R.id.group_lastModified);
-		gText.setText(bundle.getString(LAST_MODIFIED));
 		
 		TextView gUserCount = (TextView)view.findViewById(R.id.group_user_count);
 		gUserCount.setText(Integer.toString(bundle.getInt(USER_COUNT)));
