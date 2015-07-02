@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-      android:id="@+id/home_add_item"
-      android:icon="@drawable/ic_action_new"
+   <item
+      android:id="@+id/add_action"
       android:orderInCategory="20"
       android:showAsAction="ifRoom"
+      android:icon="@drawable/ic_action_new"
       android:title="@string/add_item">
    </item>
    <item
@@ -13,5 +13,12 @@
       android:showAsAction="ifRoom"
       android:icon="@drawable/ic_action_labels_white"
       android:title="@string/tag_filter">
+   </item>
+   <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_launcher"
+        android:showAsAction="always"
+        android:title="@string/search" >
    </item>
 </menu>

@@ -117,6 +117,7 @@ public class ReviewObjectsListFragment extends AbstractDetailListFragment<Review
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_FILTER)
 		{
 			tagFilter = data.getStringArrayListExtra(TagFilterActivity.CHECKED_ITEMS);

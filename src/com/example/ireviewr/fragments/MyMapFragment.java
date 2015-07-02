@@ -1,6 +1,10 @@
 package com.example.ireviewr.fragments;
 
+import java.util.ArrayList;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.activities.TagFilterActivity;
 import com.example.ireviewr.dialogs.LocationDialog;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectFormFragment;
 import com.example.ireviewr.tools.FragmentTransition;
@@ -30,6 +35,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MyMapFragment extends Fragment implements LocationListener, OnMapReadyCallback{
+	
+	public static int REQUEST_TAG_FILTER = 0;
+	public static String TAG_FILTER = "TAG_FILTER";
+	private ArrayList<String> tagFilter;
 	
 	private GoogleMap map;
 	private SupportMapFragment mMapFragment;
@@ -54,6 +63,22 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		
 		Criteria criteria = new Criteria();
 	    provider = locationManager.getBestProvider(criteria, true);
+	    
+		if(savedInstanceState != null)
+		{
+			tagFilter = savedInstanceState.getStringArrayList(TAG_FILTER);
+		}
+		else
+		{
+			tagFilter = new ArrayList<String>();
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putStringArrayList(TAG_FILTER, tagFilter);
 	}
 	
 	@Override
@@ -93,8 +118,29 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			case R.id.home_add_item:
 				FragmentTransition.to(ReviewObjectFormFragment.newInstance(), getActivity());
 				return true;
+			case R.id.filter_action:
+				showTagFilterDialog();
+				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	private void showTagFilterDialog()
+	{
+		Intent intent = new Intent(getActivity(), TagFilterActivity.class);
+		intent.putExtra(TagFilterActivity.CHECKED_ITEMS, tagFilter);
+		startActivityForResult(intent, REQUEST_TAG_FILTER);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_FILTER)
+		{
+			tagFilter = data.getStringArrayListExtra(TagFilterActivity.CHECKED_ITEMS);
+			// TODO reload data
 		}
 	}
 	
