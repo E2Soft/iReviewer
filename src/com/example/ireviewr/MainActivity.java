@@ -266,7 +266,10 @@ public class MainActivity extends FragmentActivity{
         }
         
         mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).getmTitle());
+        if(position != 5) // za sve osim za sync
+        {
+        	setTitle(mNavItems.get(position).getmTitle());
+        }
         mDrawerLayout.closeDrawer(mDrawerPane);
     }
 

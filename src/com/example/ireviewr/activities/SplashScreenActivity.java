@@ -1,8 +1,5 @@
 package com.example.ireviewr.activities;
 
-import java.util.Date;
-import java.util.List;
-
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,13 +19,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.activeandroid.query.Select;
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
-import com.example.ireviewr.model.Group;
-import com.example.ireviewr.model.Review;
-import com.example.ireviewr.model.ReviewObject;
-import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.sync.tasks.RegisterTask;
 import com.example.ireviewr.sync.tasks.SyncTask;
@@ -65,8 +57,6 @@ public class SplashScreenActivity extends Activity
 		@Override
 		protected Void doInBackground(Void... arg0)
 		{
-			initTestData();
-			
 			if(SyncUtils.getLastSyncronizationDate(SplashScreenActivity.this) == null) // ako jos nije sinhronizovan
 			{
 				new SyncTask(SplashScreenActivity.this)
@@ -286,81 +276,5 @@ public class SplashScreenActivity extends Activity
 	{
 		startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
 		finish(); // da nebi mogao da ode back na splash
-	}
-
-	private void initTestData()
-	{
-		User testUser = new User("test_user", "test@user.com");
-		testUser.save();
-		
-		User testUser2 = new User("test_user2", "test@user2.com");
-		testUser2.save();
-		
-		Log.d("DATABASE", "starting save test");
-		Group group = new Group("mygroup", testUser);
-		group.save();
-		group = new Group("mygroup2", testUser2);
-		group.save();
-		group = new Group("mygroup3", testUser);
-		group.save();
-		Log.d("DATABASE", "saved");
-		
-		Log.d("DATABASE", "starting query test");
-		List<Group> existingGroups = (new Select())
-		.from(Group.class)
-		.execute();
-		for(Group existingGroup : existingGroups)
-		{
-			Log.d("DATABASE", "got group with name: "+existingGroup.getName());
-		}
-		/////////////////////////////////////
-		
-		ReviewObject ro = new ReviewObject("ro1", "dro1", 1, 1, testUser);
-        ro.save();
-        
-        Tag tag1 = new Tag("tag1");
-        tag1.save();
-        Tag tag2 = new Tag("tag2");
-        tag2.save();
-        
-        ro.addTag(tag1);
-        ro.addTag(tag2);
-        
-        List<ReviewObject> existingRevObjects = (new Select())
-                .from(ReviewObject.class)
-                .execute();
-        for(ReviewObject existingReviewObject : existingRevObjects)
-        {
-        	Log.d("DATABASE", "got ReviewObject with name: "+existingReviewObject.getName());
-        	for(Tag existingTag : existingReviewObject.getTags())
-        	{
-        		Log.d("DATABASE", "got tag with name: "+existingTag.getName());
-        	}
-        }
-        
-        ReviewObject ro2 = new ReviewObject("ro2", "dro2asdsdfas dafsfs dfasds fsdasfsgvdf sfvdsvsd", 2, 2, testUser);
-        ro2.save();
-        ro2.addTag(tag1);
-        
-        ReviewObject ro3 = new ReviewObject("ro3", "dro3", 2, 2, testUser);
-        ro3.save();
-	        
-	    //////////////////////////////////////
-		
-		Review rev1 = new Review("test_id", new Date(), "review1", "desc1sdfsdf", 2, new Date(), testUser, ro);
-		rev1.save();
-		
-		Review rev2 = new Review("test_id2", new Date(), "review2", "desc1sdfsdf2", 3, new Date(), testUser, ro);
-		rev2.save();
-		
-		Review rev3 = new Review("test_id3", new Date(), "review3", "desc1sdfsdf3", 2, new Date(), testUser, ro);
-		rev3.save();
-		
-		Review rev4 = new Review("test_id4", new Date(), "review4", "desc1sdfsdf4", 4, new Date(), testUser2, ro);
-		rev4.save();
-		
-		group.addReview(rev1);
-		group.addReview(rev2);
-		group.addUser(testUser2);
 	}
 }

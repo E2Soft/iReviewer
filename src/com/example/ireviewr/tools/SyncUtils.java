@@ -16,7 +16,7 @@ public class SyncUtils
 	{
 		return new Sync.Builder(
 				AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-				.setRootUrl("http://10.0.3.2:8080/_ah/api/") // 10.0.3.2 je adresa pca sa genymotion emulatora
+				//.setRootUrl("http://10.0.3.2:8080/_ah/api/") // 10.0.3.2 je adresa pca sa genymotion emulatora
 				.build();
 	}
 	
@@ -24,7 +24,7 @@ public class SyncUtils
 	{
 		return new Crud.Builder(
 				AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-				.setRootUrl("http://10.0.3.2:8080/_ah/api/") // 10.0.3.2 je adresa pca sa genymotion emulatora
+				//.setRootUrl("http://10.0.3.2:8080/_ah/api/") // 10.0.3.2 je adresa pca sa genymotion emulatora
 				.build();
 	}
 	

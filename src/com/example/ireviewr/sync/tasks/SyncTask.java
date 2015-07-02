@@ -383,12 +383,12 @@ public class SyncTask extends AsyncTask<Void, Void, Void>
 	
 	private void persist()
 	{
+		persistUsers();
+		persistReviewObjects();
+		persistReviews();
 		persistComments();
 		persistGroups();
 		persistImages();
-		persistReviews();
-		persistReviewObjects();
-		persistUsers();
 		persistGroupToReviews();
 		persistGroupToUsers();
 	}
