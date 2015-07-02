@@ -311,6 +311,18 @@ public class CreateReviewFragment extends Fragment {
 				addTagDialog(textTags);
 			}
 		});
+		
+		Button removeTags = (Button)view.findViewById(R.id.remove_review_tags);
+		removeTags.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(tags.size() > 0) 
+				{
+					tags.remove(tags.size()-1);
+					textTags.setText(ReviewerTools.getTagsString(tags));
+				}
+			}
+		});
 
 		return view;
 	}

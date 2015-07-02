@@ -98,16 +98,16 @@
         android:layout_below="@id/review_rating_choose"
         android:layout_margin="5dp"/>
    	
-   	<TextView 
-        android:id="@+id/review_tags_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/review_tags_list"
-        android:layout_below="@id/review_tags"
-        android:layout_toRightOf="@id/choose_tags"
-        android:layout_toEndOf="@id/choose_tags"
-        android:layout_alignBaseline="@id/choose_tags" 
-        android:layout_margin="5dp"/>
+   	<TextView
+   	    android:id="@+id/review_tags_list"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:layout_alignBaseline="@id/choose_tags"
+   	    android:layout_below="@id/review_tags"
+   	    android:layout_margin="5dp"
+   	    android:layout_toEndOf="@id/choose_tags"
+   	    android:layout_toRightOf="@+id/review_image"
+   	    android:hint="@string/review_tags_list" />
    	
    	<TextView
         android:id="@+id/review_description"
@@ -124,6 +124,17 @@
         android:hint="@string/review_desc"
         android:layout_below="@id/review_description" 
         android:layout_margin="5dp"/>
-   	
+
+   	<Button
+   	    android:id="@+id/remove_review_tags"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:layout_below="@+id/review_rating_choose"
+   	    android:layout_margin="5dp"
+   	    android:layout_toRightOf="@+id/choose_tags"
+   	    android:layout_toEndOf="@+id/choose_tags" 
+   	    android:contentDescription="@string/remove_item"
+   	    android:drawableLeft="@drawable/ic_stat_content_backspace"
+   	    android:drawableStart="@drawable/ic_stat_content_backspace" />
 
 </RelativeLayout>
