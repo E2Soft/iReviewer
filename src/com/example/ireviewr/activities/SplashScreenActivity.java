@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.example.ireviewr.MainActivity;
 import com.example.ireviewr.R;
+import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.ReviewObject;
@@ -302,5 +303,20 @@ public class SplashScreenActivity extends Activity
 		group.addReview(rev1);
 		group.addReview(rev2);
 		group.addUser(testUser2);
+		
+	    //////////////////////////////////////
+		
+		Comment comm1 = new Comment("comment1", testUser, rev1);
+		comm1.save();
+		
+		Comment comm2 = new Comment("comment2", testUser, rev1);
+		comm2.save();
+		
+		Comment comm3 = new Comment("comment3", testUser, rev2);
+		comm3.save();
+		
+		Comment comm4 = new Comment("comment4", testUser, rev3);
+		comm4.save();
+		
 	}
 }

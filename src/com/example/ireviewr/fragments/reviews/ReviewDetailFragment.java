@@ -80,17 +80,17 @@ public class ReviewDetailFragment extends Fragment {
 	{
 		super.onCreateOptionsMenu(menu, inflater);
 		
-/*		User currentUser = CurrentUser.getModel(getActivity());
-		String currentUserId = currentUser.getModelId();*/
+		User currentUser = CurrentUser.getModel(getActivity());
+		String currentUserId = currentUser.getModelId();
 		
 		//dodati meni
 		inflater.inflate(R.menu.fragment_detail_menu, menu);
 		
-/*		if(!getReview().isCreatedBy(currentUserId))
+		if(!getReview().isCreatedBy(currentUserId))
 		{
 			menu.removeItem(R.id.edit_item);
 			menu.removeItem(R.id.delete_item);
-		}*/
+		}
 	}
 	
 	@Override

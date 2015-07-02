@@ -6,97 +6,43 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.adapters.CommentsAdapter;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Comment;
-import com.example.ireviewr.model.User;
-import com.example.ireviewr.tools.Mokap;
+import com.example.ireviewr.model.Review;
+import com.example.ireviewr.tools.CurrentUser;
 
-public class CommentsListFragment extends ListFragment
-{
-	private CommentsAdapter myAdapter;
+public class CommentsListFragment extends AbstractCommentsListFragment
+{	
 	
-	// TODO da prima id reviewa i dobavlja komentare za njega
-	public static CommentsListFragment newInstance(String itemId)
+	public CommentsListFragment()
+	{}
+	
+	// prima id reviewa i dobavlja komentare za njega
+	public CommentsListFragment(String itemId)
 	{
-		CommentsListFragment fragment = new CommentsListFragment();
-	    return fragment;
+		super(itemId, R.menu.activity_itemdetail);
 	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	protected ModelLoaderCallbacks<Comment> createLoaderCallbacks() 
 	{
-		super.onCreate(savedInstanceState);
-		
-		//postaviti da fragment ima meni
-		setHasOptionsMenu(true);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
-	{
-		View view = inflater.inflate(R.layout.comments_list, container, false);
-		
-		myAdapter = new CommentsAdapter(getActivity());
-		
-		// TODO da prima id reviewa i dobavlja komentare za njega
-		getActivity().getSupportLoaderManager().initLoader(R.id.COMMENT_LOADER, null, 
-				new ModelLoaderCallbacks<Comment>(getActivity(), 
-				Comment.class, 
-				myAdapter)
-				{
-					@Override
-					protected List<Comment> getData()
-					{
-						return Mokap.getCommentsList();
-					}
-				});
-		
-		setListAdapter(myAdapter);
-		
-		return view; 
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		
-		//dodati meni
-		inflater.inflate(R.menu.activity_itemdetail, menu);
-		SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-		
-		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                // this is your adapter that will be filtered
-                myAdapter.getFilter().filter(newText.toString());
-                //System.out.println("on text chnge text: "+newText);
-                return true;
-            }
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                // this is your adapter that will be filtered
-                //myAdapter.getFilter().filter(query.toString());
-                //System.out.println("on query submit: "+query);
-                return false;
-            }
-        };
-        searchView.setOnQueryTextListener(textChangeListener);
+		return new ModelLoaderCallbacks<Comment>(getActivity(), Comment.class, adapter)
+		{
+			@Override
+			protected List<Comment> getData()
+			{	
+				Log.d("KOMENTARI REVIEWA", "review_id="+getReview().getModelId()+"komentari="+getReview().getComments());
+				return getReview().getComments();
+			}
+		};
 	}
 	
 	@Override
@@ -113,43 +59,56 @@ public class CommentsListFragment extends ListFragment
 		}
 	}
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		
+		//postaviti da fragment ima meni
+		setHasOptionsMenu(true);
+	}
+	
 	private void commentDialog(){
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+		
 		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 		final View promptView = layoutInflater.inflate(R.layout.comment_dialog, null);
-		alertDialogBuilder.setView(promptView);
-		
-		alertDialogBuilder.setCancelable(false)
-			.setPositiveButton(R.string.comment, new OnClickListener() {
-				
+		new AlertDialog.Builder(getActivity())
+			.setView(promptView)		
+			.setCancelable(false)
+			.setPositiveButton(R.string.comment, new OnClickListener() 
+			{	
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				public void onClick(DialogInterface dialog, int which) 
+				{
 					//get data
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+					
+					Review review = getReview();
+					
 					//create object
-					Comment newComment = new Comment(editText.getText().toString(), new User(), null);
-					//add to list
-					//items.add(newComment);
-					// TODO save to database
+					Comment newComment = new Comment(editText.getText().toString(), CurrentUser.getModel(getActivity()), review);
+					
+					// save to database
+					newComment.saveOrThrow();
+					
+					//Log.d("COMMENT","commnet  "+newComment.getReview().getName());
+					Toast.makeText(getActivity(), R.string.created, Toast.LENGTH_SHORT).show();
 					
 					//update original list
 					//((CommentsAdapter) myAdapter).getItemsOriginal().add(newComment);
 					
 					//notify adapter
-					myAdapter.notifyDataSetChanged();
+					//myAdapter.notifyDataSetChanged();
 				}
 			})
-			.setNegativeButton(R.string.cancel,
-					new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-			});
-		
-		
-		// create an alert dialog
-		AlertDialog alert = alertDialogBuilder.create();
-		alert.show();
+			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int id) 
+				{
+					dialog.cancel();
+				}
+			})
+			.show();
 	}
 	
 	@Override
@@ -157,6 +116,11 @@ public class CommentsListFragment extends ListFragment
 		super.onResume();
 		getActivity().getActionBar().setTitle(R.string.comments);
 		setHasOptionsMenu(true);
+	}
+	
+	private Review getReview()
+	{
+		return Review.getByModelId(Review.class, getArguments().getString(RELATED_ID));
 	}
 	
 }

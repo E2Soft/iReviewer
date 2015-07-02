@@ -46,7 +46,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			}
 			case 1:
 			{
-				return CommentsListFragment.newInstance(itemId);
+				return new CommentsListFragment(itemId);
 			}
 			case 2:
 			{
