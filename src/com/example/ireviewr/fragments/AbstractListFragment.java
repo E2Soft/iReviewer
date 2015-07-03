@@ -92,8 +92,15 @@ public abstract class AbstractListFragment<T extends AbstractModel> extends List
 	            @Override
 	            public boolean onQueryTextChange(String newText)
 	            {
-	                adapter.getFilter().filter(newText.toString());
-	                return true;
+	            	if(adapter != null && newText != null)
+	            	{
+	            		adapter.getFilter().filter(newText.toString());
+	            		return true;
+	            	}
+	            	else
+	            	{
+	            		return false;
+	            	}
 	            }
 	            @Override
 	            public boolean onQueryTextSubmit(String query)

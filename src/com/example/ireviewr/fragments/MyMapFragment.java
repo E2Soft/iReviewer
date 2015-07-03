@@ -1,16 +1,22 @@
 package com.example.ireviewr.fragments;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -19,14 +25,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.activities.TagFilterActivity;
 import com.example.ireviewr.dialogs.LocationDialog;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectFormFragment;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectTabsFragment;
+import com.example.ireviewr.model.Review;
+import com.example.ireviewr.model.ReviewObject;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.tools.ReviewerTools;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -48,10 +64,14 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 	private AlertDialog dialog;
 
 	private Marker home;
+	private HashMap<Marker, ReviewObject> markers;
 
 	public static MyMapFragment newInstance() {
+		
 		MyMapFragment mpf = new MyMapFragment();
-
+		
+		//mpf.markers = new HashMap<Marker, ReviewObject>();
+		
 		return mpf;
 	}
 
@@ -117,6 +137,11 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			// Toast.LENGTH_SHORT).show();
 			
 			locationManager.requestLocationUpdates(provider, 0, 0, this);
+		}
+		
+		if(markers == null)
+		{
+			markers = new HashMap<Marker, ReviewObject>();
 		}
 
 	}
@@ -203,6 +228,36 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		locationManager.removeUpdates(this);
 	}
 
+	private void fillTheMapWithRevObjects(GoogleMap map, Location location) 
+	{
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getActivity().getApplicationContext());
+		String lookupRadius = sharedPreferences.getString(getString(R.string.pref_radius), "1");//1km
+		double radius = Double.parseDouble(lookupRadius);
+		
+		List<ReviewObject> list = ReviewObject.getFiltered(ReviewerTools.stringListToTagList(tagFilter), 
+				location.getLatitude(), location.getLongitude(), radius);
+		
+		//clear from list
+		map.clear();
+		
+		//clear marker
+		markers.clear();
+		
+		for(ReviewObject rev : list)
+		{
+			LatLng loc = new LatLng(rev.getLocationLat(), rev.getLocationLong());
+			Marker marker = map.addMarker(new MarkerOptions()
+				.title(rev.getName())
+				.snippet(rev.getDescription())
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+				.position(loc));
+			
+			markers.put(marker, rev);
+		}
+	}
+	
 	private void addMarker(Location location) {
 		// Toast.makeText(getActivity(), "addMarker",
 		// Toast.LENGTH_SHORT).show();
@@ -211,10 +266,12 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		if (home != null) {
 			home.remove();
 		}
-
+		
+		fillTheMapWithRevObjects(map, location);
+		
 		home = map.addMarker(new MarkerOptions()
-				.title("Title")
-				.snippet("Contnet")
+				.title("Hey there.")
+				.snippet("You are here at the moment :)")
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_RED))
 				.position(loc));
@@ -257,10 +314,87 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 		//Toast.makeText(getActivity(), "onMapReady()", Toast.LENGTH_SHORT).show();
 
 		map = googleMap;
+		map.setInfoWindowAdapter(new MapInfoAdapter());
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				
+				marker.showInfoWindow();
+				
+				return true;
+			}
+		});
+		
+		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			
+			@Override
+			public void onInfoWindowClick(Marker arg0) {
+				ReviewObject rev = markers.get(arg0);
+				FragmentTransition.to(ReviewObjectTabsFragment.newInstance(rev.getModelId()), getActivity());
+			}
+		});
 
 		if (location != null) {
 			addMarker(location);
 		}
+	}
+	
+	private class MapInfoAdapter implements InfoWindowAdapter{
+
+		public MapInfoAdapter()
+		{
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		public View getInfoContents(Marker arg0) 
+		{
+			View view = getLayoutInflater(null).inflate(R.layout.info_window_layout, null);
+			
+			ReviewObject rev = markers.get(arg0);
+			
+			TextView title = (TextView) view.findViewById(R.id.marker_name);
+			title.setText(rev.getName());
+			
+			TextView detail = (TextView) view.findViewById(R.id.marked_detail);
+			detail.setText(rev.getDescription());
+			
+			ImageView image = (ImageView) view.findViewById(R.id.marker_picture);
+			
+			if(rev.getMainImage() != null)
+			{
+				if(!rev.getMainImage().getPath().equals(""))
+				{
+					Bitmap bmp = BitmapFactory.decodeFile(rev.getMainImage().getPath());
+					image.setImageBitmap(bmp);
+				}
+			}
+			
+			
+			float rat = 0;
+			
+			for(Review revobj : rev.getReviews())
+			{
+				rat+=revobj.getRating();
+			}
+			
+			if(rat > 0)
+			{
+				rat = rat / rev.getReviews().size();
+			}
+			
+			RatingBar rating = (RatingBar) view.findViewById(R.id.marker_rating);
+			rating.setRating(rat);
+			
+			return view;
+		}
+
+		@Override
+		public View getInfoWindow(Marker arg0) {
+			return null;
+		}
+		
 	}
 
 }
