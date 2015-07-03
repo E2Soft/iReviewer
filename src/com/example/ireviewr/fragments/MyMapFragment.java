@@ -251,7 +251,7 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 				.title(rev.getName())
 				.snippet(rev.getDescription())
 				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 				.position(loc));
 			
 			markers.put(marker, rev);
@@ -273,7 +273,7 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 				.title("Hey there.")
 				.snippet("You are here at the moment :)")
 				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+				.defaultMarker(BitmapDescriptorFactory.HUE_RED))
 				.position(loc));
 
 		CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -320,8 +320,10 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				
-				marker.showInfoWindow();
-				
+				if(markers.containsKey(marker))
+				{
+					marker.showInfoWindow();
+				}
 				return true;
 			}
 		});
@@ -331,7 +333,9 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			@Override
 			public void onInfoWindowClick(Marker arg0) {
 				ReviewObject rev = markers.get(arg0);
+				
 				FragmentTransition.to(ReviewObjectTabsFragment.newInstance(rev.getModelId()), getActivity());
+				
 			}
 		});
 
@@ -356,12 +360,12 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			
 			TextView title = (TextView) view.findViewById(R.id.marker_name);
 			title.setText(rev.getName());
-			
+				
 			TextView detail = (TextView) view.findViewById(R.id.marked_detail);
 			detail.setText(rev.getDescription());
-			
+				
 			ImageView image = (ImageView) view.findViewById(R.id.marker_picture);
-			
+				
 			if(rev.getMainImage() != null)
 			{
 				if(!rev.getMainImage().getPath().equals(""))
@@ -373,12 +377,12 @@ public class MyMapFragment extends Fragment implements LocationListener, OnMapRe
 			
 			
 			float rat = 0;
-			
+				
 			for(Review revobj : rev.getReviews())
 			{
 				rat+=revobj.getRating();
 			}
-			
+				
 			if(rat > 0)
 			{
 				rat = rat / rev.getReviews().size();
