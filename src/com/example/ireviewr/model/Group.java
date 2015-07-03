@@ -127,4 +127,14 @@ public class Group extends AbstractModel
 			m2m.deleteSynced();
 		}
 	}
+	
+	public boolean hasReview(String reviewId)
+	{
+		// ako postoji veza izmedju ovog reviewa i grupe
+		return new Select()
+			.from(GroupToReview.class).as("GRP_TO_REV")
+			.join(Review.class).as("REV")
+			.on("REV._id = GRP_TO_REV.review")
+			.where("GRP_TO_REV.userGroup = ? and REV.modelId = ?", getId(), reviewId).executeSingle() != null;
+	}
 }

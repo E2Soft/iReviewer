@@ -9,4 +9,5 @@
     <item type="id" name="REVIEW_OBJECT_LOADER"/>
     <item type="id" name="COMMENT_LOADER"/>
     <item type="id" name="TAG_LOADER"/>
+    <item type="id" name="REVIEW_GROUP_CHECK_LOADER"/>
 </resources>
