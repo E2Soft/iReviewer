@@ -1,13 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-	<TextView 
-        android:id="@+id/my_view_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_first"/>
+    android:layout_height="match_parent" >
 
-</LinearLayout>
+	    <ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_alignParentEnd="true"
+	        android:layout_alignParentTop="true"
+	        android:contentDescription="@null"
+	        android:layout_margin="5dp"
+	        android:src="@drawable/about" />
+
+	    <TextView
+	        android:id="@+id/team"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_below="@id/imageView1"
+	        android:layout_margin="5dp"
+	        android:gravity="center_vertical"
+	        android:text="@string/team"
+	        android:textColor="#000"
+	        android:textSize="17sp"
+	        android:textStyle="bold" />
+
+	    <TextView
+	        android:id="@+id/member1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="17sp"
+	        android:gravity="center_vertical"
+	        android:textColor="#000"
+	        android:textStyle="bold"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_margin="5dp"
+	        android:layout_below="@id/team"
+	        android:text="@string/team_member1" />
+
+	    <TextView
+	        android:id="@+id/member2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="17sp"
+	        android:gravity="center_vertical"
+	        android:textColor="#000"
+	        android:textStyle="bold"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_margin="5dp"
+	        android:layout_below="@id/member1"
+	        android:text="@string/team_member2" />
+
+	    <TextView
+	        android:id="@+id/member3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="17sp"
+	        android:gravity="center_vertical"
+	        android:textColor="#000"
+	        android:textStyle="bold"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_margin="5dp"
+	        android:layout_below="@id/member2"
+	        android:text="@string/team_member3" />
+
+    </RelativeLayout>

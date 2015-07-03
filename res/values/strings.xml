@@ -171,4 +171,12 @@
     <string name="logout">Log out</string>
     
     
+     <string name="team">Tim 10:</string>
+    
+     <string name="team_member1">Milos Simic</string>    
+    
+     <string name="team_member2">Zeljko Bal</string>
+    
+     <string name="team_member3">Bojana Sofronovic</string>  
+    
 </resources>
