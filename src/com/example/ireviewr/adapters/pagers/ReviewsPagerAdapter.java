@@ -56,6 +56,10 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			{
 				return TagsFragmentList.newInstance(itemId);
 			}
+			//case 4:
+			//{
+			//	return new ReviewTagListFragment(itemId);
+			//}
 			default:
 			{
 				Log.e("ReviewsPagerAdapter", "Internal error unknown slide position.");
