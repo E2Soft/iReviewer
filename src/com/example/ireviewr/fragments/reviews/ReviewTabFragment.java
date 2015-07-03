@@ -56,6 +56,7 @@ public class ReviewTabFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		setHasOptionsMenu(true);
+		getActivity().getActionBar().setTitle(R.string.review_details);
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

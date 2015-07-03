@@ -91,32 +91,6 @@
         android:isIndicator="true" 
         android:numStars="5"
         android:layout_margin="5dp"/>
-    
-    <TextView android:id="@+id/review_modified_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:gravity="center_vertical"
-        android:textColor="#000"
-        android:text="@string/last_date_modified"
-        android:textStyle="bold"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/review_rating_label"
-        android:layout_margin="5dp" />
-    
-    <TextView
-        android:id="@+id/review_modified_contnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:gravity="center_vertical"
-        android:textColor="#000"
-        android:layout_toRightOf="@id/review_modified_label"
-        android:layout_toEndOf="@id/review_modified_label"
-        android:layout_alignBaseline="@id/review_modified_label"
-        android:layout_below="@id/review_rating_content" 
-        android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/created_by_label"
@@ -129,7 +103,7 @@
         android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/review_modified_label"
+        android:layout_below="@id/review_rating_label"
         android:layout_margin="5dp"  />
 
     <TextView

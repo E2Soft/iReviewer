@@ -186,7 +186,6 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.comments);
 		setHasOptionsMenu(true);
 	}
 	
