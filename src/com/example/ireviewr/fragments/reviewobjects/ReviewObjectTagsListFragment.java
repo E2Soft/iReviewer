@@ -2,13 +2,20 @@ package com.example.ireviewr.fragments.reviewobjects;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteConstraintException;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.example.ireviewr.R;
 import com.example.ireviewr.adapters.AbstractArrayAdapter;
 import com.example.ireviewr.adapters.TagsAdapter;
+import com.example.ireviewr.dialogs.DefaultCancelListener;
+import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.fragments.AbstractDetailListFragment;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.ReviewObject;
@@ -16,6 +23,8 @@ import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.TagToReviewObject;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.validators.NameValidator;
+import com.example.ireviewr.validators.TextValidator;
 
 public class ReviewObjectTagsListFragment extends AbstractDetailListFragment<Tag>
 {
@@ -26,7 +35,7 @@ public class ReviewObjectTagsListFragment extends AbstractDetailListFragment<Tag
 	
 	public ReviewObjectTagsListFragment(String itemId)
 	{
-		super(R.id.TAG_LOADER, R.menu.standard_list_menu);
+		super(R.id.TAG_LOADER, R.menu.review_tags_list_menu);
 		getArguments().putString(RELATED_ID, itemId);
 	}
 
@@ -67,6 +76,7 @@ public class ReviewObjectTagsListFragment extends AbstractDetailListFragment<Tag
 		else
 		{
 			menu.removeItem(R.id.menu_action);
+			menu.removeItem(R.id.add_action);
 		}
 	}
 	
@@ -77,6 +87,9 @@ public class ReviewObjectTagsListFragment extends AbstractDetailListFragment<Tag
 		switch (item.getItemId()) {
 			case R.id.menu_action:
 				onMenuAction();
+				return true;
+			case R.id.add_action:
+				addTagDialog();
 				return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -91,5 +104,41 @@ public class ReviewObjectTagsListFragment extends AbstractDetailListFragment<Tag
 	private ReviewObject getReviewObject()
 	{
 		return ReviewObject.getByModelId(ReviewObject.class, getArguments().getString(RELATED_ID));
+	}
+	
+	private void addTagDialog()
+	{
+		final EditText content = new EditText(getActivity());
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+		.setView(content)
+		.setTitle(R.string.tag_name)
+		.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener()
+		{
+			@SuppressLint("DefaultLocale")
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				String newTag = content.getText().toString().toUpperCase();
+				
+				Tag tag = new Tag(newTag);
+				try
+				{
+					tag.saveOrThrow();
+					getReviewObject().addTag(tag);
+				}
+				catch(SQLiteConstraintException ex)
+				{
+					ShowDialog.error(getActivity().getString(R.string.contains_tag_message), getActivity());
+				}
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DefaultCancelListener())
+		.create();
+		
+		TextValidator tagValidator = new NameValidator(dialog, content, 10);
+		content.addTextChangedListener(tagValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 }
