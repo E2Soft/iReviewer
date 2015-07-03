@@ -91,4 +91,32 @@ public class Tag extends AbstractModel
 			.on("REV._id = TAG_TO_REV.review")
 			.where("TAG_TO_REV.tag = ? and REV.modelId = ?", getId(), reviewId).executeSingle() != null;
 	}
+
+	public void addReviewObject(ReviewObject toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new TagToReviewObject(toAdd, this).save();
+	}
+	
+	public void removeReviewObject(ReviewObject toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReviewObject m2m = new Select().from(TagToReviewObject.class)
+				.where("reviewObject = ? and tag = ?", toRemove.getId(), getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
+	public boolean hasReviewObject(String reviewObjId)
+	{
+		return new Select()
+			.from(TagToReviewObject.class).as("TAG_TO_REVOB")
+			.join(ReviewObject.class).as("REVOB")
+			.on("REVOB._id = TAG_TO_REVOB.reviewObject")
+			.where("TAG_TO_REVOB.tag = ? and REVOB.modelId = ?", getId(), reviewObjId).executeSingle() != null;
+	}
 }
