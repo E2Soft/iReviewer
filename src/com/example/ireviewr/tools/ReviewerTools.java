@@ -1,7 +1,14 @@
 package com.example.ireviewr.tools;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,16 +19,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import static java.lang.Math.sin;
-import static java.lang.Math.cos;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.atan2;
-import static java.lang.Math.PI;
 import android.util.Base64;
 
 import com.appspot.elevated_surge_702.crud.model.MessagesCommentMessage;
 import com.example.ireviewr.model.Comment;
 import com.example.ireviewr.model.Review;
+import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.User;
 
 public class ReviewerTools {
@@ -174,5 +177,17 @@ public class ReviewerTools {
 		}
 		
 		return nums;
+	}
+	
+	public static List<Tag> stringListToTagList(List<String> tagFilter)
+	{
+		List<Tag> tags = new ArrayList<Tag>();
+		
+		for(String tagId : tagFilter)
+		{
+			tags.add(Tag.getByModelId(Tag.class, tagId));
+		}
+		
+		return tags;
 	}
 }
