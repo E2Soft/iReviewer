@@ -7,15 +7,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.example.ireviewr.R;
-import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
 import com.example.ireviewr.fragments.reviews.ReviewGalleryFragment;
+import com.example.ireviewr.fragments.reviews.ReviewGroupsListFragment;
 import com.example.ireviewr.model.Review;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter
 {
-	private String[] names ={"Detail", "Comments", "Galery", "Tags"};
+	private String[] names ={"Detail", "Comments", "Galery", "Groups"};
 	private String itemId;
 	
 	public ReviewsPagerAdapter(String itemId, FragmentManager fm, Context context)
@@ -25,7 +25,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 		names[0] = context.getString(R.string.detail);
 		names[1] = context.getString(R.string.comments);
 		names[2] = context.getString(R.string.gallery);
-		names[3] = context.getString(R.string.tags);
+		names[3] = context.getString(R.string.groups);
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			}
 			case 3:
 			{
-				return TagsFragmentList.newInstance(itemId);
+				return new ReviewGroupsListFragment(itemId);
 			}
 			default:
 			{
