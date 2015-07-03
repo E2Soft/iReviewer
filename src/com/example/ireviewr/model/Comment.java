@@ -2,41 +2,65 @@ package com.example.ireviewr.model;
 
 import java.util.Date;
 
-public class Comment {
-	
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
+
+@Table(name = "Comment", id="_id")
+public class Comment extends AbstractModel
+{
+	@Column(name = "content", notNull=true)
 	private String content;
-	private Date dateCreated;
-	private String userCreated;
 	
-	public Comment(String content, Date dateCreated, String userCreated) {
-		super();
+	@Column(name = "userCreated", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private User userCreated;
+	
+	@Column(name = "review", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private Review review;
+	
+	public Comment() {} // required by activeandroid
+	
+	public Comment(String modelId, Date dateModified, String content, User userCreated, Review review) 
+	{
+		super(modelId, dateModified);
 		this.content = content;
-		this.dateCreated = dateCreated;
 		this.userCreated = userCreated;
+		this.review = review;
 	}
-	
+
+	public Comment(String content, User userCreated, Review review) 
+	{
+		this.content = content;
+		this.userCreated = userCreated;
+		this.review = review;
+	}
+
 	public String getContent() {
 		return content;
 	}
-	
+
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-	
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-	
-	public String getUserCreated() {
+
+	public User getUserCreated() {
 		return userCreated;
 	}
-	
-	public void setUserCreated(String userCreated) {
+
+	public void setUserCreated(User userCreated) {
 		this.userCreated = userCreated;
 	}
 	
+	public boolean isCreatedBy(String userId)
+	{
+		return userCreated.getModelId().equals(userId);
+	}
+
+	public Review getReview() {
+		return review;
+	}
+
+	public void setReview(Review review) {
+		this.review = review;
+	}
 }

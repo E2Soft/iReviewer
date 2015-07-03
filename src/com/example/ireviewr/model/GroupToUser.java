@@ -1,0 +1,48 @@
+package com.example.ireviewr.model;
+
+import java.util.Date;
+
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.annotation.Column.ForeignKeyAction;
+
+@Table(name = "GroupToUser", id="_id")
+public class GroupToUser extends AbstractModel
+{
+	@Column(name = "user", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private User user;
+	
+	@Column(name = "userGroup", notNull=true, onDelete=ForeignKeyAction.CASCADE)
+	private Group userGroup;
+	
+	public GroupToUser() {} // required by activeandroid
+
+	public GroupToUser(User user, Group userGroup)
+	{
+		this.user = user;
+		this.userGroup = userGroup;
+	}
+
+	public GroupToUser(String uuid, Date convertToDate, User user, Group group)
+	{
+		super(uuid, convertToDate);
+		this.user = user;
+		this.userGroup = group;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Group getGroup() {
+		return userGroup;
+	}
+
+	public void setGroup(Group userGroup) {
+		this.userGroup = userGroup;
+	}
+}

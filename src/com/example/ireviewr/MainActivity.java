@@ -18,13 +18,20 @@ package com.example.ireviewr;
 
 import java.util.ArrayList;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,15 +39,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ireviewr.activities.ReviewerPreferenceActivity;
 import com.example.ireviewr.adapters.DrawerListAdapter;
 import com.example.ireviewr.fragments.AboutFragment;
-import com.example.ireviewr.fragments.LocationFragment;
-import com.example.ireviewr.fragments.PreferencesFragment;
+import com.example.ireviewr.fragments.MyMapFragment;
+import com.example.ireviewr.fragments.ProfileFragment;
 import com.example.ireviewr.fragments.groups.GroupsListFragment;
-import com.example.ireviewr.fragments.reviews.ReviewsFragmentList;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectsListFragment;
 import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.sync.SyncReceiver;
+import com.example.ireviewr.sync.auto.SyncService;
+import com.example.ireviewr.tools.CurrentUser;
+import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.tools.ReviewerTools;
 
 public class MainActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
@@ -51,6 +65,23 @@ public class MainActivity extends FragmentActivity{
     private CharSequence mTitle;
     private ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
     
+    //Sync stuff
+    private PendingIntent pendingIntent;
+	private AlarmManager manager;
+	private SharedPreferences sharedPreferences;
+	
+	private SyncReceiver sync;
+	public static String SYNC_DATA = "SYNC_DATA";
+	public static String SYNC_TIME = "SYNC_TIME";
+	public static String NEW_COMMENTS = "NEW_COMMENTS";
+	
+	private String synctime;
+	private boolean allowSync;
+	private String lookupRadius;
+	
+	private boolean allowReviewNotif;
+	private boolean allowCommentedNotif;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,14 +130,76 @@ public class MainActivity extends FragmentActivity{
         if (savedInstanceState == null) {
             selectItemFromDrawer(0);
         }
+        
+        setUpReceiver();
+        
+    }
+    
+    private void setUpReceiver(){
+    	sync = new SyncReceiver();
+    	
+    	// Retrieve a PendingIntent that will perform a broadcast
+        Intent alarmIntent = new Intent(this, SyncService.class);
+        pendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
+        
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        consultPreferences();
+    }
+
+    private void consultPreferences(){
+    	synctime = sharedPreferences.getString(getString(R.string.pref_sync_list), "1");//1min
+    	allowSync = sharedPreferences.getBoolean(getString(R.string.pref_sync), false);
+    	
+    	lookupRadius = sharedPreferences.getString(getString(R.string.pref_radius), "1");//1km
+    	
+    	allowCommentedNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_comment_key), false);
+    	allowReviewNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_review_key), false);
+    	
+    	//Toast.makeText(MainActivity.this, allowSync+" "+lookupRadius+" "+synctime, Toast.LENGTH_LONG).show();
+    }
+    
+	private void setUpUserName(){
+		String usernameContent = CurrentUser.getName(this);
+		TextView userName = (TextView) findViewById(R.id.userName);
+		userName.setText(usernameContent);
+	}
+    
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	
+    	//da postavi naziv korisnika
+    	setUpUserName();
+    	
+    	//Za slucaj da referenca nije postavljena da se izbegne problem sa androidom!
+    	if (manager == null) {
+    		setUpReceiver();
+		}
+    	
+    	if(allowSync){
+	    	int interval = ReviewerTools.calculateTimeTillNextSync(Integer.parseInt(synctime));
+	    	manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+	        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    	}
+    	
+    	IntentFilter filter = new IntentFilter();
+    	filter.addAction(NEW_COMMENTS);
+    	filter.addAction(SYNC_DATA);
+    	
+    	registerReceiver(sync, filter);
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
-    	mNavItems.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-        mNavItems.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-        mNavItems.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-        mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-        mNavItems.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
+    	mNavItems.add(new NavItem(getString(R.string.home), getString(R.string.home_long), R.drawable.ic_action_map));
+        mNavItems.add(new NavItem(getString(R.string.groups), getString(R.string.groups_long), R.drawable.ic_action_group));
+        mNavItems.add(new NavItem(getString(R.string.places), getString(R.string.places_long), R.drawable.ic_action_place));
+        mNavItems.add(new NavItem(getString(R.string.preferences), getString(R.string.preferences_long), R.drawable.ic_action_settings));
+        mNavItems.add(new NavItem(getString(R.string.about), getString(R.string.about_long), R.drawable.ic_action_about));
+        mNavItems.add(new NavItem(getString(R.string.sync_data), getString(R.string.sync_data_long), R.drawable.ic_action_refresh));
     }
     
     @Override
@@ -159,55 +252,30 @@ public class MainActivity extends FragmentActivity{
         }
     }
     
-    /*MOKAP*/
-    private ArrayList<NavItem> getList(){
-    	ArrayList<NavItem> items = new ArrayList<NavItem>();
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	items.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-    	items.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_select_all));
-    	items.add(new NavItem("Reviews", "Meetup destination", R.drawable.ic_action_labels));
-    	items.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-    	items.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-    	
-    	return items;
-    }
     
     private void selectItemFromDrawer(int position) {
-    	FragmentManager fragmentManager = getSupportFragmentManager();
     	if(position == 0){
-    		fragmentManager.beginTransaction().replace(R.id.mainContent, new LocationFragment()).commit();
+    		FragmentTransition.to(MyMapFragment.newInstance(), this, false);
     	}else if(position == 1){
-        	/*fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new TabbedFragment(MainActivity.this)).addToBackStack(null).commit();*/
-    		fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new GroupsListFragment(getList())).addToBackStack(null).commit();
+    		FragmentTransition.to(new GroupsListFragment(), this);
         }else if(position == 2){
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new ReviewsFragmentList(getList())).addToBackStack(null).commit();
+        	FragmentTransition.to(new ReviewObjectsListFragment(), this);
         }else if(position == 3){
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new PreferencesFragment()).addToBackStack(null).commit();
-        }else if(position == 4){	
-        	fragmentManager.beginTransaction().
-        	replace(R.id.mainContent, new AboutFragment()).addToBackStack(null).commit();
+        	Intent preference = new Intent(MainActivity.this,ReviewerPreferenceActivity.class);
+        	startActivity(preference);
+        }else if(position == 4){
+        	FragmentTransition.to(new AboutFragment(), this);
+        }else if(position == 5){
+        	startService(new Intent(this, SyncService.class));
         }else{
-        	Toast.makeText(MainActivity.this, "Nesto van opsega!", Toast.LENGTH_LONG).show();
+        	Log.e("DRAWER", "Nesto van opsega!");
         }
         
         mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).getmTitle());
+        if(position != 5) // za sve osim za sync
+        {
+        	setTitle(mNavItems.get(position).getmTitle());
+        }
         mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
@@ -232,7 +300,23 @@ public class MainActivity extends FragmentActivity{
     }
 
     public void getProfile(View view){
-    	Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
+    	//Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
+    	FragmentTransition.to(new ProfileFragment(), this);
+    	mDrawerLayout.closeDrawer(mDrawerPane);
     }
-	
+    
+    @Override
+    protected void onPause() {
+    	if (manager != null) {
+			manager.cancel(pendingIntent);
+	        //Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+		}
+
+    	if(sync != null){
+    		unregisterReceiver(sync);
+    	}
+    	
+    	super.onPause();
+    	
+    }
 }

@@ -1,5 +1,5 @@
 # Built application files
-*.apk
+bin/*.apk
 *.ap_
 
 # Files for the Dalvik VM
@@ -24,3 +24,7 @@ proguard/
 
 # Log Files
 *.log
+/.pydevproject
+
+# python cache
+*.pyc

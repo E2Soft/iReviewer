@@ -1,6 +1,9 @@
 package com.example.ireviewr.model;
 
-public class NavItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class NavItem implements Parcelable {
     private String mTitle;
     private String mSubtitle;
     private int mIcon;
@@ -40,4 +43,17 @@ public class NavItem {
     	
     	return mTitle;
     }
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mTitle);
+        out.writeString(mSubtitle);
+        out.writeInt(mIcon);
+		
+	}
 }

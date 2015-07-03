@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   <item
+      android:id="@+id/join_group"
+      android:icon="@drawable/ic_people_outline_white_36dp"
+      android:orderInCategory="18"
+      android:showAsAction="ifRoom"
+      android:title="@string/join_group">
+   </item>
+   <item
+      android:id="@+id/edit_item"
+      android:icon="@drawable/ic_action_edit"
+      android:orderInCategory="19"
+      android:showAsAction="ifRoom"
+      android:title="@string/edit_item">
+   </item>
+   <item
+      android:id="@+id/delete_item"
+      android:icon="@drawable/ic_action_remove"
+      android:orderInCategory="20"
+      android:showAsAction="ifRoom"
+      android:title="@string/remove_item">
+   </item>
+</menu>

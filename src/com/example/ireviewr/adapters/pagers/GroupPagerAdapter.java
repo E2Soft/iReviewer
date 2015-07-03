@@ -1,61 +1,66 @@
 package com.example.ireviewr.adapters.pagers;
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
+import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.groups.GroupDetailFragment;
-import com.example.ireviewr.fragments.groups.UserFragmentList;
-import com.example.ireviewr.fragments.reviews.ReviewsGroupList;
-import com.example.ireviewr.model.NavItem;
+import com.example.ireviewr.fragments.groups.GroupReviewsListFragment;
+import com.example.ireviewr.fragments.users.GroupUsersListFragment;
+import com.example.ireviewr.model.Group;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
 
-	private Context context;
 	private String[] names ={"Detail","Reviews", "Users"};
-	private ArrayList<NavItem> reviews;
-	private ArrayList<NavItem> users;
-	private Bundle bundle;
+	private String itemId;
 	
-	public GroupPagerAdapter(Bundle bundle, FragmentManager fm, Context context, 
-			ArrayList<NavItem> reviews, ArrayList<NavItem> users) {
+	public GroupPagerAdapter(String itemId, FragmentManager fm, Context context)
+	{
 		super(fm);
-		this.context = context;
-		this.reviews = reviews;
-		this.users = users;
-		this.bundle = bundle;
-	}
-
-	@Override
-	public Fragment getItem(int position) {
-		Fragment fragment = null;
-		
-		if(position == 0){
-			fragment = new GroupDetailFragment();
-			fragment.setArguments(bundle);
-		}else if(position == 1){
-			fragment = new ReviewsGroupList(reviews);
-		}else if(position == 2){
-			fragment = new UserFragmentList(users);
-		}
-		
-		return fragment;
+		this.itemId = itemId;
+		names[0] = context.getString(R.string.detail);
+		names[1] = context.getString(R.string.reviews);
+		names[2] = context.getString(R.string.users);
 	}
 	
 	@Override
-	public CharSequence getPageTitle(int position) {
-		
+	public Fragment getItem(int position)
+	{
+		switch(position)
+		{
+			case 0:
+			{
+				Group group = Group.getByModelId(Group.class, itemId);
+				return GroupDetailFragment.newInstance(group);
+			}
+			case 1:
+			{
+				return new GroupReviewsListFragment(itemId);
+			}
+			case 2:
+			{
+				return new GroupUsersListFragment(itemId);
+			}
+			default:
+			{
+				Log.e("GroupPagerAdapter", "Internal error unknown slide position.");
+				return null;
+			}
+		}
+	}
+	
+	@Override
+	public CharSequence getPageTitle(int position)
+	{
 		return names[position];
 	}
 	
 	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
+	public int getCount()
+	{
 		return names.length;
 	}
-
 }
