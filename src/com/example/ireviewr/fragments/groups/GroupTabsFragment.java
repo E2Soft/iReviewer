@@ -31,7 +31,7 @@ public class GroupTabsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View v = inflater.inflate(R.layout.group_fragment_tabbed, container, false);
-		mGroupPagerAdapter = new GroupPagerAdapter(getArguments().getString(ID), getChildFragmentManager());
+		mGroupPagerAdapter = new GroupPagerAdapter(getArguments().getString(ID), getChildFragmentManager(), getActivity());
         
         mViewPager = (ViewPager) v.findViewById(R.id.group_pager);
         mViewPager.setAdapter(mGroupPagerAdapter);

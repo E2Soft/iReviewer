@@ -42,7 +42,7 @@ public class ReviewTabFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View v = inflater.inflate(R.layout.reviews_tabbed, container, false);
-		mReviewsPagerAdapter = new ReviewsPagerAdapter(getArguments().getString(ID), getChildFragmentManager());
+		mReviewsPagerAdapter = new ReviewsPagerAdapter(getArguments().getString(ID), getChildFragmentManager(), getActivity());
         
         mViewPager = (ViewPager) v.findViewById(R.id.review_pager);
         mViewPager.setAdapter(mReviewsPagerAdapter);

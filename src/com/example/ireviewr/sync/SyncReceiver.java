@@ -49,22 +49,22 @@ public class SyncReceiver extends BroadcastReceiver {
 				if(resultCode == ReviewerTools.TYPE_NOT_CONNECTED){
 					bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_wifi);
 					mBuilder.setSmallIcon(R.drawable.ic_action_error);
-					mBuilder.setContentTitle("Automatic Sync problem");
-					mBuilder.setContentText("Bad news, no internet connection");
+					mBuilder.setContentTitle(context.getString(R.string.autosync_problem));
+					mBuilder.setContentText(context.getString(R.string.no_internet));
 					mBuilder.addAction(R.drawable.ic_action_network_wifi, context.getString(R.string.turn_wifi_on), pIntent);
 					mBuilder.addAction(R.drawable.ic_action_settings, context.getString(R.string.turn_notif_on), pIntentSettings);
 				}else if(resultCode == ReviewerTools.TYPE_MOBILE){
 					bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_network_cell);
 					mBuilder.setSmallIcon(R.drawable.ic_action_warning);
-					mBuilder.setContentTitle("Automatic Sync warning");
-					mBuilder.setContentText("Please connect to wifi to sync data");
+					mBuilder.setContentTitle(context.getString(R.string.autosync_warning));
+					mBuilder.setContentText(context.getString(R.string.connect_to_wifi));
 					mBuilder.addAction(R.drawable.ic_action_network_wifi, context.getString(R.string.turn_wifi_on), pIntent);
 					mBuilder.addAction(R.drawable.ic_action_settings, context.getString(R.string.turn_notif_on), pIntentSettings);
 				}else{
 					bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
 					mBuilder.setSmallIcon(R.drawable.ic_action_refresh_w);
-					mBuilder.setContentTitle("Automatic Sync");
-					mBuilder.setContentText("Good news, everything is sync now.");
+					mBuilder.setContentTitle(context.getString(R.string.autosync));
+					mBuilder.setContentText(context.getString(R.string.good_news_sync));
 					mBuilder.addAction(R.drawable.ic_action_settings, context.getString(R.string.turn_notif_on), pIntentSettings);
 				}
 	
@@ -90,19 +90,19 @@ public class SyncReceiver extends BroadcastReceiver {
 		    		
 		    		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
 					mBuilder.setSmallIcon(R.drawable.ic_action_chat);
-					mBuilder.setContentTitle("New comments");
-					mBuilder.setContentText("New");
+					mBuilder.setContentTitle(context.getString(R.string.new_comments));
+					mBuilder.setContentText(context.getString(R.string.new_));
 					mBuilder.addAction(R.drawable.ic_action_settings, context.getString(R.string.turn_notif_on), pIntentSettings);
 					
 		    		/* Add Big View Specific Configuration */
 		    		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 		    		
 		    		if (allowReviewNotif) {
-		    			inboxStyle.addLine("New comments on my reviews: "+myReviewComment);
+		    			inboxStyle.addLine(context.getString(R.string.new_comments_on_reviews)+myReviewComment);
 		    		}
 		    		
 		    		if (allowCommentedNotif) {
-		    			inboxStyle.addLine("New comments on my comments: "+commentsICommented);
+		    			inboxStyle.addLine(context.getString(R.string.new_comments_on_comments)+commentsICommented);
 		    		}
 		    		
 		    		

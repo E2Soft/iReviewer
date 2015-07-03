@@ -1,6 +1,7 @@
 package com.example.ireviewr.fragments.reviews;
 
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.ireviewr.R;
 import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Comment;
@@ -122,6 +124,8 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 			
 			TextValidator nameValidator = new TextValidator(editText)
 			{
+				int maxLength = 200;
+				
 				@Override
 				public void validate(TextView textView, String text)
 				{
@@ -129,17 +133,17 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 					
 					if(text == null || "".equals(text.trim()))
 					{
-						textView.setError("Comment must not be empty!");
+						textView.setError(getActivity().getString(R.string.comment_empty_message));
 						okButton.setEnabled(false);
 					}
 					else if(!isAlphanumericWithInterpunction(text))
 					{
-						textView.setError("Comment must contain only alphanumeric characters or interpunction!");
+						textView.setError(getActivity().getString(R.string.comment_alphanum_message));
 						okButton.setEnabled(false);
 					}
 					else if(text.length() > 200)
 					{
-						textView.setError("Comment can't be longer than 200 characters!");
+						textView.setError(getActivity().getString(R.string.comment_maxlength_message).replace("{}", Integer.toString(maxLength)));
 						okButton.setEnabled(false);
 					}
 					else

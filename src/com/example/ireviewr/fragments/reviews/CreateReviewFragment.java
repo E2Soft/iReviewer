@@ -225,17 +225,17 @@ public class CreateReviewFragment extends Fragment {
  			{
  				if(text == null || "".equals(text.trim()))
  				{
- 					textView.setError("Name must not be empty!");
+ 					textView.setError(getActivity().getString(R.string.name_empty_message));
  					throw new ValidationException();
  				}
  				else if(!isAlphanumeric(text))
  				{
- 					textView.setError("Name must contain only alphanumeric characters!");
+ 					textView.setError(getActivity().getString(R.string.name_alphanum_message));
  					throw new ValidationException();
  				}
  				else if(text.length() > maxLength)
  				{
- 					textView.setError("Name can't be longer than {} characters!".replace("{}", Integer.toString(maxLength)));
+ 					textView.setError(getActivity().getString(R.string.name_maxlength_message).replace("{}", Integer.toString(maxLength)));
  					throw new ValidationException();
  				}
  				else
@@ -255,12 +255,12 @@ public class CreateReviewFragment extends Fragment {
  			{
  				if(!isAlphanumericWithInterpunction(text))
  				{
- 					textView.setError("Description must contain only alphanumeric characters or interpunction!");
+ 					textView.setError(getActivity().getString(R.string.desc_alphanum_message));
  					throw new ValidationException();
  				}
  				else if(text.length() > maxLength)
  				{
- 					textView.setError("Name can't be longer than {} characters!".replace("{}", Integer.toString(maxLength)));
+ 					textView.setError(getActivity().getString(R.string.desc_maxlength_message).replace("{}", Integer.toString(maxLength)));
  					throw new ValidationException();
  				}
  				else
@@ -462,7 +462,7 @@ public class CreateReviewFragment extends Fragment {
 		}
 		catch(SQLiteConstraintException ex)
 		{
-			ShowDialog.error("Error while saving.", getActivity());
+			ShowDialog.error(getActivity().getString(R.string.error_saving_message), getActivity());
 		}
 	}
 	
@@ -487,7 +487,7 @@ public class CreateReviewFragment extends Fragment {
 				}
 				else
 				{
-					ShowDialog.error("Already contains this tag.", getActivity());
+					ShowDialog.error(getActivity().getString(R.string.contains_tag_message), getActivity());
 				}
 			}
 		})
@@ -509,7 +509,7 @@ public class CreateReviewFragment extends Fragment {
 	
 	private void selectImage() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Add Photo");
+		builder.setTitle(R.string.add_photo);
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 
 			@Override

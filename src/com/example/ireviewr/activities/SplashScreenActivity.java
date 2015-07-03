@@ -81,12 +81,10 @@ public class SplashScreenActivity extends Activity
 			// sacekaj tako da splash bude vidljiv minimum SPLASH_TIME_OUT milisekundi
 			long timeLeft = SPLASH_TIME_OUT - (System.currentTimeMillis() - startTime);
 			if(timeLeft < 0) timeLeft = 0;
-			SystemClock.sleep(timeLeft); // TODO odkomentarisati ovo, zakomentarisano zbog testiranja
+			SystemClock.sleep(timeLeft);
 			
 			// uloguj se
-			login(); // TODO odkomentarisati ovaj, obrisati ovaj ispod
-			//User test_user = new Select().from(User.class).where("name = ?", "test_user").executeSingle();
-			//login(test_user); // dummy login za testiranje
+			login();
 		}
 	}
 	
@@ -118,7 +116,7 @@ public class SplashScreenActivity extends Activity
 	    }
 		catch (ActivityNotFoundException e)
 		{
-			Toast.makeText(this, "iReviewr cannot aquire account information. Closing now.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.cant_aquire_account_message, Toast.LENGTH_LONG).show();
 			finish();
 	    }
 	}
@@ -145,13 +143,13 @@ public class SplashScreenActivity extends Activity
             	}
             	else
             	{
-            		Toast.makeText(this, "Selected account doesn't have a valid email, please select another one.", Toast.LENGTH_LONG).show();
+            		Toast.makeText(this, R.string.no_valid_email_message, Toast.LENGTH_LONG).show();
             		register(); // probaj ovo opet
             	}
         	}
         	else
         	{
-        		Toast.makeText(this, "Please select an account with a valid email address.", Toast.LENGTH_LONG).show();
+        		Toast.makeText(this, R.string.select_account_with_email_message, Toast.LENGTH_LONG).show();
         		register(); // probaj ovo opet
         	}
         }
@@ -222,17 +220,17 @@ public class SplashScreenActivity extends Activity
 					}
 					else if(NAME_EXISTS.equals(result))
 					{
-						Toast.makeText(SplashScreenActivity.this, "Username already exists.", Toast.LENGTH_LONG).show();
+						Toast.makeText(SplashScreenActivity.this, R.string.username_exists_message, Toast.LENGTH_LONG).show();
 						register(currentUserEmail); // probaj opet da se registrujes
 					}
 					else if(EMAIL_EXISTS.equals(result))
 					{
-						Toast.makeText(SplashScreenActivity.this, "Email already exists. Try restarting the application or choosing another account.", Toast.LENGTH_LONG).show();
+						Toast.makeText(SplashScreenActivity.this, R.string.email_exists_message, Toast.LENGTH_LONG).show();
 						register(); // probaj opet da pitas za mail
 					}
 					else if(NO_CONNECTION.equals(result))
 					{
-						Toast.makeText(SplashScreenActivity.this, "Could not register at this moment, try again later.", Toast.LENGTH_LONG).show();
+						Toast.makeText(SplashScreenActivity.this, R.string.cant_register_message, Toast.LENGTH_LONG).show();
 						register(currentUserEmail); // probaj opet da se registrujes
 					}
 					else
@@ -251,13 +249,13 @@ public class SplashScreenActivity extends Activity
 		catch(SQLiteConstraintException ex) // ako nije prosla registracija
 		{
 			newUser.delete();
-			Toast.makeText(this, "Username already exists.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.username_exists_message, Toast.LENGTH_LONG).show();
 			register(currentUserEmail); // probaj opet da se registrujes
 		}
 		catch(Exception ex) // ako nije prosla registracija
 		{
 			newUser.delete();
-			Toast.makeText(this, "Could not register at this moment, try again later.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.cant_register_message, Toast.LENGTH_LONG).show();
 			register(currentUserEmail); // probaj opet da se registrujes
 		}
 	}

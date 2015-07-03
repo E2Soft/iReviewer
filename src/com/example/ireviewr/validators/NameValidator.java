@@ -1,5 +1,7 @@
 package com.example.ireviewr.validators;
 
+import com.example.ireviewr.R;
+
 import android.app.AlertDialog;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,17 +25,17 @@ public class NameValidator extends TextValidator
 		
 		if(text == null || "".equals(text.trim()))
 		{
-			textView.setError("Name must not be empty!");
+			textView.setError(dialog.getContext().getString(R.string.name_empty_message));
 			okButton.setEnabled(false);
 		}
 		else if(!isAlphanumeric(text))
 		{
-			textView.setError("Name must contain only alphanumeric characters!");
+			textView.setError(dialog.getContext().getString(R.string.name_alphanum_message));
 			okButton.setEnabled(false);
 		}
 		else if(text.length() > maxLength)
 		{
-			textView.setError("Name can't be longer than {} characters!".replace("{}", Integer.toString(maxLength)));
+			textView.setError(dialog.getContext().getString(R.string.name_maxlength_message).replace("{}", Integer.toString(maxLength)));
 			okButton.setEnabled(false);
 		}
 		else

@@ -119,6 +119,52 @@
     
     <string name="tag_filter">Tag filter</string>
     
-     <string name="created_by">Created by</string>
+    <string name="created_by">Created by</string>
+    
+    <string name="sync_data">Sync data</string>
+    
+    <string name="home_long">Map</string>
+    <string name="groups_long">User groups</string>
+    <string name="places_long">Places to review</string>
+    <string name="preferences_long">Change your preferences</string>
+    <string name="about_long">Get to know about us</string>
+    <string name="sync_data_long">Sync data from the repo</string>
+    
+    <string name="cant_aquire_account_message">iReviewr cannot acquire account information. Closing now.</string>
+	<string name="no_valid_email_message">Selected account doesn\'t have a valid email, please select another one.</string>
+	<string name="select_account_with_email_message">Please select an account with a valid email address.</string>
+    <string name="username_exists_message">Username already exists.</string>
+    <string name="email_exists_message">Email already exists. Try restarting the application or choosing another account.</string>
+    <string name="cant_register_message">Could not register at this moment, try again later.</string>
+	<string name="name_empty_message">Name must not be empty!</string>
+    <string name="name_alphanum_message">Name must contain only alphanumeric characters!</string>
+    <string name="name_maxlength_message">Name can\'t be longer than {} characters!</string>
+    <string name="desc_alphanum_message">Description must contain only alphanumeric characters or interpunction!</string>
+    <string name="desc_maxlength_message">Description can\'t be longer than {} characters!</string>
+    <string name="enter_place_location_message">Please enter place location.</string>
+    <string name="contains_tag_message">Already contains this tag.</string>
+    <string name="location_disabled_message">Your Locations seems to be disabled, do you want to enable it?</string>
+    <string name="comment_empty_message">Comment must not be empty!</string>
+    <string name="comment_alphanum_message">Comment must contain only alphanumeric characters or interpunction!</string>
+    <string name="comment_maxlength_message">Comment can\'t be longer than {} characters!</string>
+    <string name="error_saving_message">Error while saving.</string>
+    
+    <string name="gallery">Gallery</string>
+    <string name="tags">Tags</string>
+    <string name="no">No</string>
+    <string name="sure">Sure</string>
+    <string name="oops">Ooops</string>
+    <string name="add_photo">Add Photo</string>
+    
+    <string name="autosync_problem">Automatic Sync problem</string>
+    <string name="no_internet">Bad news, no internet connection</string>
+    <string name="autosync_warning">Automatic Sync warning</string>
+    <string name="connect_to_wifi">Please connect to wifi to sync data</string>
+    <string name="autosync">Automatic Sync</string>
+    <string name="good_news_sync">Good news, everything is sync now.</string>
+    <string name="new_comments">New comments</string>
+    <string name="new_">New</string>
+    <string name="new_comments_on_reviews">New comments on my reviews: </string>
+    <string name="new_comments_on_comments">New comments on my comments: </string>
     
 </resources>

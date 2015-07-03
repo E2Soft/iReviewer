@@ -1,10 +1,12 @@
 package com.example.ireviewr.adapters.pagers;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.TagsFragmentList;
 import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
@@ -16,10 +18,14 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 	private String[] names ={"Detail", "Comments", "Galery", "Tags"};
 	private String itemId;
 	
-	public ReviewsPagerAdapter(String itemId, FragmentManager fm)
+	public ReviewsPagerAdapter(String itemId, FragmentManager fm, Context context)
 	{
 		super(fm);
 		this.itemId = itemId;
+		names[0] = context.getString(R.string.detail);
+		names[1] = context.getString(R.string.comments);
+		names[2] = context.getString(R.string.gallery);
+		names[3] = context.getString(R.string.tags);
 	}
 	
 	@Override
