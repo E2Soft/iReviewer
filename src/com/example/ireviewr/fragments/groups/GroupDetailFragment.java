@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.DefaultCancelListener;
 import com.example.ireviewr.loaders.ModelObserver;
 import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.GroupToReview;
@@ -28,6 +29,8 @@ import com.example.ireviewr.model.GroupToUser;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.validators.NameValidator;
+import com.example.ireviewr.validators.TextValidator;
 
 public class GroupDetailFragment extends Fragment
 {
@@ -156,7 +159,7 @@ public class GroupDetailFragment extends Fragment
 	{
 		final EditText promptView = new EditText(getActivity());
 		promptView.setText(getArguments().getString(NAME));
-		new AlertDialog.Builder(getActivity())
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
 		.setView(promptView)
 		.setTitle(R.string.edit_group)
 		.setPositiveButton(R.string.edit_item, new OnClickListener()
@@ -175,14 +178,14 @@ public class GroupDetailFragment extends Fragment
 				Toast.makeText(getActivity(), R.string.edited, Toast.LENGTH_SHORT).show();
 			}
 		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int id)
-			{
-				dialog.cancel();
-			}
-		})
-		.show();
+		.setNegativeButton(R.string.cancel, new DefaultCancelListener())
+		.create();
+		
+		TextValidator nameValidator = new NameValidator(dialog, promptView, 20);
+		promptView.addTextChangedListener(nameValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 	
 	private void showDeleteDialog()
@@ -204,13 +207,7 @@ public class GroupDetailFragment extends Fragment
 				FragmentTransition.remove(GroupDetailFragment.this, getActivity());
 			}
 		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int id)
-			{
-				dialog.cancel();
-			}
-		})
+		.setNegativeButton(R.string.cancel, new DefaultCancelListener())
 		.show();
 	}
 	

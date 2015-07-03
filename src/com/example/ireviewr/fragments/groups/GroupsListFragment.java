@@ -19,6 +19,8 @@ import com.example.ireviewr.model.Group;
 import com.example.ireviewr.model.User;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
+import com.example.ireviewr.validators.NameValidator;
+import com.example.ireviewr.validators.TextValidator;
 
 public class GroupsListFragment extends AbstractDetailListFragment<Group>
 {
@@ -66,7 +68,7 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 	{
 		final EditText promptView = new EditText(getActivity());
 		promptView.setHint(R.string.new_group_hint);
-		new AlertDialog.Builder(getActivity())
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
 			.setView(promptView)
 			.setTitle(R.string.new_group)
 			.setPositiveButton(R.string.create, new OnClickListener()
@@ -84,7 +86,13 @@ public class GroupsListFragment extends AbstractDetailListFragment<Group>
 				}
 			})
 			.setNegativeButton(R.string.cancel, new DefaultCancelListener())
-			.show();
+			.create();
+		
+		TextValidator nameValidator = new NameValidator(dialog, promptView, 20);
+		promptView.addTextChangedListener(nameValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 
 	@Override

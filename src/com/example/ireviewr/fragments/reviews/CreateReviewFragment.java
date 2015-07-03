@@ -1,10 +1,8 @@
 package com.example.ireviewr.fragments.reviews;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,9 +15,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -48,6 +44,7 @@ import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
+import com.example.ireviewr.validators.NameValidator;
 import com.example.ireviewr.validators.TextValidator;
 
 public class CreateReviewFragment extends Fragment {
@@ -82,6 +79,7 @@ public class CreateReviewFragment extends Fragment {
 	private ArrayList<String> tags;
 	
 	private TextValidator nameValidator;
+	private TextValidator descriptionValidator;
 		
 	public static CreateReviewFragment newInstance() 
 	{
@@ -217,23 +215,61 @@ public class CreateReviewFragment extends Fragment {
 		textTags = (TextView)view.findViewById(R.id.review_tags_list);
 	    ratingBar = (RatingBar)view.findViewById(R.id.review_rating_choose);
 		
-		nameValidator = new TextValidator(textName)
-		{
-			@Override
-			public void validate(TextView textView, String text)
-			{
-				if(text == null || "".equals(text.trim()))
-				{
-					textView.setError("Name must not be empty!");
-					throw new ValidationException();
-				}
-				else
-				{
-					textView.setError(null);
-				}
-			}
-		};
-		textName.addTextChangedListener(nameValidator);    
+	 // set validators
+ 		nameValidator = new TextValidator(textName)
+ 		{
+ 			int maxLength = 20;
+ 			
+ 			@Override
+ 			public void validate(TextView textView, String text)
+ 			{
+ 				if(text == null || "".equals(text.trim()))
+ 				{
+ 					textView.setError("Name must not be empty!");
+ 					throw new ValidationException();
+ 				}
+ 				else if(!isAlphanumeric(text))
+ 				{
+ 					textView.setError("Name must contain only alphanumeric characters!");
+ 					throw new ValidationException();
+ 				}
+ 				else if(text.length() > maxLength)
+ 				{
+ 					textView.setError("Name can't be longer than {} characters!".replace("{}", Integer.toString(maxLength)));
+ 					throw new ValidationException();
+ 				}
+ 				else
+ 				{
+ 					textView.setError(null);
+ 				}
+ 			}
+ 		};
+ 		textName.addTextChangedListener(nameValidator);
+ 		
+ 		descriptionValidator = new TextValidator(textDesc)
+ 		{
+ 			int maxLength = 500;
+ 			
+ 			@Override
+ 			public void validate(TextView textView, String text)
+ 			{
+ 				if(!isAlphanumericWithInterpunction(text))
+ 				{
+ 					textView.setError("Description must contain only alphanumeric characters or interpunction!");
+ 					throw new ValidationException();
+ 				}
+ 				else if(text.length() > maxLength)
+ 				{
+ 					textView.setError("Name can't be longer than {} characters!".replace("{}", Integer.toString(maxLength)));
+ 					throw new ValidationException();
+ 				}
+ 				else
+ 				{
+ 					textView.setError(null);
+ 				}
+ 			}
+ 		};
+ 		textDesc.addTextChangedListener(descriptionValidator);   
 	    
 		if (savedInstanceState != null) 
 		{
@@ -336,6 +372,7 @@ public class CreateReviewFragment extends Fragment {
 		try
 		{
 			nameValidator.validate();
+			descriptionValidator.validate();
 		}
 		catch(ValidationException ex)
 		{
@@ -432,7 +469,7 @@ public class CreateReviewFragment extends Fragment {
 	private void addTagDialog(final TextView tagContent)
 	{
 		final EditText content = new EditText(getActivity());
-		new AlertDialog.Builder(getActivity())
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
 		.setView(content)
 		.setTitle(R.string.tag_name)
 		.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener()
@@ -461,7 +498,13 @@ public class CreateReviewFragment extends Fragment {
 				dialog.cancel();
 			}
 		})
-		.show();
+		.create();
+		
+		TextValidator tagValidator = new NameValidator(dialog, content, 10);
+		content.addTextChangedListener(tagValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 	
 	private void selectImage() {
@@ -536,30 +579,6 @@ public class CreateReviewFragment extends Fragment {
 			}
 		}
 		
-	}
-	
-	private File createImageFile() throws IOException {
-	    // Create an image file name
-	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-	    String imageFileName = "JPEG_" + timeStamp + "_";
-	    File storageDir = Environment.getExternalStoragePublicDirectory(
-	            Environment.DIRECTORY_PICTURES);
-	    File image = File.createTempFile(
-	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
-	    );
-
-	    image.getAbsolutePath();
-	    return image;
-	}
-	
-	private void galleryAddPic() throws IOException {
-	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-	    File f = new File(createImageFile().getAbsolutePath());
-	    Uri contentUri = Uri.fromFile(f);
-	    mediaScanIntent.setData(contentUri);
-	    getActivity().sendBroadcast(mediaScanIntent);
 	}
 	
 	private void takePhoto(Bundle extras){

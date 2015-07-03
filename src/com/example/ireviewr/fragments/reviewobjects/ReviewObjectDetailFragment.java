@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.DefaultCancelListener;
 import com.example.ireviewr.loaders.ModelObserver;
 import com.example.ireviewr.model.Image;
 import com.example.ireviewr.model.Review;
@@ -198,13 +199,7 @@ public class ReviewObjectDetailFragment extends Fragment
 				FragmentTransition.remove(ReviewObjectDetailFragment.this, getActivity());
 			}
 		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int id)
-			{
-				dialog.cancel();
-			}
-		})
+		.setNegativeButton(R.string.cancel, new DefaultCancelListener())
 		.show();
 	}
 	
