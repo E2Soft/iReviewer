@@ -302,6 +302,7 @@ public class MainActivity extends FragmentActivity{
     public void getProfile(View view){
     	//Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
     	FragmentTransition.to(new ProfileFragment(), this);
+    	mDrawerLayout.closeDrawer(mDrawerPane);
     }
     
     @Override

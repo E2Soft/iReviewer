@@ -151,7 +151,7 @@ public class TagsFragmentList extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		getActivity().getActionBar().setTitle(R.string.review_tags);
+		//getActivity().getActionBar().setTitle(R.string.review_tags);
 		setHasOptionsMenu(true);
 	}
 	

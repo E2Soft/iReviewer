@@ -26,6 +26,8 @@ import com.example.ireviewr.sync.tasks.RegisterTask;
 import com.example.ireviewr.sync.tasks.SyncTask;
 import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.SyncUtils;
+import com.example.ireviewr.validators.NameValidator;
+import com.example.ireviewr.validators.TextValidator;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 
@@ -173,7 +175,7 @@ public class SplashScreenActivity extends Activity
 	{
 		LayoutInflater layoutInflater = LayoutInflater.from(this);
 		final View promptView = layoutInflater.inflate(R.layout.register_dialog, null);
-		new AlertDialog.Builder(this)
+		final AlertDialog dialog = new AlertDialog.Builder(this)
 			.setView(promptView)
 			.setCancelable(false)
 			.setPositiveButton(R.string.register, new OnClickListener()
@@ -190,12 +192,18 @@ public class SplashScreenActivity extends Activity
 					//get data
 					EditText editText = (EditText) promptView.findViewById(R.id.edittext);
 					String newUserName = editText.getText().toString();
-					// TODO validirati username
 					register(email, newUserName); // registruj korisnika sa email i username
 				}
 			}
 			.setEmail(currentUserEmail))
-			.show();
+			.create();
+		
+		EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+		TextValidator nameValidator = new NameValidator(dialog, editText, 20);
+		editText.addTextChangedListener(nameValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 
 	/**

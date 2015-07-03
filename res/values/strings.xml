@@ -167,4 +167,7 @@
     <string name="new_comments_on_reviews">New comments on my reviews: </string>
     <string name="new_comments_on_comments">New comments on my comments: </string>
     
+    <string name="logout">Log out</string>
+    
+    
 </resources>
