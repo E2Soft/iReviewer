@@ -32,7 +32,17 @@ public abstract class TextValidator implements TextWatcher
     	catch(ValidationException ex)
     	{} // ignorisemo exception
     }
-
+    
+    protected boolean isAlphanumeric(String str)
+    {
+    	return str.matches("[a-zA-Z0-9 ]*");
+    }
+    
+    protected boolean isAlphanumericWithInterpunction(String str)
+    {
+    	return str.matches("[a-zA-Z0-9 _.,!\"'/;:@#$%&()*<>?]*");
+    }
+    
     @Override
     final public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Don't care */ }
 

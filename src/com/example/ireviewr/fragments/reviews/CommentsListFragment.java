@@ -2,6 +2,7 @@ package com.example.ireviewr.fragments.reviews;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
@@ -24,8 +26,7 @@ import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.validators.TextValidator;
 
 public class CommentsListFragment extends AbstractCommentsListFragment
-{	
-	private TextValidator validator;
+{
 	public CommentsListFragment()
 	{}
 	
@@ -72,6 +73,7 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 		setHasOptionsMenu(true);
 	}
 	
+	@SuppressLint("InflateParams")
 	private void commentDialog(){
 		
 		LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -119,6 +121,44 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 			
 			final AlertDialog dialog = builder.create();
 
+			
+			TextValidator nameValidator = new TextValidator(editText)
+			{
+				int maxLength = 200;
+				
+				@Override
+				public void validate(TextView textView, String text)
+				{
+					final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+					
+					if(text == null || "".equals(text.trim()))
+					{
+						textView.setError(getActivity().getString(R.string.comment_empty_message));
+						okButton.setEnabled(false);
+					}
+					else if(!isAlphanumericWithInterpunction(text))
+					{
+						textView.setError(getActivity().getString(R.string.comment_alphanum_message));
+						okButton.setEnabled(false);
+					}
+					else if(text.length() > 200)
+					{
+						textView.setError(getActivity().getString(R.string.comment_maxlength_message).replace("{}", Integer.toString(maxLength)));
+						okButton.setEnabled(false);
+					}
+					else
+					{
+						textView.setError(null);
+						okButton.setEnabled(true);
+					}
+				}
+			};
+			editText.addTextChangedListener(nameValidator);
+			
+			dialog.show();
+			dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+			
+			
 			editText.addTextChangedListener(new TextWatcher() 
 			{
 			    @Override
@@ -134,16 +174,7 @@ public class CommentsListFragment extends AbstractCommentsListFragment
 			    @Override
 			    public void afterTextChanged(Editable s) 
 			    {
-			        final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 			        
-			        if(editText.getText().length() == 0)
-			        {
-			            okButton.setEnabled(false);
-			        } 
-			        else 
-			        {
-			            okButton.setEnabled(true);
-			        }
 
 			    }
 			});

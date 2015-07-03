@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ireviewr.R;
+import com.example.ireviewr.dialogs.DefaultCancelListener;
 import com.example.ireviewr.dialogs.ShowDialog;
 import com.example.ireviewr.exceptions.ValidationException;
 import com.example.ireviewr.model.Image;
@@ -45,6 +46,7 @@ import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 import com.example.ireviewr.tools.ImageUtils;
 import com.example.ireviewr.tools.ReviewerTools;
+import com.example.ireviewr.validators.NameValidator;
 import com.example.ireviewr.validators.TextValidator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,6 +98,7 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 	
 	// validators
 	private TextValidator nameValidator;
+	private TextValidator descriptionValidator;
 	
 	/**
 	 * Za create.
@@ -243,12 +246,24 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 		// set validators
 		nameValidator = new TextValidator(textName)
 		{
+			int maxLength = 20;
+			
 			@Override
 			public void validate(TextView textView, String text)
 			{
 				if(text == null || "".equals(text.trim()))
 				{
-					textView.setError("Name must not be empty!");
+					textView.setError(getActivity().getString(R.string.name_empty_message));
+					throw new ValidationException();
+				}
+				else if(!isAlphanumeric(text))
+				{
+					textView.setError(getActivity().getString(R.string.name_alphanum_message));
+					throw new ValidationException();
+				}
+				else if(text.length() > maxLength)
+				{
+					textView.setError(getActivity().getString(R.string.name_maxlength_message).replace("{}", Integer.toString(maxLength)));
 					throw new ValidationException();
 				}
 				else
@@ -258,6 +273,31 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 			}
 		};
 		textName.addTextChangedListener(nameValidator);
+		
+		descriptionValidator = new TextValidator(textDesc)
+		{
+			int maxLength = 500;
+			
+			@Override
+			public void validate(TextView textView, String text)
+			{
+				if(!isAlphanumericWithInterpunction(text))
+				{
+					textView.setError(getActivity().getString(R.string.desc_alphanum_message));
+					throw new ValidationException();
+				}
+				else if(text.length() > maxLength)
+				{
+					textView.setError(getActivity().getString(R.string.desc_maxlength_message).replace("{}", Integer.toString(maxLength)));
+					throw new ValidationException();
+				}
+				else
+				{
+					textView.setError(null);
+				}
+			}
+		};
+		textDesc.addTextChangedListener(descriptionValidator);
 		
 		// restore state
 		if (savedInstanceState != null)
@@ -353,10 +393,11 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 		{
 			if(placeMarker == null)
 			{
-				ShowDialog.error("Please enter place location.", getActivity());
+				ShowDialog.error(getActivity().getString(R.string.enter_place_location_message), getActivity());
 				return;
 			}
 			nameValidator.validate();
+			descriptionValidator.validate();
 		}
 		catch(ValidationException ex)
 		{
@@ -444,13 +485,13 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 		}
 		catch(SQLiteConstraintException ex)
 		{
-			ShowDialog.error("Error while saving.", getActivity());
+			ShowDialog.error(getActivity().getString(R.string.error_saving_message), getActivity());
 		}
 	}
 	
 	private void selectImage() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Add Photo");
+		builder.setTitle(R.string.add_photo);
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -551,7 +592,7 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 	private void addTagDialog(final TextView tagContent)
 	{
 		final EditText content = new EditText(getActivity());
-		new AlertDialog.Builder(getActivity())
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())
 		.setView(content)
 		.setTitle(R.string.tag_name)
 		.setPositiveButton(R.string.tag_name, new DialogInterface.OnClickListener()
@@ -569,18 +610,18 @@ public class ReviewObjectFormFragment extends Fragment //implements LocationList
 				}
 				else
 				{
-					ShowDialog.error("Already contains this tag.", getActivity());
+					ShowDialog.error(getActivity().getString(R.string.contains_tag_message), getActivity());
 				}
 			}
 		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-		{
-			public void onClick(DialogInterface dialog, int id)
-			{
-				dialog.cancel();
-			}
-		})
-		.show();
+		.setNegativeButton(R.string.cancel, new DefaultCancelListener())
+		.create();
+		
+		TextValidator tagValidator = new NameValidator(dialog, content, 10);
+		content.addTextChangedListener(tagValidator);
+		
+		dialog.show();
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 	}
 	
 	@Override

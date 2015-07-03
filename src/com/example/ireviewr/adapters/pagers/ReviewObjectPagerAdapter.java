@@ -1,10 +1,12 @@
 package com.example.ireviewr.adapters.pagers;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectDetailFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectGalleryFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectReviewsListFragment;
@@ -12,13 +14,16 @@ import com.example.ireviewr.model.ReviewObject;
 
 public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] names ={"Details","Reviews", "Gallery"};
+	private String[] names ={"Detail","Reviews", "Gallery"};
 	private String itemId;
 	
-	public ReviewObjectPagerAdapter(String itemId, FragmentManager fm)
+	public ReviewObjectPagerAdapter(String itemId, FragmentManager fm, Context context)
 	{
 		super(fm);
 		this.itemId = itemId;
+		names[0] = context.getString(R.string.detail);
+		names[1] = context.getString(R.string.reviews);
+		names[2] = context.getString(R.string.gallery);
 	}
 	
 	@Override

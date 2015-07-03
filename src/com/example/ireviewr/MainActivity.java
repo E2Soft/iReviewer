@@ -31,6 +31,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -193,12 +194,12 @@ public class MainActivity extends FragmentActivity{
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
-    	mNavItems.add(new NavItem("Home", "Meetup review objects", R.drawable.ic_action_map));
-        mNavItems.add(new NavItem("Groups", "Meetup groups", R.drawable.ic_action_group));
-        mNavItems.add(new NavItem(getString(R.string.places), "Meetup destination", R.drawable.ic_action_place));
-        mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.ic_action_settings));
-        mNavItems.add(new NavItem("About", "Get to know about us", R.drawable.ic_action_about));
-        mNavItems.add(new NavItem("Sync data", "Sync data from repo", R.drawable.ic_action_refresh));
+    	mNavItems.add(new NavItem(getString(R.string.home), getString(R.string.home_long), R.drawable.ic_action_map));
+        mNavItems.add(new NavItem(getString(R.string.groups), getString(R.string.groups_long), R.drawable.ic_action_group));
+        mNavItems.add(new NavItem(getString(R.string.places), getString(R.string.places_long), R.drawable.ic_action_place));
+        mNavItems.add(new NavItem(getString(R.string.preferences), getString(R.string.preferences_long), R.drawable.ic_action_settings));
+        mNavItems.add(new NavItem(getString(R.string.about), getString(R.string.about_long), R.drawable.ic_action_about));
+        mNavItems.add(new NavItem(getString(R.string.sync_data), getString(R.string.sync_data_long), R.drawable.ic_action_refresh));
     }
     
     @Override
@@ -267,7 +268,7 @@ public class MainActivity extends FragmentActivity{
         }else if(position == 5){
         	startService(new Intent(this, SyncService.class));
         }else{
-        	Toast.makeText(MainActivity.this, "Nesto van opsega!", Toast.LENGTH_LONG).show();
+        	Log.e("DRAWER", "Nesto van opsega!");
         }
         
         mDrawerList.setItemChecked(position, true);
@@ -301,6 +302,7 @@ public class MainActivity extends FragmentActivity{
     public void getProfile(View view){
     	//Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
     	FragmentTransition.to(new ProfileFragment(), this);
+    	mDrawerLayout.closeDrawer(mDrawerPane);
     }
     
     @Override

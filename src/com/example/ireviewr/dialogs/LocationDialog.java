@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import com.example.ireviewr.R;
+
 
 public class LocationDialog extends AlertDialog.Builder{
 
@@ -15,18 +17,18 @@ public class LocationDialog extends AlertDialog.Builder{
 	}
 	
 	private void setUpDialog(){
-		setTitle("Ooops");
-	    setMessage("Your Locations seems to be disabled, do you want to enable it?");
+		setTitle(R.string.oops);
+	    setMessage(R.string.location_disabled_message);
 	    setCancelable(false);
 	    
-	    setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+	    setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
          	   getContext().startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                dialog.dismiss();
             }
         });
 	    
-	    setNegativeButton("No", new DialogInterface.OnClickListener() {
+	    setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                  dialog.cancel();
             }

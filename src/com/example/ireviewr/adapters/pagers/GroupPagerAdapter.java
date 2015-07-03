@@ -1,10 +1,12 @@
 package com.example.ireviewr.adapters.pagers;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.groups.GroupDetailFragment;
 import com.example.ireviewr.fragments.groups.GroupReviewsListFragment;
 import com.example.ireviewr.fragments.users.GroupUsersListFragment;
@@ -12,13 +14,16 @@ import com.example.ireviewr.model.Group;
 
 public class GroupPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] names ={"Details","Reviews", "Users"};
+	private String[] names ={"Detail","Reviews", "Users"};
 	private String itemId;
 	
-	public GroupPagerAdapter(String itemId, FragmentManager fm)
+	public GroupPagerAdapter(String itemId, FragmentManager fm, Context context)
 	{
 		super(fm);
 		this.itemId = itemId;
+		names[0] = context.getString(R.string.detail);
+		names[1] = context.getString(R.string.reviews);
+		names[2] = context.getString(R.string.users);
 	}
 	
 	@Override

@@ -34,7 +34,7 @@ public class ReviewObjectTabsFragment extends Fragment
 			Bundle savedInstanceState) {
 		
 		View v = inflater.inflate(R.layout.revob_fragment_tabbed, container, false);
-		mReviewObjectPagerAdapter = new ReviewObjectPagerAdapter(getArguments().getString(ID), getChildFragmentManager());
+		mReviewObjectPagerAdapter = new ReviewObjectPagerAdapter(getArguments().getString(ID), getChildFragmentManager(), getActivity());
         
         mViewPager = (ViewPager) v.findViewById(R.id.revob_pager);
         mViewPager.setAdapter(mReviewObjectPagerAdapter);
