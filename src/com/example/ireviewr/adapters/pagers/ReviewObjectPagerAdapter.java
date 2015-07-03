@@ -10,11 +10,12 @@ import com.example.ireviewr.R;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectDetailFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectGalleryFragment;
 import com.example.ireviewr.fragments.reviewobjects.ReviewObjectReviewsListFragment;
+import com.example.ireviewr.fragments.reviewobjects.ReviewObjectTagsListFragment;
 import com.example.ireviewr.model.ReviewObject;
 
 public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 
-	private String[] names ={"Detail","Reviews", "Gallery"};
+	private String[] names ={"Detail","Reviews", "Gallery", "Tags"};
 	private String itemId;
 	
 	public ReviewObjectPagerAdapter(String itemId, FragmentManager fm, Context context)
@@ -24,6 +25,7 @@ public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 		names[0] = context.getString(R.string.detail);
 		names[1] = context.getString(R.string.reviews);
 		names[2] = context.getString(R.string.gallery);
+		names[3] = context.getString(R.string.tags);
 	}
 	
 	@Override
@@ -44,10 +46,10 @@ public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 			{
 				return new ReviewObjectGalleryFragment(itemId);
 			}
-			//case 4:
-			//{
-			//	return new ReviewObjectTagListFragment(itemId);
-			//}
+			case 3:
+			{
+				return new ReviewObjectTagsListFragment(itemId);
+			}
 			default:
 			{
 				Log.e("GroupPagerAdapter", "Internal error unknown slide position.");

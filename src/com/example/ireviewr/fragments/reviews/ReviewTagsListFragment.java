@@ -14,6 +14,7 @@ import com.example.ireviewr.loaders.ModelLoaderCallbacks;
 import com.example.ireviewr.model.Review;
 import com.example.ireviewr.model.Tag;
 import com.example.ireviewr.model.TagToReview;
+import com.example.ireviewr.tools.CurrentUser;
 import com.example.ireviewr.tools.FragmentTransition;
 
 public class ReviewTagsListFragment extends AbstractDetailListFragment<Tag>
@@ -57,9 +58,16 @@ public class ReviewTagsListFragment extends AbstractDetailListFragment<Tag>
 	@Override
 	protected void configureMenu(Menu menu, MenuInflater inflater)
 	{
-		menu.findItem(R.id.menu_action)
-		.setIcon(R.drawable.ic_action_edit)
-		.setTitle(R.string.edit_item);
+		if(getReview().isCreatedBy(CurrentUser.getId(getActivity())))
+		{
+			menu.findItem(R.id.menu_action)
+			.setIcon(R.drawable.ic_action_edit)
+			.setTitle(R.string.edit_item);
+		}
+		else
+		{
+			menu.removeItem(R.id.menu_action);
+		}
 	}
 	
 	@Override
