@@ -44,6 +44,10 @@ public class ReviewObjectPagerAdapter extends FragmentPagerAdapter {
 			{
 				return new ReviewObjectGalleryFragment(itemId);
 			}
+			//case 4:
+			//{
+			//	return new ReviewObjectTagListFragment(itemId);
+			//}
 			default:
 			{
 				Log.e("GroupPagerAdapter", "Internal error unknown slide position.");

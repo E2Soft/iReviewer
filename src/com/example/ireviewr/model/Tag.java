@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.util.Log;
+
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
@@ -35,6 +37,25 @@ public class Tag extends AbstractModel
 		this.name = name;
 	}
 	
+	public void addReview(Review toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new TagToReview(toAdd, this).save();
+	}
+	
+	public void removeReview(Review toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReview m2m = new Select().from(TagToReview.class)
+				.where("review = ? and tag = ?", toRemove.getId(), getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
 	public List<Review> getReviews()
 	{
 		List<TagToReview> manyToMany = getMany(TagToReview.class, "tag");
@@ -60,5 +81,42 @@ public class Tag extends AbstractModel
 	public static Tag getByName(String name)
 	{
 		return new Select().from(Tag.class).where("name = ?", name).executeSingle();
+	}
+	
+	public boolean hasReview(String reviewId)
+	{
+		return new Select()
+			.from(TagToReview.class).as("TAG_TO_REV")
+			.join(Review.class).as("REV")
+			.on("REV._id = TAG_TO_REV.review")
+			.where("TAG_TO_REV.tag = ? and REV.modelId = ?", getId(), reviewId).executeSingle() != null;
+	}
+
+	public void addReviewObject(ReviewObject toAdd)
+	{
+		ValidationUtils.checkSaved(toAdd, this);
+		new TagToReviewObject(toAdd, this).save();
+	}
+	
+	public void removeReviewObject(ReviewObject toRemove)
+	{
+		ValidationUtils.checkSaved(toRemove, this);
+		TagToReviewObject m2m = new Select().from(TagToReviewObject.class)
+				.where("reviewObject = ? and tag = ?", toRemove.getId(), getId())
+				.executeSingle();
+		
+		if(m2m != null) 
+		{
+			m2m.deleteSynced();
+		}
+	}
+	
+	public boolean hasReviewObject(String reviewObjId)
+	{
+		return new Select()
+			.from(TagToReviewObject.class).as("TAG_TO_REVOB")
+			.join(ReviewObject.class).as("REVOB")
+			.on("REVOB._id = TAG_TO_REVOB.reviewObject")
+			.where("TAG_TO_REVOB.tag = ? and REVOB.modelId = ?", getId(), reviewObjId).executeSingle() != null;
 	}
 }

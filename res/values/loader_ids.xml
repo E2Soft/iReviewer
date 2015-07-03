@@ -6,6 +6,8 @@
     <item type="id" name="GROUP_USER_CHECK_LOADER"/>
     <item type="id" name="REVOB_IMAGE_LOADER"/>
     <item type="id" name="REVIEW_IMAGE_LOADER"/>
+    <item type="id" name="REVIEW_TAG_CHECK_LOADER"/>
+    <item type="id" name="REVIEW_OBJECT_TAG_CHECK_LOADER"/>
     <item type="id" name="REVIEW_OBJECT_LOADER"/>
     <item type="id" name="COMMENT_LOADER"/>
     <item type="id" name="TAG_LOADER"/>

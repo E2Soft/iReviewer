@@ -11,11 +11,12 @@ import com.example.ireviewr.fragments.reviews.CommentsListFragment;
 import com.example.ireviewr.fragments.reviews.ReviewDetailFragment;
 import com.example.ireviewr.fragments.reviews.ReviewGalleryFragment;
 import com.example.ireviewr.fragments.reviews.ReviewGroupsListFragment;
+import com.example.ireviewr.fragments.reviews.ReviewTagsListFragment;
 import com.example.ireviewr.model.Review;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter
 {
-	private String[] names ={"Detail", "Comments", "Galery", "Groups"};
+	private String[] names ={"Detail", "Comments", "Galery", "Groups", "Tags"};
 	private String itemId;
 	
 	public ReviewsPagerAdapter(String itemId, FragmentManager fm, Context context)
@@ -26,6 +27,7 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 		names[1] = context.getString(R.string.comments);
 		names[2] = context.getString(R.string.gallery);
 		names[3] = context.getString(R.string.groups);
+		names[4] = context.getString(R.string.tags);
 	}
 	
 	@Override
@@ -61,6 +63,10 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter
 			case 3:
 			{
 				return new ReviewGroupsListFragment(itemId);
+			}
+			case 4:
+			{
+				return new ReviewTagsListFragment(itemId);
 			}
 			default:
 			{
